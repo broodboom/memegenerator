@@ -13,7 +13,8 @@ import {
   NbToastrModule,
   NbWindowModule,
 } from '@nebular/theme';
-import { NbSecurityModule } from '@nebular/security';
+import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
+import { of } from 'rxjs';
 
 @NgModule({
   declarations: [AppComponent],
@@ -45,6 +46,17 @@ import { NbSecurityModule } from '@nebular/security';
         },
       },
     }),
+  ],
+  providers: [
+    // ...
+    {
+      provide: NbRoleProvider,
+      useValue: {
+        getRole: () => {
+          return of('guest'); // TODO get the role from the user none == guest
+        },
+      },
+    },
   ],
   bootstrap: [AppComponent],
 })
