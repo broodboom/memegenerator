@@ -13,6 +13,7 @@ import {
   NbToastrModule,
   NbWindowModule,
 } from '@nebular/theme';
+import { NbSecurityModule } from '@nebular/security';
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,6 +29,22 @@ import {
     NbWindowModule.forRoot(),
     NbToastrModule.forRoot(),
     ThemeModule.forRoot(),
+    NbSecurityModule.forRoot({
+      accessControl: {
+        guest: {
+          view: ['dashboard'],
+        },
+        user: {
+          parent: 'guest',
+          create: '',
+        },
+        moderator: {
+          parent: 'user',
+          create: '',
+          remove: '*',
+        },
+      },
+    }),
   ],
   bootstrap: [AppComponent],
 })
