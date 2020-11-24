@@ -11,9 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class MainController {
     @GetMapping()
     ResponseEntity<String> message() {
-        return new ResponseEntity("" +
-                "<a href='/rekening'>rekening</a><br />" +
-                "<a href='/rekeninghouder'>rekeninghouder</a>"
-                , HttpStatus.OK);
+        return new ResponseEntity("Hoi", HttpStatus.OK);
     }
 }

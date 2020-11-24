@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Memes extends BaseEntity {
+public class Meme extends BaseEntity {
 
     @Column(name = "title", unique = true, nullable = false)
     @Getter
