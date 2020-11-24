@@ -19,8 +19,8 @@ public abstract class BaseEntity implements Serializable {
     private Integer id;
 
     @CreationTimestamp
-    @Column(name = "aangemaakt", unique = false, nullable = false)
+    @Column(name = "createdat", unique = false, nullable = false)
     @Getter
     @Setter
-    private Timestamp aangemaakt;
+    private Timestamp createdat;
 }
