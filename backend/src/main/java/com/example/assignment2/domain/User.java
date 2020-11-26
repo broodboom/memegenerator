@@ -5,12 +5,16 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 public class User extends BaseEntity {
+    
+    /**
+     *
+     */
+    private static final long serialVersionUID = 7662525133363601456L;
 
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
@@ -18,7 +22,7 @@ public class User extends BaseEntity {
         joinColumns = { @JoinColumn(name = "userid") }, 
         inverseJoinColumns = { @JoinColumn(name = "achievementid") }
     )
-    Set<Project> projects = new HashSet<>();
+    Set<Achievement> achievements = new HashSet<>();
     
     @Column(name = "username", nullable = false)
     @Getter

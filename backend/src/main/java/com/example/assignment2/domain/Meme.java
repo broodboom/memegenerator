@@ -4,15 +4,17 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 
 import java.sql.Blob;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 public class Meme extends BaseEntity {
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = 6179148044106686855L;
 
     @Column(name = "title", unique = true, nullable = false)
     @Getter

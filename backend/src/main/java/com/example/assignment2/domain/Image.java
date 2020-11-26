@@ -4,15 +4,17 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 
 import java.sql.Blob;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 public class Image extends BaseEntity {
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = 5366929109425794141L;
 
     @Column(name = "title", unique = true, nullable = false)
     @Getter
