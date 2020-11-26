@@ -4,15 +4,18 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 
-import java.sql.Blob;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 public class Achievement extends BaseEntity {
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = -5620579023438427816L;
 
     @Column(name = "name", unique = true, nullable = false)
     @Getter
