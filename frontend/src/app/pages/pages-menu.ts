@@ -7,4 +7,10 @@ export const MENU_ITEMS: NbMenuItem[] = [
     link: '/pages/dashboard',
     home: true,
   },
+  {
+    title: 'Create',
+    icon: 'cogwheel',
+    link: '/pages/createpage',
+    home: true,
+  }
 ];
