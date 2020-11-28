@@ -7,4 +7,12 @@ export const MENU_ITEMS: NbMenuItem[] = [
     link: '/pages/dashboard',
     home: true,
   },
+  {
+    title: 'Admin',
+    link: '/pages/admin',
+  },
+  {
+    title: 'Log In',
+    link: '/pages/login',
+  }
 ];
