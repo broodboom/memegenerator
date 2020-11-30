@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ThemeModule } from './@theme/theme.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -15,6 +15,10 @@ import {
 } from '@nebular/theme';
 import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
 import { of } from 'rxjs';
+
+// MUST DELETE these imports after merge
+import { fakeBackendProvider } from './temp/fake-backend';
+import { JwtInterceptor} from './temp/jwt.interceptor';
 
 @NgModule({
   declarations: [AppComponent],
@@ -57,6 +61,11 @@ import { of } from 'rxjs';
         },
       },
     },
+    // Added for Admin Page without login/register features, untill fakeBackendProvider
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+
+    // provider used to create fake backend, MUST DELETE after merge
+    fakeBackendProvider
   ],
   bootstrap: [AppComponent],
 })

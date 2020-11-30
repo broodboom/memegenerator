@@ -1,4 +1,5 @@
 import { NbMenuItem } from '@nebular/theme';
+import { AuthenticationService } from '../temp/authentication.service';
 
 export const MENU_ITEMS: NbMenuItem[] = [
   {
@@ -6,6 +7,14 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: 'home-outline',
     link: '/pages/dashboard',
     home: true,
+  },
+  {
+    title: 'Admin',
+    link: '/pages/admin',
+  },
+  {
+    title: 'Log In',
+    link: '/pages/login',
   },
   {
     title: 'Create',
