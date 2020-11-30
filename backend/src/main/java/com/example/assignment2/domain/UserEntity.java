@@ -23,6 +23,9 @@ public class UserEntity extends BaseEntity {
         inverseJoinColumns = { @JoinColumn(name = "achievementid") }
     )
     Set<Achievement> achievements = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    Set<Meme> memes = new HashSet<>();
     
     @Column(name = "username", nullable = false)
     @Getter
