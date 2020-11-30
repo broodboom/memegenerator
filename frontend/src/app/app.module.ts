@@ -33,7 +33,7 @@ import { of } from 'rxjs';
     NbSecurityModule.forRoot({
       accessControl: {
         guest: {
-          view: ['dashboard'],
+          view: ['dashboard', 'create'],
         },
         user: {
           parent: 'guest',
