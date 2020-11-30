@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { PagesComponent } from './pages.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AdminComponent } from './admin/admin.component';
+import {CreatepageComponent } from './createpage/createpage.component';
 
 import { AuthGuard } from '../_helpers/auth.guard';
 // This is a temp LogIn, MUST DELETE after merge
@@ -33,6 +34,10 @@ const routes: Routes = [{
     {
       path: 'login',
       component: LoginComponent,
+    },
+    {
+      path: 'create',
+      component: CreatepageComponent,
     }
   ],
 }];
