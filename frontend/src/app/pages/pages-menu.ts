@@ -15,5 +15,11 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'Log In',
     link: '/pages/login',
+  },
+  {
+    title: 'Create',
+    icon: 'cogwheel',
+    link: '/pages/create',
+    home: true,
   }
 ];

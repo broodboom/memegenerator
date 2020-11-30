@@ -37,7 +37,7 @@ import { JwtInterceptor} from './temp/jwt.interceptor';
     NbSecurityModule.forRoot({
       accessControl: {
         guest: {
-          view: ['dashboard'],
+          view: ['dashboard', 'create'],
         },
         user: {
           parent: 'guest',
