@@ -17,7 +17,4 @@ public class Tag extends BaseEntity {
     @Setter
     @NotNull
     private String title;
-
-    @ManyToMany(mappedBy = "memes")
-    public Set<Meme> memes = new HashSet<>();
 }
