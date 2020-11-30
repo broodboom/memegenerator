@@ -18,7 +18,7 @@ public class UserController {
 	@Autowired
 	UserService userService;
 	
-	@PostMapping("/")
+	@PostMapping(path = "/")
 	public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails)
 	{	
 		UserDto userDto = new UserDto();
