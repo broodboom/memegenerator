@@ -1,16 +1,13 @@
 package com.example.assignment2.service.impl;
 
-import java.util.ArrayList;
-
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.assignment2.domain.*;
+import com.example.assignment2.domain.Role;
+import com.example.assignment2.domain.UserEntity;
 import com.example.assignment2.respository.UserRepository;
 import com.example.assignment2.service.UserService;
 import com.example.assignment2.shared.dto.UserDto;
@@ -26,23 +23,37 @@ public class UserServiceImpl implements UserService {
 
 	//@Override
 	public UserDto createUser(UserDto user) {
+		UserEntity checkIfEmailExists = userRepository.findByEmail(user.email);
+		UserEntity checkIfUsernameExists = userRepository.findByUsername(user.username);
 		
-		com.example.assignment2.domain.User checkIfEmailExists = userRepository.findByEmail(user.email);
-		
+		// Check if email is already in use
+		// TODO: More graceful error messages
 		if(checkIfEmailExists != null) throw new RuntimeException("A user with this email already exists.");
 		
-		User userEntity = new User(null, null, false, false, false, false, null);
-		BeanUtils.copyProperties(user, userEntity);
+		// Check if username is already in use
+		if(checkIfUsernameExists != null) throw new RuntimeException("A user with this username already exists.");
 		
-		//userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-		//userEntity.setUserId("test12345");
+		// Set user entity properties
+		UserEntity userEntity = new UserEntity();
+		userEntity.username = user.username;
 		
-		//User storedUserDetails = userRepository.save(userEntity);
+		// TODO: Encrypt password
+		userEntity.password = user.password;
 		
-		UserDto returnValue = new UserDto();
-		//BeanUtils.copyProperties(storedUserDetails, returnValue);
+		//TODO: Validate user email
+		userEntity.email = user.email;
 		
-		return returnValue;
+		userEntity.activated = 0;
+		userEntity.role = Role.User;
+		
+		// The created user
+		UserEntity storedUserDetails = userRepository.save(userEntity);
+		
+		// Create new object to show newly created user's username
+		UserDto createdUserDto = new UserDto();
+		createdUserDto.username = storedUserDetails.username;
+		
+		return createdUserDto;
 	}
 
 	@Override
