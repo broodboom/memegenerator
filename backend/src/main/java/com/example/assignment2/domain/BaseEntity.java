@@ -10,12 +10,7 @@ import java.sql.Timestamp;
 
 @MappedSuperclass
 public abstract class BaseEntity implements Serializable {
-
-    /**
-     *
-     */
-    private static final long serialVersionUID = -1957642603302635457L;
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true, nullable = false)

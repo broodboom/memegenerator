@@ -11,45 +11,37 @@ import java.sql.Blob;
 @Entity
 public class Meme extends BaseEntity {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 6179148044106686855L;
-
-    @Column(name = "title", unique = true, nullable = false)
+    @Column(name = "title", nullable = false)
     @Getter
     @Setter
     @NotNull
     private String title;
 
-    @Column(name = "description", unique = true, nullable = true)
+    @Column(name = "description")
     @Getter
     @Setter
     private String description;
 
-    @Column(name = "image", unique = true, nullable = false)
+    @Column(name = "image")
     @Getter
     @Setter
-    @NotNull
     private Blob imageblob;
 
-    @Column(name = "likes", unique = true, nullable = false)
+    @Column(name = "likes")
     @Getter
     @Setter
-    @NotNull
     private int likes;
 
-    @Column(name = "dislikes", unique = true, nullable = false)
+    @Column(name = "dislikes")
     @Getter
     @Setter
-    @NotNull
     private int dislikes;
 
     @ManyToOne
-    @JoinColumn(name="imageid", nullable=false)
+    @JoinColumn(name = "imageid")
     private Image image;
 
     @ManyToOne
-    @JoinColumn(name="userid", nullable=false)
+    @JoinColumn(name = "userid", nullable = false)
     private UserEntity user;
 }
