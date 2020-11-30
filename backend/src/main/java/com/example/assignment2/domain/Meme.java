@@ -24,7 +24,7 @@ public class Meme extends BaseEntity {
     @Setter
     private String description;
 
-    @Column(name = "image")
+    @Column(name = "image", nullable = false)
     @Getter
     @Setter
     private Blob imageblob;
@@ -40,7 +40,7 @@ public class Meme extends BaseEntity {
     private int dislikes;
 
     @ManyToOne
-    @JoinColumn(name = "imageid")
+    @JoinColumn(name = "imageid", nullable = false)
     private Image image;
 
     @ManyToOne
