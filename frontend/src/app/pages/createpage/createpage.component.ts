@@ -22,18 +22,12 @@ function fillCanvas(){
      ctx.fillStyle = "black";
      ctx.fillText(inputField.value,40,80);
   })
-  // $(document).on('input','#inp',function(){
-  //     //redraw image
-  //     ctx.clearRect(0,0,canvas.width,canvas.height);
-  //     ctx.drawImage(image, 0, 0);
-  //     //refill text
-  //     ctx.fillStyle = "black";
-  //     ctx.fillText($(this).val(),40,80);
-  // });
-  // $('button').click(function(){
-  //     console.log(ctx.getImageData(50, 50, 100, 100));
-  // });
-
+  
+  var savebutton = document.querySelector('.save-button');
+  savebutton.addEventListener("click", function(){
+    var savedImage = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+    window.location.href= savedImage;
+  })
 
   // $('.save_button').click(function(){
       
