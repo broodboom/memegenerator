@@ -7,10 +7,12 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import java.sql.Blob;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Meme extends BaseEntity {
-
+    
     @Column(name = "title", nullable = false)
     @Getter
     @Setter
@@ -44,4 +46,12 @@ public class Meme extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "userid", nullable = false)
     private UserEntity user;
+
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+        name = "meme_tags", 
+        joinColumns = { @JoinColumn(name = "memeid") }, 
+        inverseJoinColumns = { @JoinColumn(name = "tagid") }
+    )
+    private Set<Tag> tags = new HashSet<>();
 }
