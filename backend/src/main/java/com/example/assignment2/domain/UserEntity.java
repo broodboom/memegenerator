@@ -11,11 +11,6 @@ import java.util.Set;
 @Entity
 public class UserEntity extends BaseEntity {
     
-    /**
-     *
-     */
-    private static final long serialVersionUID = 7662525133363601456L;
-
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
         name = "user_achievements", 
