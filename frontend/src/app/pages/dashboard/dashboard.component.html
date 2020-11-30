@@ -1,6 +1,6 @@
 <nb-list class="dashboardlist" nbInfiniteList [threshold]="500">
   <nb-list-item *ngFor="let item of items">
-    <nb-card>
+    <nb-card id={{item.id}}>
       <nb-card-header>{{item.title}}</nb-card-header>
       <nb-card-body>
         <img src="{{item.image}}"/>
