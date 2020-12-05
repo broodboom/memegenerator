@@ -19,6 +19,7 @@ import { of } from 'rxjs';
 // MUST DELETE these imports after merge
 import { fakeBackendProvider } from './temp/fake-backend';
 import { JwtInterceptor} from './temp/jwt.interceptor';
+import { MemeService } from './_helpers/MemeService';
 
 @NgModule({
   declarations: [AppComponent],
@@ -65,7 +66,14 @@ import { JwtInterceptor} from './temp/jwt.interceptor';
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
 
     // provider used to create fake backend, MUST DELETE after merge
-    fakeBackendProvider
+    fakeBackendProvider,
+    //CRUD service for the memes
+    {provide: MemeService,
+      useValue: {
+        getRole: () => {
+          return of('guest'); // TODO get the role from the user none == guest
+        },
+      },},
   ],
   bootstrap: [AppComponent],
 })
