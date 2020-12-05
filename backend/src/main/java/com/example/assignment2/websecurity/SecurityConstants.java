@@ -7,7 +7,7 @@ public class SecurityConstants {
 	public static final String TOKEN_PREFIX = "Bearer";
 	public static final String HEADER_STRING = "Authorization";
 	public static final String SIGN_UP_URL = "/user";
-	public static final String TOKEN_SECRET = "vissers";
+	public static final String TOKEN_SECRET = "DeVissersZijnDeGekste!()*#)&(@&*^#(*&^(*&^(*))";
 	public static final String VERIFICATION_EMAIL_URL = "/users/email-verification";
     public static final String PASSWORD_RESET_REQUEST_URL = "/users/password-reset-request";
     public static final String PASSWORD_RESET_URL = "/users/password-reset";
@@ -15,7 +15,7 @@ public class SecurityConstants {
 	
 	public static String getTokenSecret()
 	{
-        var appProperties = SpringApplicationContext.getBean("AppProperties");
-        return ((SecurityConstants) appProperties).getTokenSecret();
+		AppProperties appProperties = (AppProperties) SpringApplicationContext.getBean("AppProperties");
+        return appProperties.getTokenSecret();
 	}
 }
