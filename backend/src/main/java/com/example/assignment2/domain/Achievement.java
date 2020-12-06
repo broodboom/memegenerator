@@ -12,17 +12,12 @@ import java.util.Set;
 @Entity
 public class Achievement extends BaseEntity {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = -5620579023438427816L;
-
-    @Column(name = "name", unique = true, nullable = false)
+    @Column(name = "name", nullable = false)
     @Getter
     @Setter
     @NotNull
     private String title;
 
     @ManyToMany(mappedBy = "achievements")
-    private Set<User> users = new HashSet<>();
+    private Set<UserEntity> users = new HashSet<>();
 }
