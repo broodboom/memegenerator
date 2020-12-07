@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.memegenerator.domain.Role;
 import com.example.memegenerator.domain.UserEntity;
 import com.example.memegenerator.respository.UserRepository;
 import com.example.memegenerator.service.JavaMailSender;
@@ -46,6 +47,7 @@ public class UserServiceImpl implements UserService {
 		ModelMapper modelMapper = new ModelMapper();
 		UserEntity userEntity = modelMapper.map(user, UserEntity.class);
 
+		userEntity.setRole(Role.User);
 		userEntity.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
 		UserEntity storedUserDetails = userRepository.save(userEntity);
