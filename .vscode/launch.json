@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - MemegeneratorApplication",
+            "request": "launch",
+            "mainClass": "com.example.memegenerator.MemegeneratorApplication",
+            "projectName": "assignment2"
+        },
+        {
+            "type": "java",
             "name": "Debug (Launch) - Current File",
             "request": "launch",
             "mainClass": "${file}"

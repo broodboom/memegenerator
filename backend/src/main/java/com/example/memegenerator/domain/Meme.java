@@ -1,4 +1,4 @@
-package com.example.memegeneratororor.domain;
+package com.example.memegenerator.domain;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +13,11 @@ import java.util.Set;
 @Entity
 public class Meme extends BaseEntity {
     
+    /**
+     *
+     */
+    private static final long serialVersionUID = 4756717328435193553L;
+
     @Column(name = "title", nullable = false)
     @Getter
     @Setter

@@ -13,10 +13,6 @@ public class UserDto {
 	@Setter
 	public String username;
 	
-	//@Getter
-	//@Setter
-	//public Set<Achievement> achievements = new HashSet<>();
-	
 	@Setter
 	@Getter
 	public String password;

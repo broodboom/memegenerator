@@ -1,4 +1,4 @@
-package com.example.memegeneratoror.domain;
+package com.example.memegenerator.domain;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +11,11 @@ import java.util.Set;
 
 @Entity
 public class Achievement extends BaseEntity {
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = -5620579023438427816L;
 
     @Column(name = "name", nullable = false)
     @Getter

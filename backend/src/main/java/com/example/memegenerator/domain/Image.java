@@ -1,4 +1,4 @@
-package com.example.memegeneratoror.domain;
+package com.example.memegenerator.domain;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,6 +12,11 @@ import java.util.Set;
 
 @Entity
 public class Image extends BaseEntity {
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = 2625947951673180450L;
 
     @OneToMany(mappedBy = "image")
     Set<Meme> memes = new HashSet<>();

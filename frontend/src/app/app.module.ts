@@ -19,8 +19,7 @@ import { of } from 'rxjs';
 // MUST DELETE these imports after merge
 import { fakeBackendProvider } from './temp/fake-backend';
 import { JwtInterceptor} from './temp/jwt.interceptor';
-import { MemeService } from './_helpers/MemeService';
-import { Interceptor } from './_helpers/interceptor';
+import { AuthenticationService } from './temp/authentication.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -68,12 +67,7 @@ import { Interceptor } from './_helpers/interceptor';
 
     // provider used to create fake backend, MUST DELETE after merge
     fakeBackendProvider,
-
-    
-    //CRUD service for the memes
-    {provide: MemeService,
-     },
-     {provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true},
+    AuthenticationService
   ],
   bootstrap: [AppComponent],
 })

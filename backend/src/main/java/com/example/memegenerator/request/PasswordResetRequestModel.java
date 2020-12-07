@@ -3,15 +3,7 @@ package com.example.memegenerator.request;
 import lombok.Getter;
 import lombok.Setter;
 
-public class UserDetailsRequestModel {
-	@Getter
-	@Setter
-	public String username;
-	
-	@Getter
-	@Setter
-	public String password;
-	
+public class PasswordResetRequestModel {
 	@Getter
 	@Setter
 	public String email;
