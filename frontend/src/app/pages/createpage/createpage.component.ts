@@ -7,7 +7,21 @@ import { Meme } from '../../shared/models/Meme';
 
 // var ctx = canvas.getContext('2d');
 
+function saveMeme(){
+    
+      
+  var canvas = document.querySelector('canvas')
+  var meme= new Meme("test", "testLink", 1 );
+  console.log(meme);
+  console.log(this.memeService);
+  this.memeService.CreateMeme(meme).subscribe(res => {
+    console.log("Works?")
+  
 
+  var savedImage = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+  window.location.href= savedImage;
+})
+}
 
 @Component({
   selector: 'ngx-createpage',
@@ -23,10 +37,9 @@ export class CreatepageComponent implements OnInit{
   
   ngOnInit() {
     this.fillCanvas();
+    
   }
-  constructor(
-    public memeService : MemeService
-    ) { }
+  constructor(public memeService : MemeService ) { }
   
 
 
@@ -45,11 +58,13 @@ export class CreatepageComponent implements OnInit{
           var temp = event.target.result as string;
           var image = document.querySelector('img');
           image.setAttribute("src", temp)
+          
       }
   
-     
+    
       reader.readAsDataURL(e.target.files[0]);     
   }
+
   fillCanvas(){
     var inputField = document.querySelector('input');
     var canvas = document.querySelector('canvas')
@@ -72,20 +87,12 @@ export class CreatepageComponent implements OnInit{
     
     var imageLoader = document.getElementById('imageLoader');
       imageLoader.addEventListener('change', this.handleSaveImage, false);
+
+      var savebutton = document.querySelector('.save-button');
+    savebutton.addEventListener("click", saveMeme)
   
-    var savebutton = document.querySelector('.save-button');
-    savebutton.addEventListener("click", function(){
-      
-  
-      var meme= new Meme("test", "testLink", 1 );
-      console.log(meme);
-      console.log(this.memeService);
-      this.memeService.CreateMeme(meme).subscribe(res => {
-        console.log("Works?")
-      })
-  
-      var savedImage = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-      window.location.href= savedImage;
-    })
+
   }
+
+  
 }

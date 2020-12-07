@@ -4,21 +4,28 @@ import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import { Meme } from '../shared/models/Meme';
 
+const environment = {
+  production: false,
+  apiUrl: 'https://localhost:44386/api'
+};
 
-@Injectable({providedIn: 'root'})
+@Injectable()
 export class MemeService {
-  private url: "https://localhost:44386/api/";
+  public baseurl: "http://localhost:51049/api/";
 
-  constructor(private http: HttpClient) { }
+  constructor(public http: HttpClient) {
+
+   }
 
   httpOptions = {
     headers: new HttpHeaders({
-      'Content-Type' : 'application/json'
+      'Content-Type' : 'application/json',
+      'Access-Control-Allow-Origin': '*'
     })
   }
 
   CreateMeme(data): Observable<Meme> {
-    return this.http.post<Meme>(this.url + '/meme/', JSON.stringify(data), this.httpOptions)
+    return this.http.post<Meme>(`${environment.apiUrl}/meme`, JSON.stringify(data), this.httpOptions)
     .pipe(
       retry(1),
       catchError(this.errorHandl)
@@ -26,7 +33,7 @@ export class MemeService {
   }
 
   GetAllMemes(): Observable<Meme[]> {
-    return this.http.get<Meme[]>(this.url + '/getmemes/')
+    return this.http.get<Meme[]>(`${environment.apiUrl}/meme`, this.httpOptions)
     .pipe(
       retry(1),
       catchError(this.errorHandl)
@@ -34,7 +41,7 @@ export class MemeService {
   }
 
   getMeme(id): Observable<Meme> {
-    return this.http.get<Meme>(this.url + '/getmeme/' + id)
+    return this.http.get<Meme>(`${environment.apiUrl}/meme/`+ id)
     .pipe(
       retry(1),
       catchError(this.errorHandl)

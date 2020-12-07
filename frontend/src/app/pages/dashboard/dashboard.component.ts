@@ -1,4 +1,5 @@
-import {Component, OnDestroy} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import { MemeService } from 'app/_helpers/MemeService';
 
 //TODO: move this to a generic model folder
 class Card{
@@ -42,9 +43,23 @@ function getPlaceholderCards(){
 })
 
 
-export class DashboardComponent {
+export class DashboardComponent implements OnInit{
   
-  items = getPlaceholderCards();
+  // items = getPlaceholderCards();
+  items = []
+  loading = false;
+
+  constructor(public memeService: MemeService){}
+
+  loadNext(){
+    if(this.loading) {return}
+    this.loading = true;
+    this.memeService.GetAllMemes().subscribe(meme => this.items.push(...meme));
+    this.loading = false;
+  }
+  ngOnInit(){
+    
+  }
 
  
 }
