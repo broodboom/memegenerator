@@ -3,9 +3,10 @@ import {Component, OnInit} from '@angular/core';
 function activateButtons(){
     var likes = document.querySelector('.likeValue');
     var dislikes = document.querySelector('.dislikeValue');
-    likes.innerHTML = "23";
+    likes.innerHTML = "69";
+    dislikes.innerHTML = "420";
     /*
-    var Meme = FindMemeById(1);
+    var Meme = findMemeById(1);
     likes.innerHTML = (Meme.likes).toString();
     dislikes.innerHTML = (Meme.dislikes).toString();
     */
