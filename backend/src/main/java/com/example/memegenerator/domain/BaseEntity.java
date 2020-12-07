@@ -21,11 +21,11 @@ public abstract class BaseEntity implements Serializable {
     @Column(name = "id", unique = true, nullable = false)
     @Getter
     @Setter
-    private Long id;
+    public Long id;
 
     @CreationTimestamp
     @Column(name = "createdat", unique = false, nullable = false)
     @Getter
     @Setter
-    private Timestamp createdat;
+    public Timestamp createdat;
 }

@@ -14,39 +14,33 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Service
 public class Utils {
 
-	public static boolean hasTokenExpired(String token) {
+    public static boolean hasTokenExpired(String token) {
         boolean expired = false;
 
-		try {
-            Claims claims = Jwts.parser()
-                .setSigningKey(SecurityConstants.getTokenSecret())
-                .parseClaimsJws(token).getBody();
+        try {
+            Claims claims = Jwts.parser().setSigningKey(SecurityConstants.getTokenSecret()).parseClaimsJws(token)
+                    .getBody();
 
-			Date tokenExpirationDate = claims.getExpiration();
-			Date todayDate = new Date();
+            Date tokenExpirationDate = claims.getExpiration();
+            Date todayDate = new Date();
 
-			expired = tokenExpirationDate.before(todayDate);
-		} catch (ExpiredJwtException ex) {
-			return expired;
-		}
+            expired = tokenExpirationDate.before(todayDate);
+        } catch (ExpiredJwtException ex) {
+            return expired;
+        }
 
-		return expired;
-	}
-
-    public String generateEmailVerificationToken(Integer userId) {
-        return Jwts.builder()
-                .setSubject(userId.toString())
-                .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.HS512, SecurityConstants.getTokenSecret())
-                .compact();
+        return expired;
     }
-    
-    public String generatePasswordResetToken(Integer userId)
-    {
-        return Jwts.builder()
-                .setSubject(userId.toString())
+
+    public String generateEmailVerificationToken(long userId) {
+        return Jwts.builder().setSubject(Long.toString(userId))
                 .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.HS512, SecurityConstants.getTokenSecret())
-                .compact();
+                .signWith(SignatureAlgorithm.HS512, SecurityConstants.getTokenSecret()).compact();
+    }
+
+    public String generatePasswordResetToken(long userId) {
+        return Jwts.builder().setSubject(Long.toString(userId))
+                .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
+                .signWith(SignatureAlgorithm.HS512, SecurityConstants.getTokenSecret()).compact();
     }
 }

@@ -7,7 +7,7 @@ public class UserRest {
 	@Getter
 	@Setter
 	public String username;
-	
+
 	@Getter
 	@Setter
 	public String email;

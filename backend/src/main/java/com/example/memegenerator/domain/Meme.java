@@ -12,7 +12,7 @@ import java.util.Set;
 
 @Entity
 public class Meme extends BaseEntity {
-    
+
     /**
      *
      */
@@ -53,10 +53,7 @@ public class Meme extends BaseEntity {
     public UserEntity user;
 
     @ManyToMany(cascade = { CascadeType.ALL })
-    @JoinTable(
-        name = "meme_tags", 
-        joinColumns = { @JoinColumn(name = "memeid") }, 
-        inverseJoinColumns = { @JoinColumn(name = "tagid") }
-    )
+    @JoinTable(name = "meme_tags", joinColumns = { @JoinColumn(name = "memeid") }, inverseJoinColumns = {
+            @JoinColumn(name = "tagid") })
     public Set<Tag> tags = new HashSet<>();
 }

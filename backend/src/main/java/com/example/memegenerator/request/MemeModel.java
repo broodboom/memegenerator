@@ -1,4 +1,5 @@
 package com.example.memegenerator.request;
+
 import lombok.Getter;
 import lombok.Setter;
 import java.sql.Blob;
@@ -10,24 +11,19 @@ public class MemeModel {
 
     public String title;
 
-
     @Getter
     @Setter
     public String description;
-
 
     @Getter
     @Setter
     public Blob imageblob;
 
-
     @Getter
     @Setter
     public int likes;
 
-
     @Getter
     @Setter
     public int dislikes;
-
 }

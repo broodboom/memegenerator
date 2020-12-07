@@ -18,5 +18,5 @@ public class Tag extends BaseEntity {
     @Getter
     @Setter
     @NotNull
-    private String title;
+    public String title;
 }

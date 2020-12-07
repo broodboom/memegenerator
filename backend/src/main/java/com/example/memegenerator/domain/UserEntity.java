@@ -10,23 +10,20 @@ import java.util.Set;
 
 @Entity
 public class UserEntity extends BaseEntity {
-    
+
     /**
      *
      */
     private static final long serialVersionUID = 5184790245397751389L;
 
     @ManyToMany(cascade = { CascadeType.ALL })
-    @JoinTable(
-        name = "user_achievements", 
-        joinColumns = { @JoinColumn(name = "userid") }, 
-        inverseJoinColumns = { @JoinColumn(name = "achievementid") }
-    )
+    @JoinTable(name = "user_achievements", joinColumns = { @JoinColumn(name = "userid") }, inverseJoinColumns = {
+            @JoinColumn(name = "achievementid") })
     Set<Achievement> achievements = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
     Set<Meme> memes = new HashSet<>();
-    
+
     @Column(name = "username", nullable = false)
     @Getter
     @Setter
@@ -37,7 +34,7 @@ public class UserEntity extends BaseEntity {
     @Getter
     @Setter
     @NotNull(message = "No password given")
-	public String password;
+    public String password;
 
     @Column(name = "points", nullable = true)
     @Getter
@@ -64,6 +61,6 @@ public class UserEntity extends BaseEntity {
     @Column(name = "activated", nullable = false)
     @Getter
     @Setter
-    @NotNull(message ="No activated give")
+    @NotNull(message = "No activated give")
     public boolean activated;
 }

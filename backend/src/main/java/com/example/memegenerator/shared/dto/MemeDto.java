@@ -9,28 +9,24 @@ public class MemeDto {
     @Getter
     @Setter
 
-    public Long id;
+    public long id;
 
     @Getter
     @Setter
 
     public String title;
 
-
     @Getter
     @Setter
     public String description;
-
 
     @Getter
     @Setter
     public Blob imageblob;
 
-
     @Getter
     @Setter
     public int likes;
-
 
     @Getter
     @Setter

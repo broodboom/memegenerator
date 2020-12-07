@@ -25,11 +25,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
-public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter  {
-
+public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	private final AuthenticationManager authenticationManager;
-
-	private String contentType;
 
 	public AuthenticationFilter(AuthenticationManager authenticationManager) {
 		this.authenticationManager = authenticationManager;
@@ -40,7 +37,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter  
 			throws AuthenticationException {
 		try {
 
-			contentType = req.getHeader("Accept");
+			req.getHeader("Accept");
 
 			UserLoginRequestModel creds = new ObjectMapper().readValue(req.getInputStream(),
 					UserLoginRequestModel.class);
@@ -52,7 +49,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter  
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	@Override
 	protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain,
 			Authentication auth) throws IOException, ServletException {
@@ -61,11 +58,11 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter  
 
 		String token = Jwts.builder().setSubject(userName)
 				.setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
-				.signWith(SignatureAlgorithm.HS512, SecurityConstants.TOKEN_SECRET).compact();
+				.signWith(SignatureAlgorithm.HS512, SecurityConstants.getTokenSecret()).compact();
 		UserService userService = (UserService) SpringApplicationContext.getBean("userServiceImpl");
 		UserDto userDto = userService.getUser(userName);
 
 		res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
-		//res.addIntHeader("id", userDto.id);
+		res.addHeader("UserID", Long.toString(userDto.id));
 	}
 }

@@ -5,7 +5,8 @@ import com.example.memegenerator.shared.dto.MemeDto;
 
 public interface MemeService {
     void createMeme(MemeDto meme);
-    MemeModel getMemeById (long id);
+
+    MemeModel getMemeById(long id);
 
     void updateMeme(MemeDto meme);
 }

@@ -25,15 +25,15 @@ public class Image extends BaseEntity {
     @Getter
     @Setter
     @NotNull
-    private String title;
+    public String title;
 
     @Column(name = "image", nullable = false)
     @Getter
     @Setter
     @NotNull
-    private Blob imageblob;
+    public Blob imageblob;
 
     @ManyToOne
     @JoinColumn(name = "userid", nullable = false)
-    private UserEntity user;
+    public UserEntity user;
 }
