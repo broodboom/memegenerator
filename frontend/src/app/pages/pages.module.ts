@@ -9,6 +9,7 @@ import { LoginModule } from '../temp/login.module';
 import { PagesRoutingModule } from './pages-routing.module';
 import { DetailpageComponent } from './detailpage/detailpage.component';
 import { CreatepageComponent } from './createpage/createpage.component';
+import { LikeButtonModule } from './likebutton/likebutton.module';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { CreatepageComponent } from './createpage/createpage.component';
     NbMenuModule,
     DashboardModule,
     AdminModule,
-    LoginModule
+    LoginModule,
+    LikeButtonModule
   ],
   declarations: [
     PagesComponent,

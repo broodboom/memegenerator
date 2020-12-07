@@ -21,5 +21,11 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: 'cogwheel',
     link: '/pages/create',
     home: true,
+  },
+  {
+    title: 'Like Button',
+    icon: 'heart-outline',
+    link: '/pages/likebutton',
+    home: true,
   }
 ];
