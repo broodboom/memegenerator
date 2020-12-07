@@ -12,10 +12,10 @@
         },
         {
             "type": "java",
-            "name": "Debug (Launch)-Assignment2Application<assignment2>",
+            "name": "Debug (Launch)-MemegeneratorApplication<memegenerator>",
             "request": "launch",
-            "mainClass": "com.example.assignment2.Assignment2Application",
-            "projectName": "assignment2"
+            "mainClass": "com.example.memegenerator.MemegeneratorApplication",
+            "projectName": "memegenerator"
         }
     ]
 }
