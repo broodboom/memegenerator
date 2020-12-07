@@ -40,21 +40,29 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDto createUser(UserDto user) {
 
-		if (userRepository.findByEmail(user.getEmail()) != null) {
+		if (userRepository.findByEmail(user.email) != null) {
 			throw new UsernameNotFoundException("Email is in use");
 		}
 
-		ModelMapper modelMapper = new ModelMapper();
-		UserEntity userEntity = modelMapper.map(user, UserEntity.class);
-
-		userEntity.setRole(Role.User);
-		userEntity.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+		//ModelMapper modelMapper = new ModelMapper();
+		UserEntity userEntity = new UserEntity();	
+		
+		userEntity.username = user.username;
+		userEntity.email = user.email;
+		userEntity.role = Role.User;
+		userEntity.password = bCryptPasswordEncoder.encode(user.password);
 
 		UserEntity storedUserDetails = userRepository.save(userEntity);
+		
+		UserDto userDto = new UserDto();
+		
+		userDto.username = userEntity.username;
+		userDto.password = userEntity.password;
+		userDto.email = userEntity.email;
 
-		UserDto returnValue = modelMapper.map(storedUserDetails, UserDto.class);
+		//UserDto returnValue = modelMapper.map(storedUserDetails, UserDto.class);
 
-		return returnValue;
+		return userDto;
 	}
 
 	@Override
@@ -79,7 +87,7 @@ public class UserServiceImpl implements UserService {
 			throw new UsernameNotFoundException(email);
 		}
 
-		return new User(userEntity.getEmail(), userEntity.getPassword(), userEntity.isActivated(), true, true, true,
+		return new User(userEntity.email, userEntity.password, userEntity.activated, true, true, true,
 				new ArrayList<>());
 	}
 
@@ -133,16 +141,16 @@ public class UserServiceImpl implements UserService {
 			throw new UsernameNotFoundException(email);
 		}
 
-		String token = new Utils().generatePasswordResetToken(userEntity.getId());
+		String token = new Utils().generatePasswordResetToken(userEntity.id);
 
-		userEntity.setToken(token);
+		userEntity.token = token;
 		userRepository.save(userEntity);
 
 		SimpleMailMessage message = new SimpleMailMessage(); 
         message.setFrom("javaminor@cornevisser.nl");
-        message.setTo(userEntity.getEmail()); 
+        message.setTo(userEntity.email); 
         message.setSubject("Password reset token"); 
-        message.setText("Your password reset token: " + userEntity.getToken());
+        message.setText("Your password reset token: " + userEntity.token);
 		javaMailSender.getJavaMailSender().send(message);
 	}
 
@@ -162,12 +170,12 @@ public class UserServiceImpl implements UserService {
 
 		String hashedPassword = bCryptPasswordEncoder.encode(password);
 
-		userEntity.setPassword(hashedPassword);
-		userEntity.setToken(null);
+		userEntity.password = hashedPassword;
+		userEntity.token = null;
 
 		UserEntity savedUserEntity = userRepository.save(userEntity);
 
-		if (savedUserEntity != null && savedUserEntity.getPassword().equalsIgnoreCase(hashedPassword)) {
+		if (savedUserEntity != null && savedUserEntity.password.equalsIgnoreCase(hashedPassword)) {
 			returnValue = true;
 		}
 

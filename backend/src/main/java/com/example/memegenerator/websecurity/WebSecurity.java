@@ -49,6 +49,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter{
         .sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         
+        http.csrf().disable();
+        
         http.headers().frameOptions().disable();
     }
 

@@ -21,7 +21,7 @@ public abstract class BaseEntity implements Serializable {
     @Column(name = "id", unique = true, nullable = false)
     @Getter
     @Setter
-    private Integer id;
+	public Integer id;
 
     @CreationTimestamp
     @Column(name = "createdat", unique = false, nullable = false)

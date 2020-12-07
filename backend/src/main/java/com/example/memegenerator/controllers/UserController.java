@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 
 import com.example.memegenerator.request.PasswordResetModel;
 import com.example.memegenerator.request.PasswordResetRequestModel;
@@ -49,13 +51,21 @@ public class UserController {
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) throws Exception {
-		ModelMapper modelMapper = new ModelMapper();
-		UserDto userDto = modelMapper.map(userDetails, UserDto.class);
-
-		UserDto createdUser = userService.createUser(userDto);
-
-		return modelMapper.map(createdUser, UserRest.class);
+	public UserDto createUser(@RequestBody UserDetailsRequestModel userDetails) throws Exception {
+		
+		UserDto userDto = new UserDto();
+		
+		userDto.username = userDetails.username;
+		userDto.email = userDetails.email;
+		userDto.password = userDetails.password;
+		
+		BeanUtils.copyProperties(userDetails, userDto);
+//
+		userService.createUser(userDto);
+//
+//		return createdUser;
+		
+		return userDto;
 	}
 
 	@PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -70,14 +80,14 @@ public class UserController {
 
 	@PostMapping(path = "/password-reset-request", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> requestReset(@RequestBody PasswordResetRequestModel passwordResetRequestModel) {
-		userService.requestPasswordReset(passwordResetRequestModel.getEmail());
+		userService.requestPasswordReset(passwordResetRequestModel.email);
 
 		return new ResponseEntity<String>("", HttpStatus.OK);
 	}
 
 	@PostMapping(path = "/password-reset", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> resetPassword(@RequestBody PasswordResetModel passwordResetModel) {
-		userService.resetPassword(passwordResetModel.getToken(), passwordResetModel.getPassword());
+		userService.resetPassword(passwordResetModel.token, passwordResetModel.password);
 
 		return new ResponseEntity<String>("", HttpStatus.OK);
 	}
