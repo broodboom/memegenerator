@@ -17,35 +17,35 @@ public class Meme extends BaseEntity {
     @Getter
     @Setter
     @NotNull
-    private String title;
+    public String title;
 
     @Column(name = "description")
     @Getter
     @Setter
-    private String description;
+    public String description;
 
     @Column(name = "image", nullable = false)
     @Getter
     @Setter
-    private Blob imageblob;
+    public Blob imageblob;
 
     @Column(name = "likes")
     @Getter
     @Setter
-    private int likes;
+    public int likes;
 
     @Column(name = "dislikes")
     @Getter
     @Setter
-    private int dislikes;
+    public int dislikes;
 
     @ManyToOne
     @JoinColumn(name = "imageid", nullable = false)
-    private Image image;
+    public Image image;
 
     @ManyToOne
     @JoinColumn(name = "userid", nullable = false)
-    private UserEntity user;
+    public UserEntity user;
 
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
@@ -53,5 +53,5 @@ public class Meme extends BaseEntity {
         joinColumns = { @JoinColumn(name = "memeid") }, 
         inverseJoinColumns = { @JoinColumn(name = "tagid") }
     )
-    private Set<Tag> tags = new HashSet<>();
+    public Set<Tag> tags = new HashSet<>();
 }
