@@ -9,6 +9,7 @@ import {CreatepageComponent } from './createpage/createpage.component';
 import { AuthGuard } from '../_helpers/auth.guard';
 // This is a temp LogIn, MUST DELETE after merge
 import { LoginComponent } from '../temp/login.component';
+import { LikeButtonComponent } from './likebutton/likebutton.component';
 
 // These lines are only used for the Admin Page WITHOUT the logIn/register features, so MUST DELETE after merge
 enum Role {
@@ -38,6 +39,10 @@ const routes: Routes = [{
     {
       path: 'create',
       component: CreatepageComponent,
+    },
+    {
+      path: 'likebutton',
+      component: LikeButtonComponent,
     }
   ],
 }];
