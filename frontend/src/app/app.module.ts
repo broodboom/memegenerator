@@ -21,6 +21,7 @@ import { fakeBackendProvider } from './temp/fake-backend';
 import { JwtInterceptor} from './temp/jwt.interceptor';
 import { MemeService } from './_helpers/MemeService';
 import { AuthenticationService } from './temp/authentication.service';
+import { Interceptor } from './_helpers/interceptor';
 
 @NgModule({
   declarations: [AppComponent],
@@ -69,12 +70,15 @@ import { AuthenticationService } from './temp/authentication.service';
     // provider used to create fake backend, MUST DELETE after merge
     fakeBackendProvider,
     AuthenticationService
+    
     {provide: MemeService,
       useValue: {
         getRole: () => {
           return of('guest'); // TODO get the role from the user none == guest
         },
-      },},
+       },
+     },
+     {provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true},
   ],
   bootstrap: [AppComponent],
 })
