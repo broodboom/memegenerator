@@ -61,7 +61,7 @@ export class CreatepageComponent implements OnInit{
       ctx.font = "64px Verdana";
        //redraw image
        ctx.clearRect(0,0,image.width,image.height);
-      //  console.log(temp);
+
      
       var tempImg = new Image();
       tempImg.src = temp;
