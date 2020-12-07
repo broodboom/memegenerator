@@ -11,6 +11,11 @@ import java.util.Set;
 @Entity
 public class UserEntity extends BaseEntity {
     
+    /**
+     *
+     */
+    private static final long serialVersionUID = 5184790245397751389L;
+
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
         name = "user_achievements", 
@@ -45,6 +50,11 @@ public class UserEntity extends BaseEntity {
     @NotNull(message = "No email given")
     public String email;
 
+    @Column(name = "token")
+    @Getter
+    @Setter
+    public String token;
+
     @Column(name = "role", nullable = false)
     @Getter
     @Setter
@@ -55,5 +65,5 @@ public class UserEntity extends BaseEntity {
     @Getter
     @Setter
     @NotNull(message ="No activated give")
-    public int activated;
+    public boolean activated;
 }
