@@ -25,6 +25,7 @@ export class CreatepageComponent implements OnInit{
 
   handleSaveImage(e){
     var canvas = document.querySelector('canvas')
+    console.log(canvas);
     var ctx = canvas.getContext('2d');
       var reader = new FileReader();
       reader.onload = function(event){
@@ -35,9 +36,10 @@ export class CreatepageComponent implements OnInit{
               ctx.drawImage(img,0,0);
           }
           img.src= event.target.result as string;
+          console.log("img src:  ")
           var temp = event.target.result as string;
-          var image = document.querySelector('img');
-          image.setAttribute("src", temp)
+          var image = document.querySelector('canvas');
+          canvas.setAttribute("src", img.src)
           
       }
   
@@ -50,7 +52,8 @@ export class CreatepageComponent implements OnInit{
     var canvas = document.querySelector('canvas')
     var ctx = canvas.getContext('2d');
     inputField.addEventListener("keyup", function(){
-       var image = document.querySelector('img');
+       var image = document.querySelector('canvas');
+       var temp = canvas.getAttribute("src")
       canvas.width = image.width;
       canvas.setAttribute("crossOrigin" , "Anonymous");
       canvas.height = image.height;
@@ -58,8 +61,12 @@ export class CreatepageComponent implements OnInit{
       ctx.font = "64px Verdana";
        //redraw image
        ctx.clearRect(0,0,image.width,image.height);
-       console.log(canvas.width);
-       ctx.drawImage(image, 0, 0);
+      //  console.log(temp);
+     
+      var tempImg = new Image();
+      tempImg.src = temp;
+        ctx.drawImage(tempImg, 0, 0);
+      // canvas.setAttribute("background-image", temp);
        //refill text
        ctx.fillStyle = "black";
        ctx.fillText(inputField.value,40,80);
