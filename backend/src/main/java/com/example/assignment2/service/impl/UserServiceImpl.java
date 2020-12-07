@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.assignment2.domain.Role;
 import com.example.assignment2.domain.UserEntity;
-import com.example.assignment2.respository.UserRepository;
+import com.example.assignment2.repository.UserRepository;
 import com.example.assignment2.service.UserService;
 import com.example.assignment2.shared.dto.UserDto;
 

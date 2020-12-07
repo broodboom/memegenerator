@@ -2,44 +2,24 @@ import { Component, OnInit } from '@angular/core';
 import { MemeService } from '../../_helpers/MemeService';
 import { Meme } from '../../shared/models/Meme';
 
-
-
-
-// var ctx = canvas.getContext('2d');
-
-function saveMeme(){
-    
-      
-  var canvas = document.querySelector('canvas')
-  var meme= new Meme("test", "testLink", 1 );
-  console.log(meme);
-  console.log(this.memeService);
-  this.memeService.CreateMeme(meme).subscribe(res => {
-    console.log("Works?")
-  
-
-  var savedImage = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-  window.location.href= savedImage;
-})
-}
+let self: any;
 
 @Component({
   selector: 'ngx-createpage',
   templateUrl: './createpage.component.html',
-  styleUrls: ['./createpage.component.scss'],
-  providers: [MemeService]
+  styleUrls: ['./createpage.component.scss']
 })
-
-
 
 export class CreatepageComponent implements OnInit{
  
-  
+  constructor(public memeService : MemeService ) { }
+
   ngOnInit() {
+    self = this;
+
     this.fillCanvas();
     
   }
-  constructor(public memeService : MemeService ) { }
   
 
 
@@ -89,9 +69,23 @@ export class CreatepageComponent implements OnInit{
       imageLoader.addEventListener('change', this.handleSaveImage, false);
 
       var savebutton = document.querySelector('.save-button');
-    savebutton.addEventListener("click", saveMeme)
+    savebutton.addEventListener("click", this.saveMeme)
   
 
+  }
+
+  saveMeme(){
+    var canvas = document.querySelector('canvas')
+    var meme= new Meme("test", "testLink", 1 );
+    console.log(meme);
+    console.log(self.memeService);
+    self.memeService.CreateMeme(meme).subscribe(res => {
+      console.log("Works?")
+    
+  
+    var savedImage = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+    window.location.href= savedImage;
+  })
   }
 
   

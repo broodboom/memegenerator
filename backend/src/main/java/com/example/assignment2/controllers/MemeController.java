@@ -2,6 +2,8 @@ package com.example.assignment2.controllers;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,20 +13,18 @@ import com.example.assignment2.request.MemeModel;
 import com.example.assignment2.shared.dto.MemeDto;
 
 
-import com.example.assignment2.service.UserService;
+import com.example.assignment2.service.MemeService;
 
 @RestController
-@RequestMapping("user")
+@RequestMapping("meme")
 public class MemeController {
 
     @Autowired
-    UserService userService;
+    MemeService memeService;
 
     @PostMapping(path = "/")
     public void createMeme(@RequestBody MemeModel meme)
     {
-
-
         MemeDto memeDto = new MemeDto();
         memeDto.title = meme.title;
         memeDto.description = meme.description;
@@ -32,15 +32,24 @@ public class MemeController {
         memeDto.likes = 0;
         memeDto.dislikes = 0;
 
+        // Create meme
         memeService.createMeme(memeDto);
-        // Create user
-        UserDto createdUser = userService.createUser(userDto);
+    }
 
-        // Show newly created user to the client
-        UserRest newUser = new UserRest();
-        newUser.username = createdUser.username;
-        newUser.email = createdUser.email;
+    @GetMapping(path = "/{id}")
+    public MemeModel getMemeById(@PathVariable long id){
+        return memeService.getMemeById(id);
+    }
 
-        return newUser;
+    @PostMapping(path = "/update/{meme}")
+    public void updateMeme(@RequestBody MemeModel meme){
+        MemeDto memeDto = new MemeDto();
+        memeDto.title = meme.title;
+        memeDto.description = meme.description;
+        memeDto.imageblob = meme.imageblob;
+        memeDto.likes = meme.likes;
+        memeDto.dislikes = meme.dislikes;
+
+        memeService.updateMeme(memeDto);
     }
 }

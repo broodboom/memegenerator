@@ -1,7 +1,6 @@
-package com.example.assignment2.respository;
+package com.example.assignment2.repository;
 
 import com.example.assignment2.domain.Meme;
-import com.example.assignment2.domain.UserEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
