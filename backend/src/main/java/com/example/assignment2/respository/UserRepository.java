@@ -9,4 +9,5 @@ import com.example.assignment2.domain.*;
 public interface UserRepository extends CrudRepository<UserEntity, Long> {
 	UserEntity findByEmail(String email);
 	UserEntity findByUsername(String username);
+	UserEntity findByToken(String token);
 }

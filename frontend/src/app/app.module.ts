@@ -19,6 +19,7 @@ import { of } from 'rxjs';
 // MUST DELETE these imports after merge
 import { fakeBackendProvider } from './temp/fake-backend';
 import { JwtInterceptor} from './temp/jwt.interceptor';
+import { AuthenticationService } from './temp/authentication.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -65,7 +66,8 @@ import { JwtInterceptor} from './temp/jwt.interceptor';
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
 
     // provider used to create fake backend, MUST DELETE after merge
-    fakeBackendProvider
+    fakeBackendProvider,
+    AuthenticationService
   ],
   bootstrap: [AppComponent],
 })
