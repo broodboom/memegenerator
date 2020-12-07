@@ -41,7 +41,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter{
         .permitAll()
         .antMatchers(SecurityConstants.H2_CONSOLE)
         .permitAll()
-        .antMatchers("/v2/api-docs", "/configuration/**", "/webjars/**", "**console**")
+        .antMatchers("/v2/api-docs", "/configuration/**", "/webjars/**")
         .permitAll()
         .anyRequest().authenticated().and()
         .addFilter(getAuthenticationFilter())
