@@ -1,8 +1,10 @@
 package com.example.memegenerator.service.impl;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
@@ -19,7 +21,6 @@ import com.example.memegenerator.domain.UserEntity;
 import com.example.memegenerator.repository.UserRepository;
 import com.example.memegenerator.service.JavaMailSender;
 import com.example.memegenerator.service.UserService;
-import com.example.memegenerator.shared.Utils;
 import com.example.memegenerator.shared.dto.UserDto;
 
 @Service
@@ -27,9 +28,6 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	UserRepository userRepository;
-
-	@Autowired
-	Utils utils;
 
 	@Autowired
 	BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -136,7 +134,9 @@ public class UserServiceImpl implements UserService {
 			throw new UsernameNotFoundException(email);
 		}
 
-		String token = new Utils().generatePasswordResetToken(userEntity.getId());
+		byte[] array = new byte[10];
+		new Random().nextBytes(array);
+		String token = new String(array, Charset.forName("UTF-8"));
 
 		userEntity.token = token;
 		userRepository.save(userEntity);
@@ -152,10 +152,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean resetPassword(String token, String password) {
 		boolean returnValue = false;
-
-		if (Utils.hasTokenExpired(token)) {
-			return returnValue;
-		}
 
 		UserEntity userEntity = userRepository.findByToken(token);
 
