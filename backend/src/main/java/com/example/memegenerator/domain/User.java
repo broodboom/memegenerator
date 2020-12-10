@@ -5,11 +5,14 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+
+import com.example.memegenerator.security.Role;
+
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class UserEntity extends BaseEntity {
+public class User extends BaseEntity {
 
     /**
      *
