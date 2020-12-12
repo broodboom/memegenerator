@@ -1,6 +1,5 @@
 package com.example.memegenerator.service;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.UUID;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -55,9 +55,17 @@ public class UserService implements UserDetailsService {
         user.email = dto.email;
         user.role = Role.User;
         user.password = bCryptPasswordEncoder.encode(dto.password);
+        user.confirmationToken = UUID.randomUUID().toString();
 
         // Save user
         userRepository.save(user);
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("javaminor@cornevisser.nl");
+        message.setTo(user.email);
+        message.setSubject("Thank you for signing up");
+        message.setText("Your confirmation token: " + user.confirmationToken);
+        javaMailSender.getJavaMailSender().send(message);
 
         return ResponseEntity.ok("User " + user.username + " has been created");
     }
