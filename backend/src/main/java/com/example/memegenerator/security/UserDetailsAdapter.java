@@ -3,20 +3,23 @@ package com.example.memegenerator.security;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import lombok.AllArgsConstructor;
-
 import java.util.Collection;
+import java.util.Optional;
 
 import com.example.memegenerator.domain.User;
 
-@AllArgsConstructor
 public class UserDetailsAdapter implements UserDetails {
 
     /**
      *
      */
     private static final long serialVersionUID = 8982330570447520717L;
+
     private User user;
+
+    public UserDetailsAdapter(Optional<User> user) {
+        this.user = user.get();
+    }
 
 	@Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

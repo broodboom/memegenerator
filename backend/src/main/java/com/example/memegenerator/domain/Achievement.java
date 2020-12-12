@@ -24,5 +24,5 @@ public class Achievement extends BaseEntity {
     public String title;
 
     @ManyToMany(mappedBy = "achievements")
-    public Set<UserEntity> users = new HashSet<>();
+    public Set<User> users = new HashSet<>();
 }

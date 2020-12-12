@@ -36,7 +36,9 @@ public class UserService implements UserDetailsService {
 
     public UserDto createUser(UserDto dto) {
 
-        if (userRepository.findByEmail(dto.email) != null) {
+        Optional<User> stupidJavaOptional = userRepository.findByEmail(dto.email);
+
+        if (stupidJavaOptional.isPresent()) {
             throw new UsernameNotFoundException("Email is in use");
         }
 
@@ -72,8 +74,7 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return new UserDetailsAdapter(userRepository.findUserByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(String.format("No user with username: %s was found", username))));
+        return new UserDetailsAdapter(userRepository.findUserByUsername(username));
     }
 
     public UserDto getUserByUserId(long userId) {
@@ -81,7 +82,7 @@ public class UserService implements UserDetailsService {
         UserDto returnValue = new UserDto();
         Optional<User> stupidJavaOptional = userRepository.findById(userId);
 
-        if (stupidJavaOptional == null) {
+        if (!stupidJavaOptional.isPresent()) {
             throw new UsernameNotFoundException(Long.toString(userId));
         }
 
@@ -96,7 +97,7 @@ public class UserService implements UserDetailsService {
 
         Optional<User> stupidJavaOptional = userRepository.findById(userId);
 
-        if (stupidJavaOptional == null) {
+        if (!stupidJavaOptional.isPresent()) {
             throw new UsernameNotFoundException(Long.toString(userId));
         }
 
@@ -130,7 +131,7 @@ public class UserService implements UserDetailsService {
 
         Optional<User> stupidJavaOptional = userRepository.findByEmail(email);
 
-        if (stupidJavaOptional == null) {
+        if (!stupidJavaOptional.isPresent()) {
             throw new UsernameNotFoundException(email);
         }
 
@@ -157,7 +158,7 @@ public class UserService implements UserDetailsService {
 
         Optional<User> stupidJavaOptional = userRepository.findByToken(token);
 
-        if (stupidJavaOptional == null) {
+        if (!stupidJavaOptional.isPresent()) {
             return returnValue;
         }
 

@@ -50,7 +50,7 @@ public class Meme extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "userid", nullable = false)
-    public UserEntity user;
+    public User user;
 
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(name = "meme_tags", joinColumns = { @JoinColumn(name = "memeid") }, inverseJoinColumns = {

@@ -35,5 +35,5 @@ public class Image extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "userid", nullable = false)
-    public UserEntity user;
+    public User user;
 }
