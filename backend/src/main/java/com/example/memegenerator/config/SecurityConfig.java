@@ -60,6 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, HOME_PATH).permitAll()
                 .antMatchers(HttpMethod.GET, USER_PATH).hasRole(Role.Admin.toString())
                 .antMatchers(HttpMethod.POST, USER_PATH).permitAll()
+                .antMatchers(HttpMethod.PUT, USER_PATH).permitAll()
                 .antMatchers(HttpMethod.POST, PASSWORD_RESET_REQUEST_PATH).permitAll()
                 .antMatchers(HttpMethod.POST, PASSWORD_RESET_PATH).permitAll()
                 .antMatchers(MEME_PATH).permitAll()
