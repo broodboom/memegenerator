@@ -68,7 +68,11 @@ public class UserService implements UserDetailsService {
         message.setFrom("javaminor@cornevisser.nl");
         message.setTo(user.email);
         message.setSubject("Thank you for signing up");
-        message.setText("Your confirmation token: " + user.confirmationToken);
+
+        String url = "http://localhost:8080/users/activate/" + user.id + "/" + user.confirmationToken;
+
+        message.setText("Click here to activate your account: " + url);
+
         javaMailSender.getJavaMailSender().send(message);
 
         return ResponseEntity.ok("User " + user.username + " has been created");
