@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.ws.rs.core.Response;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -116,5 +117,13 @@ public class UserController {
 		updateUserDto.password = user.password;
 
 		return userService.updateUser(user, updateUserDto);
+	}
+
+	@GetMapping(path = "/activate/{id}/{token}")
+	public ResponseEntity<String> getUser(@PathVariable long id, @PathVariable int token) {
+
+		//return ResponseEntity.ok("Id: " + id + ", token " + token);
+
+		return userService.activateUser(id, token);
 	}
 }

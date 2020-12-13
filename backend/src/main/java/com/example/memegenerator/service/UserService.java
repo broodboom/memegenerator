@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.example.memegenerator.domain.User;
 import com.example.memegenerator.repository.UserRepository;
@@ -16,12 +17,15 @@ import com.example.memegenerator.security.Role;
 import com.example.memegenerator.shared.dto.UserDto;
 import com.example.memegenerator.security.UserDetailsAdapter;
 
+import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
+
+import javax.ws.rs.core.Response;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -55,7 +59,7 @@ public class UserService implements UserDetailsService {
         user.email = dto.email;
         user.role = Role.User;
         user.password = bCryptPasswordEncoder.encode(dto.password);
-        user.confirmationToken = UUID.randomUUID().toString();
+        user.confirmationToken = this.randomInt();
 
         // Save user
         userRepository.save(user);
@@ -208,5 +212,26 @@ public class UserService implements UserDetailsService {
         }
 
         return returnValue;
+    }
+
+    public ResponseEntity<String> activateUser(Long id, int confirmationToken) {
+        Optional<User> user = userRepository.findById(id);
+
+        if (!user.isPresent())
+            return ResponseEntity.badRequest().body("User not found");
+
+        if (user.get().confirmationToken == confirmationToken) {
+            user.get().activated = true;
+            userRepository.save(user.get());
+
+            return ResponseEntity.ok("User is activated");
+        } else {
+
+            return ResponseEntity.badRequest().body("Wrong confirmationToken");
+        }
+    }
+
+    private int randomInt() {
+        return new Random().nextInt(9000) + 1000;
     }
 }

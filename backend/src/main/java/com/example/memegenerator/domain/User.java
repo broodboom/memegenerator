@@ -58,7 +58,7 @@ public class User extends BaseEntity {
     @Column(name = "confirmation_token")
     @Getter
     @Setter
-    public String confirmationToken;
+    public int confirmationToken;
 
     @Column(name = "role", nullable = false)
     @Getter
