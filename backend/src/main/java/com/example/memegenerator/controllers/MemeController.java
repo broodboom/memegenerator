@@ -6,8 +6,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.List;
+
+import com.example.memegenerator.domain.Meme;
 import com.example.memegenerator.request.MemeModel;
 import com.example.memegenerator.shared.dto.MemeDto;
 
@@ -20,12 +26,17 @@ public class MemeController {
     @Autowired
     MemeService memeService;
 
+    @GetMapping(path = "/")
+    public List<Meme> getMemes() {
+        return memeService.getMemes();
+    }
+
     @PostMapping(path = "/")
-    public void createMeme(@RequestBody MemeModel meme) {
+    public void createMeme(@RequestParam("imageblob") MultipartFile imageblob, String title) throws IOException {
         MemeDto memeDto = new MemeDto();
-        memeDto.title = meme.title;
-        memeDto.description = meme.description;
-        memeDto.imageblob = meme.imageblob;
+        memeDto.title = title;
+        memeDto.description = "";
+        memeDto.imageblob = imageblob.getBytes();
         memeDto.likes = 0;
         memeDto.dislikes = 0;
 

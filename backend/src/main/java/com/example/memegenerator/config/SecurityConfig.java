@@ -63,7 +63,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, PASSWORD_RESET_REQUEST_PATH).permitAll()
                 .antMatchers(HttpMethod.POST, PASSWORD_RESET_PATH).permitAll()
                 .antMatchers(MEME_PATH).permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
             .and()
                 .httpBasic()
             .and()

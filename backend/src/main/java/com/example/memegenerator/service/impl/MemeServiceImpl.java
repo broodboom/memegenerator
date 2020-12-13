@@ -1,11 +1,14 @@
 package com.example.memegenerator.service.impl;
 
+import java.sql.Timestamp;
+import java.util.List;
 import java.util.Optional;
 
 import com.example.memegenerator.domain.Meme;
 import com.example.memegenerator.repository.MemeRepository;
 import com.example.memegenerator.request.MemeModel;
 import com.example.memegenerator.service.MemeService;
+import com.example.memegenerator.service.UserService;
 import com.example.memegenerator.shared.dto.MemeDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +20,19 @@ public class MemeServiceImpl implements MemeService {
     @Autowired
     MemeRepository memeRepository;
 
+    @Autowired
+    UserService userService;
+
     public void createMeme(MemeDto meme) {
         Meme dbMeme = new Meme();
         dbMeme.title = meme.title;
         dbMeme.description = meme.description;
-        dbMeme.imageblob = dbMeme.imageblob;
+        dbMeme.imageblob = meme.imageblob;
         dbMeme.likes = meme.likes;
         dbMeme.dislikes = meme.dislikes;
+        dbMeme.createdat = new Timestamp(System.currentTimeMillis());
+
+        dbMeme.user = userService.getDbUserByUserId(10);
 
         memeRepository.save(dbMeme);
     }
@@ -59,5 +68,12 @@ public class MemeServiceImpl implements MemeService {
         dbMemeTemp.dislikes = meme.dislikes;
 
         memeRepository.save(dbMemeTemp);
+    }
+
+    @Override
+    public List<Meme> getMemes() {
+        List<Meme> all = (List<Meme>) memeRepository.findAll();
+
+        return all;
     }
 }

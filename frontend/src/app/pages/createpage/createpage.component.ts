@@ -82,17 +82,27 @@ export class CreatepageComponent implements OnInit{
   }
 
   saveMeme(){
-    var canvas = document.querySelector('canvas')
-    var meme= new Meme("test", "testLink", 1 );
-    console.log(meme);
-    console.log(self.memeService);
-    self.memeService.CreateMeme(meme).subscribe(res => {
-      console.log("Works?")
+    var canvas = document.querySelector('canvas');
 
+    canvas.toBlob(function(blob) {
+      var newImg = document.createElement('img'),
+          url = URL.createObjectURL(blob);
 
-    var savedImage = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-    window.location.href= savedImage;
-  })
+      var meme= new Meme("test", blob, 1 );
+      
+      self.memeService.CreateMeme(meme).subscribe(res => {
+        console.log(res);
+      });
+
+      newImg.onload = function() {
+        // no longer need to read the blob so it's revoked
+        URL.revokeObjectURL(url);
+
+        
+        newImg.src = url;
+        document.body.appendChild(newImg);
+      };
+    });
   }
 
 

@@ -171,10 +171,20 @@ public class UserService implements UserDetailsService {
 
         User savedUserEntity = userRepository.save(user);
 
-        if (savedUserEntity != null && savedUserEntity.password.equalsIgnoreCase(hashedPassword)) {
+        if (savedUserEntity.password.equalsIgnoreCase(hashedPassword)) {
             returnValue = true;
         }
 
         return returnValue;
+    }
+
+    public User getDbUserByUserId(long userId){
+        Optional<User> stupidJavaOptional = userRepository.findById(userId);
+
+        if (!stupidJavaOptional.isPresent()) {
+            throw new UsernameNotFoundException(Long.toString(userId));
+        }
+
+        return stupidJavaOptional.get();
     }
 }
