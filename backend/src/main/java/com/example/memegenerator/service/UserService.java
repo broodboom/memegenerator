@@ -226,6 +226,8 @@ public class UserService implements UserDetailsService {
         }
 
         return stupidJavaOptional.get();
+    }
+    
     public ResponseEntity<String> activateUser(Long id, int confirmationToken) {
         Optional<User> user = userRepository.findById(id);
 
