@@ -107,6 +107,15 @@ public class UserService implements UserDetailsService {
         return user.get();
     }
 
+    public ResponseEntity<User> getUserByIdResponseEntity(long id) {
+        Optional<User> user = userRepository.findById(id);
+
+        if (!user.isPresent())
+            return ResponseEntity.badRequest().body(new User());
+
+        return ResponseEntity.ok(user.get());
+    }
+
     public UserDto getUser(String email) {
 
         User user = userRepository.findByEmail(email).orElse(null);

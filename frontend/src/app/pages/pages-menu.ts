@@ -20,12 +20,15 @@ export const MENU_ITEMS: NbMenuItem[] = [
     title: 'Create',
     icon: 'cogwheel',
     link: '/pages/create',
-    home: true,
   },
   {
     title: 'Like Button',
     icon: 'heart-outline',
     link: '/pages/likebutton',
-    home: true,
+  },
+  {
+    title: 'Profile',
+    icon: 'person-outline',
+    link: '/pages/profile',
   }
 ];

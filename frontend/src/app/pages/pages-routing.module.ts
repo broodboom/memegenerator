@@ -11,6 +11,7 @@ import { AuthGuard } from '../_helpers/auth.guard';
 import { LoginComponent } from '../temp/login.component';
 import { LikeButtonComponent } from './likebutton/likebutton.component';
 import { SignupComponent } from './signup/signup.component';
+import { ProfileComponent } from './profile/profile.component';
 
 // These lines are only used for the Admin Page WITHOUT the logIn/register features, so MUST DELETE after merge
 enum Role {
@@ -48,6 +49,10 @@ const routes: Routes = [{
     {
       path: 'signup',
       component: SignupComponent,
+    },
+    {
+      path: 'profile',
+      component: ProfileComponent,
     }
   ],
 }];
