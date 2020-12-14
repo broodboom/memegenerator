@@ -1,10 +1,10 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule } from '@angular/core';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { ThemeModule } from './@theme/theme.module';
-import { AppComponent } from './app.component';
-import { AppRoutingModule } from './app-routing.module';
+import { BrowserModule } from "@angular/platform-browser";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { NgModule } from "@angular/core";
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+import { ThemeModule } from "./@theme/theme.module";
+import { AppComponent } from "./app.component";
+import { AppRoutingModule } from "./app-routing.module";
 import {
   NbDatepickerModule,
   NbDialogModule,
@@ -12,15 +12,14 @@ import {
   NbSidebarModule,
   NbToastrModule,
   NbWindowModule,
-} from '@nebular/theme';
-import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
-import { of } from 'rxjs';
+} from "@nebular/theme";
+import { NbSecurityModule, NbRoleProvider } from "@nebular/security";
+import { of } from "rxjs";
 
 // MUST DELETE these imports after merge
-import { fakeBackendProvider } from './temp/fake-backend';
-import { JwtInterceptor} from './temp/jwt.interceptor';
-import { MemeService } from './_helpers/MemeService';
-import { Interceptor } from './_helpers/interceptor';
+import { JwtInterceptor } from "./temp/jwt.interceptor";
+import { Interceptor } from "./_helpers/interceptor";
+import { MemeService } from './services/meme.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -39,16 +38,16 @@ import { Interceptor } from './_helpers/interceptor';
     NbSecurityModule.forRoot({
       accessControl: {
         guest: {
-          view: ['dashboard', 'create'],
+          view: ["dashboard", "create"],
         },
         user: {
-          parent: 'guest',
-          create: '',
+          parent: "guest",
+          create: "",
         },
         moderator: {
-          parent: 'user',
-          create: '',
-          remove: '*',
+          parent: "user",
+          create: "",
+          remove: "*",
         },
       },
     }),
@@ -59,23 +58,17 @@ import { Interceptor } from './_helpers/interceptor';
       provide: NbRoleProvider,
       useValue: {
         getRole: () => {
-          return of('guest'); // TODO get the role from the user none == guest
+          return of("guest"); // TODO get the role from the user none == guest
         },
       },
     },
     // Added for Admin Page without login/register features, untill fakeBackendProvider
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
 
-    // provider used to create fake backend, MUST DELETE after merge
-    fakeBackendProvider,
-
-
     //CRUD service for the memes
-    {provide: MemeService,
-     },
-     {provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true},
+    { provide: MemeService },
+    { provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true },
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {
-}
+export class AppModule {}

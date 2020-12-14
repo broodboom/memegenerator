@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MemeService } from '../../_helpers/MemeService';
-import { Meme } from '../../shared/models/Meme';
+import { MemeService } from '../../services/meme.service';
+import { Meme } from '../../models/Meme';
 
 let self: any;
 
@@ -89,7 +89,7 @@ export class CreatepageComponent implements OnInit{
           url = URL.createObjectURL(blob);
 
       var meme= new Meme("test", blob, 1 );
-      
+
       self.memeService.CreateMeme(meme).subscribe(res => {
         console.log(res);
       });
@@ -98,7 +98,7 @@ export class CreatepageComponent implements OnInit{
         // no longer need to read the blob so it's revoked
         URL.revokeObjectURL(url);
 
-        
+
         newImg.src = url;
         document.body.appendChild(newImg);
       };

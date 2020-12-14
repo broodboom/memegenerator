@@ -2,23 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 // These imports are added for Admin Page without LogIn or register features
 import { Router } from '@angular/router';
+import { Role, User } from './models/User';
 import { AuthenticationService } from './temp/authentication.service';
-
-// The Role and User vars are used for Admin Page without login or register features, MUST DELETE after merge
-enum Role {
-  User = 'User',
-  Admin = 'Admin'
-}
-
-class User {
-  id: number;
-  username: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  role: Role;
-  token?: string;
-}
 
 @Component({
   selector: 'ngx-app',

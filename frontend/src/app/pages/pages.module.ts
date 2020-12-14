@@ -1,15 +1,15 @@
-import { NgModule } from '@angular/core';
-import { NbMenuModule } from '@nebular/theme';
+import { NgModule } from "@angular/core";
+import { NbMenuModule } from "@nebular/theme";
 
-import { ThemeModule } from '../@theme/theme.module';
-import { PagesComponent } from './pages.component';
-import { DashboardModule } from './dashboard/dashboard.module';
-import { AdminModule } from './admin/admin.module';
-import { LoginModule } from '../temp/login.module';
-import { PagesRoutingModule } from './pages-routing.module';
-import { DetailpageComponent } from './detailpage/detailpage.component';
-import { CreatepageComponent } from './createpage/createpage.component';
-import { LikeButtonModule } from './likebutton/likebutton.module';
+import { ThemeModule } from "../@theme/theme.module";
+import { PagesComponent } from "./pages.component";
+import { DashboardModule } from "./dashboard/dashboard.module";
+import { AdminModule } from "./admin/admin.module";
+import { LoginModule } from "./login/login.module";
+import { PagesRoutingModule } from "./pages-routing.module";
+import { DetailpageComponent } from "./detailpage/detailpage.component";
+import { CreatepageComponent } from "./createpage/createpage.component";
+import { LikeButtonModule } from "./likebutton/likebutton.module";
 
 @NgModule({
   imports: [
@@ -19,13 +19,8 @@ import { LikeButtonModule } from './likebutton/likebutton.module';
     DashboardModule,
     AdminModule,
     LoginModule,
-    LikeButtonModule
+    LikeButtonModule,
   ],
-  declarations: [
-    PagesComponent,
-    DetailpageComponent,
-    CreatepageComponent
-  ],
+  declarations: [PagesComponent, DetailpageComponent, CreatepageComponent],
 })
-export class PagesModule {
-}
+export class PagesModule {}

@@ -1,31 +1,16 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
-const environment = {
-    production: false,
-    apiUrl: 'http://localhost:4000'
-};
-
-enum Role {
-    User = 'User',
-    Admin = 'Admin'
-}
-
-class User {
-    id: number;
-    username: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-    role: Role;
-    token?: string;
-}
+import { User } from 'app/models/User';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
-    private currentUserSubject: BehaviorSubject<User>;
+
+
+
+
+    private currentUserSubject: BehaviorSubject<any>;
     public currentUser: Observable<User>;
 
     constructor(private http: HttpClient) {
@@ -38,17 +23,22 @@ export class AuthenticationService {
     }
 
     login(username: string, password: string) {
-        return this.http.post<any>(`${environment.apiUrl}/users/authenticate`, { username, password })
-            .pipe(map(user => {
-                // login successful if there's a jwt token in the response
-                if (user && user.token) {
-                    // store user details and jwt token in local storage to keep user logged in between page refreshes
-                    localStorage.setItem('currentUser', JSON.stringify(user));
-                    this.currentUserSubject.next(user);
-                }
 
-                return user;
-            }));
+      const headers = new HttpHeaders({
+        authorization : 'Basic ' + btoa(username + ':' + password)
+      });
+
+      return this.http.get('user', {headers: headers})
+          .pipe(map(user => {
+              // login successful if there's a jwt token in the response
+              if (user) {
+                  // store user details and jwt token in local storage to keep user logged in between page refreshes
+                  localStorage.setItem('currentUser', JSON.stringify(user));
+                  this.currentUserSubject.next(null);
+              }
+
+              return user;
+          }));
     }
 
     logout() {
