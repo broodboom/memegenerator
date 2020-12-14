@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import { Meme } from 'app/shared/models/Meme';
-import { MemeService } from 'app/_helpers/MemeService';
+import { Meme } from 'app/models/Meme';
+import { MemeService } from 'app/services/meme.service';
 import { DomSanitizer } from '@angular/platform-browser';
 
 //TODO: move this to a generic model folder
@@ -30,7 +30,7 @@ let self: any;
 
 
 export class DashboardComponent implements OnInit{
-  
+
   // items = getPlaceholderCards();
   items = []
   loading = false;

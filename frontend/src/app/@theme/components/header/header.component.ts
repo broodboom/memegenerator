@@ -3,7 +3,7 @@ import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeServ
 
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { AuthenticationService } from 'app/temp/authentication.service';
+import { AuthService } from 'app/services/auth.service';
 
 @Component({
   selector: 'ngx-header',
@@ -43,7 +43,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
               private menuService: NbMenuService,
               private themeService: NbThemeService,
               private breakpointService: NbMediaBreakpointsService,
-              public authenticationService: AuthenticationService) {
+              public authService: AuthService) {
   }
 
   ngOnInit() {
@@ -86,6 +86,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    this.authenticationService.logout();
+    this.authService.logout();
   }
 }
