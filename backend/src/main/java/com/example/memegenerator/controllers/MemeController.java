@@ -32,7 +32,7 @@ public class MemeController {
     }
 
     @PostMapping(path = "/")
-    public void createMeme(@RequestParam("imageblob") MultipartFile imageblob, String title) throws IOException {
+    public void createMeme(@RequestParam("imageblob") MultipartFile imageblob, String title, String userId) throws IOException {
         MemeDto memeDto = new MemeDto();
         memeDto.title = title;
         memeDto.description = "";
@@ -40,8 +40,10 @@ public class MemeController {
         memeDto.likes = 0;
         memeDto.dislikes = 0;
 
+        long userIdLong = Long.parseLong(userId);
+
         // Create meme
-        memeService.createMeme(memeDto);
+        memeService.createMeme(memeDto, userIdLong);
     }
 
     @GetMapping(path = "/{id}")

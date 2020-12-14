@@ -26,8 +26,8 @@ export class LikeButtonComponent implements OnInit{
         //likes.innerHTML = "69";
         //dislikes.innerHTML = "420";
     
-        likes.innerHTML = (this.meme.upvotes).toString();
-        dislikes.innerHTML = (this.meme.downvotes).toString();
+        likes.innerHTML = (this.meme.likes).toString();
+        dislikes.innerHTML = (this.meme.dislikes).toString();
     
     
         var likebutton = document.querySelector('.like-button');

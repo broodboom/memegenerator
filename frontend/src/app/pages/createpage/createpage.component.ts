@@ -88,7 +88,7 @@ export class CreatepageComponent implements OnInit{
       var newImg = document.createElement('img'),
           url = URL.createObjectURL(blob);
 
-      var meme= new Meme("test", blob, 1 );
+      var meme= new Meme("meme title", blob, 10);
       
       self.memeService.CreateMeme(meme).subscribe(res => {
         console.log(res);

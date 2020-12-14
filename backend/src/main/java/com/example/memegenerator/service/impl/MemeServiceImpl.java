@@ -23,7 +23,7 @@ public class MemeServiceImpl implements MemeService {
     @Autowired
     UserService userService;
 
-    public void createMeme(MemeDto meme) {
+    public void createMeme(MemeDto meme, Long id) {
         Meme dbMeme = new Meme();
         dbMeme.title = meme.title;
         dbMeme.description = meme.description;
@@ -32,7 +32,7 @@ public class MemeServiceImpl implements MemeService {
         dbMeme.dislikes = meme.dislikes;
         dbMeme.createdat = new Timestamp(System.currentTimeMillis());
 
-        dbMeme.user = userService.getDbUserByUserId(10);
+        dbMeme.user = userService.getDbUserByUserId(id);
 
         memeRepository.save(dbMeme);
     }

@@ -37,6 +37,7 @@ export class MemeService {
 
     result.append("imageblob", data.imageblob);
     result.append("title", data.title);
+    result.append("userId", "10")
 
     return result;
   }
