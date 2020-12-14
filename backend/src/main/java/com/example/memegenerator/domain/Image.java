@@ -6,7 +6,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-import java.sql.Blob;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,7 +30,7 @@ public class Image extends BaseEntity {
     @Getter
     @Setter
     @NotNull
-    public Blob imageblob;
+    public byte[] imageblob;
 
     @ManyToOne
     @JoinColumn(name = "userid", nullable = false)

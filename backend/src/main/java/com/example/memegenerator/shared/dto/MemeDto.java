@@ -3,8 +3,6 @@ package com.example.memegenerator.shared.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Blob;
-
 public class MemeDto {
     @Getter
     @Setter
@@ -22,7 +20,7 @@ public class MemeDto {
 
     @Getter
     @Setter
-    public Blob imageblob;
+    public byte[] imageblob;
 
     @Getter
     @Setter

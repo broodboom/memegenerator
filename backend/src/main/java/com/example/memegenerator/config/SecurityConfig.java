@@ -65,7 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, PASSWORD_RESET_PATH).permitAll()
                 .antMatchers(HttpMethod.GET, "/users/activate/{id:\\d+}/{token:\\d+}").permitAll()
                 .antMatchers(MEME_PATH).permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
             .and()
                 .httpBasic()
             .and()
