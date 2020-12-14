@@ -44,7 +44,7 @@ public class Meme extends BaseEntity {
     public int dislikes;
 
     @ManyToOne
-    @JoinColumn(name = "imageid", nullable = true)
+    @JoinColumn(name = "imageid")
     public Image image;
 
     @ManyToOne

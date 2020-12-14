@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { NbMenuItem } from '@nebular/theme';
-import { AuthenticationService } from '../temp/authentication.service';
 
 import { MENU_ITEMS } from './pages-menu';
 
@@ -41,6 +40,6 @@ export class PagesComponent /*implements OnInit*/{
         link: '/pages/login',
       }
     ]
-  } */ 
+  } */
   menu = MENU_ITEMS;
 }

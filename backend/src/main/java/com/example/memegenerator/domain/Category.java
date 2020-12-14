@@ -23,6 +23,6 @@ public class Category extends BaseEntity {
     @NotNull
     public String name;
 
-    @OneToMany(mappedBy = "memes")
+    @OneToMany(mappedBy = "category")
     public Set<Meme> memes = new HashSet<>();
 }

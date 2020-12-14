@@ -16,9 +16,6 @@ import {
 import { NbSecurityModule, NbRoleProvider } from "@nebular/security";
 import { of } from "rxjs";
 
-// MUST DELETE these imports after merge
-import { JwtInterceptor } from "./temp/jwt.interceptor";
-import { Interceptor } from "./_helpers/interceptor";
 import { MemeService } from './services/meme.service';
 
 @NgModule({
@@ -62,12 +59,7 @@ import { MemeService } from './services/meme.service';
         },
       },
     },
-    // Added for Admin Page without login/register features, untill fakeBackendProvider
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-
-    //CRUD service for the memes
     { provide: MemeService },
-    { provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true },
   ],
   bootstrap: [AppComponent],
 })

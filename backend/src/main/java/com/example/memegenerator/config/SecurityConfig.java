@@ -1,5 +1,10 @@
 package com.example.memegenerator.config;
 
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.HttpMethod;
 
 import com.example.memegenerator.security.Role;
@@ -15,7 +20,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -51,27 +60,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-            .csrf()
-                .disable()
-            .cors()
-            .and()
-            .authorizeRequests()
-                .antMatchers(HttpMethod.GET, HOME_PATH).permitAll()
+        http.csrf().disable().cors().and().authorizeRequests().antMatchers(HttpMethod.GET, HOME_PATH).permitAll()
                 .antMatchers(HttpMethod.GET, USER_PATH).hasRole(Role.Admin.toString())
-                .antMatchers(HttpMethod.POST, USER_PATH).permitAll()
-                .antMatchers(HttpMethod.PUT, USER_PATH).permitAll()
+                .antMatchers(HttpMethod.POST, USER_PATH).permitAll().antMatchers(HttpMethod.PUT, USER_PATH).permitAll()
                 .antMatchers(HttpMethod.POST, PASSWORD_RESET_REQUEST_PATH).permitAll()
                 .antMatchers(HttpMethod.POST, PASSWORD_RESET_PATH).permitAll()
                 .antMatchers(HttpMethod.GET, "/users/activate/{id:\\d+}/{token:\\d+}").permitAll()
-                .antMatchers(MEME_PATH).permitAll()
-                .anyRequest().permitAll()
-            .and()
-                .httpBasic()
-            .and()
-                .formLogin()
-            .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .antMatchers(MEME_PATH).permitAll().anyRequest().permitAll().and().httpBasic().and().formLogin()
+                .successHandler(new AuthenticationSuccessHandler() {
+
+                    @Override
+                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+                            Authentication authentication) throws IOException, ServletException {
+                        response.getWriter().write("{ \"status\": true }");
+                    }
+                }).failureHandler(new AuthenticationFailureHandler() {
+
+                    @Override
+                    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
+                            AuthenticationException exception) throws IOException, ServletException {
+                        response.getWriter().write("{ \"status\": true }");
+                    }
+                }).and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 }
