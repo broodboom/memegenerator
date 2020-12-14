@@ -6,7 +6,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-import java.sql.Blob;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,7 +31,7 @@ public class Meme extends BaseEntity {
     @Column(name = "image", nullable = false)
     @Getter
     @Setter
-    public Blob imageblob;
+    public byte[] imageblob;
 
     @Column(name = "likes")
     @Getter
@@ -45,7 +44,7 @@ public class Meme extends BaseEntity {
     public int dislikes;
 
     @ManyToOne
-    @JoinColumn(name = "imageid", nullable = false)
+    @JoinColumn(name = "imageid", nullable = true)
     public Image image;
 
     @ManyToOne

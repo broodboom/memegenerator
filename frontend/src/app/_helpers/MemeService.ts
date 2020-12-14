@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import { Meme } from '../shared/models/meme';
 
 const environment = {
   production: false,
-  apiUrl: 'http://localhost:8080/api'
+  apiUrl: 'http://localhost:8080'
 };
 
 @Injectable()
@@ -24,16 +24,42 @@ export class MemeService {
     })
   }
 
-  CreateMeme(data): Observable<Meme> {
-    return this.http.post<Meme>(`${environment.apiUrl}/meme`, JSON.stringify(data), this.httpOptions)
-    .pipe(
-      retry(1),
-      catchError(this.errorHandl)
-    )
+  
+  httpOptions2 = {
+    headers: new HttpHeaders({
+      'Content-Type' : 'application/json',
+      'Access-Control-Allow-Origin': '*'
+    })
   }
 
+  CreateMemeFormData(data: Meme): FormData{
+    var result = new FormData();
+
+    result.append("imageblob", data.imageblob);
+    result.append("title", data.title);
+
+    return result;
+  }
+
+  // CreateMeme(data): Observable<Meme> {
+  //   return this.http.post<Meme>(`${environment.apiUrl}/meme/`,  this.CreateMemeFormData(data), this.httpOptions2)
+  //   .pipe(
+  //     retry(1),
+  //     catchError(this.errorHandl)
+  //   )
+  // }
+
+    CreateMeme(data): Observable<HttpEvent<any>> {
+      const req = new HttpRequest('POST', `${environment.apiUrl}/meme/`, this.CreateMemeFormData(data), {
+        reportProgress: true,
+        responseType: 'json'
+      });
+  
+      return this.http.request(req);
+    }
+
   GetAllMemes(): Observable<Meme[]> {
-    return this.http.get<Meme[]>(`${environment.apiUrl}/meme`, this.httpOptions)
+    return this.http.get<Meme[]>(`${environment.apiUrl}/meme/`, this.httpOptions)
     .pipe(
       retry(1),
       catchError(this.errorHandl)
