@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
-import { Meme } from '../shared/models/Meme';
+import { Meme } from '../shared/models/meme';
 
 const environment = {
   production: false,
@@ -42,6 +42,14 @@ export class MemeService {
 
   getMeme(id): Observable<Meme> {
     return this.http.get<Meme>(`${environment.apiUrl}/meme/`+ id)
+    .pipe(
+      retry(1),
+      catchError(this.errorHandl)
+    )
+  }
+
+  updateMeme(meme){
+    this.http.put<Meme>(`${environment.apiUrl}/meme/${meme.id}`, meme)
     .pipe(
       retry(1),
       catchError(this.errorHandl)

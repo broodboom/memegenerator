@@ -10,6 +10,7 @@ import {
   NbListModule,
   NbIconModule,
 } from '@nebular/theme';
+import { HttpClientModule } from '@angular/common/http'
 
 import { ThemeModule } from '../../@theme/theme.module';
 import { LikeButtonComponent } from './likebutton.component';
@@ -28,7 +29,8 @@ import { FormsModule } from '@angular/forms';
     NbSelectModule,
     NbListModule,
     NbIconModule,
-    NbButtonModule
+    NbButtonModule,
+    HttpClientModule
   ],
   declarations: [
     LikeButtonComponent
