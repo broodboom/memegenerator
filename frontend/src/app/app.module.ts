@@ -5,6 +5,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ThemeModule } from './@theme/theme.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   NbDatepickerModule,
   NbDialogModule,
@@ -21,10 +22,13 @@ import { fakeBackendProvider } from './temp/fake-backend';
 import { JwtInterceptor} from './temp/jwt.interceptor';
 import { MemeService } from './_helpers/MemeService';
 import { Interceptor } from './_helpers/interceptor';
+import { SignupComponent } from './pages/signup/signup.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, SignupComponent],
   imports: [
+    FormsModule,
+    ReactiveFormsModule,
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
