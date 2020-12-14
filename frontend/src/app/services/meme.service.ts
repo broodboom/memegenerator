@@ -23,13 +23,6 @@ export class MemeService {
     }),
   };
 
-  httpOptions2 = {
-    headers: new HttpHeaders({
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-    }),
-  };
-
   CreateMemeFormData(data: Meme): FormData {
     var result = new FormData();
 
@@ -56,17 +49,17 @@ export class MemeService {
   GetAllMemes(): Observable<Meme[]> {
     return this.http
       .get<Meme[]>(`${environment.apiUrl}/meme/`, this.httpOptions)
-      .pipe(retry(1), catchError(this.errorHandl));
+      .pipe(retry(1), catchError(this.handleError));
   }
 
   getMeme(id): Observable<Meme> {
     return this.http
       .get<Meme>(`${environment.apiUrl}/meme/` + id)
-      .pipe(retry(1), catchError(this.errorHandl));
+      .pipe(retry(1), catchError(this.handleError));
   }
 
   // Error handling
-  errorHandl(error) {
+  handleError(error) {
     let errorMessage = "";
     if (error.error instanceof ErrorEvent) {
       // Get client-side error
