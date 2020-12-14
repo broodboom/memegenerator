@@ -18,13 +18,12 @@ export class LikeButtonComponent implements OnInit{
         this.likebuttonService.getMemeById(1).pipe(
             tap((result)=>console.log(result))
         ).subscribe((meme: Meme)=>(this.meme = meme));
+        //this.likebuttonService.updateMeme(this.meme);
         this.activateButtons();
     }
     activateButtons(){
         var likes = document.querySelector('.likeValue');
         var dislikes = document.querySelector('.dislikeValue');
-        //likes.innerHTML = "69";
-        //dislikes.innerHTML = "420";
     
         likes.innerHTML = (this.meme.upvotes).toString();
         dislikes.innerHTML = (this.meme.downvotes).toString();

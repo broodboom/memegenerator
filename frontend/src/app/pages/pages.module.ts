@@ -8,8 +8,8 @@ import { AdminModule } from './admin/admin.module';
 import { LoginModule } from '../temp/login.module';
 import { PagesRoutingModule } from './pages-routing.module';
 import { DetailpageComponent } from './detailpage/detailpage.component';
-import { CreatepageComponent } from './createpage/createpage.component';
 import { LikeButtonModule } from './likebutton/likebutton.module';
+import { CreatePageModule } from './createpage/createpage.module';
 
 @NgModule({
   imports: [
@@ -19,12 +19,12 @@ import { LikeButtonModule } from './likebutton/likebutton.module';
     DashboardModule,
     AdminModule,
     LoginModule,
-    LikeButtonModule
+    LikeButtonModule,
+    CreatePageModule
   ],
   declarations: [
     PagesComponent,
-    DetailpageComponent,
-    CreatepageComponent
+    DetailpageComponent
   ],
 })
 export class PagesModule {

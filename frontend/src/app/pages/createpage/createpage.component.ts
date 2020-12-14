@@ -1,27 +1,77 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
 import { MemeService } from '../../_helpers/MemeService';
 import { Meme } from '../../shared/models/Meme';
+import { Observable, of } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
+import { TagService } from 'app/_helpers/TagService';
+import { Tag } from 'app/shared/models/Tag';
 
 let self: any;
 
 @Component({
   selector: 'ngx-createpage',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './createpage.component.html',
   styleUrls: ['./createpage.component.scss']
 })
 
 export class CreatepageComponent implements OnInit{
 
-  constructor(public memeService : MemeService ) { }
+  options: string[];
+  filteredOptions$: Observable<string[]>;
+  tag: Tag;
+  tags: Tag[];
+  titles: string[];
+
+  @ViewChild('autoInput') input;
+
+  constructor(public memeService : MemeService, public tagService: TagService) { }
 
   ngOnInit() {
     self = this;
 
     this.fillCanvas();
 
+    //this.tagService.createTag(this.tag);
+    this.tagService.getTags().pipe(
+      tap((result)=>console.log(result))
+    ).subscribe((tags: Tag[])=>(this.tags = tags));
+    this.tags.forEach(tag => {
+      
+    });
+    this.options = ['Vis', 'Corona', 'Citroen'];//this.titles;
+    this.filteredOptions$ = of(this.options);
+    this.activateButton();
   }
 
+  activateButton(){
+    var tagbutton = document.querySelector('.add-tag-button');
+        tagbutton.addEventListener("click", function(event){
+          var tagInput = document.querySelector('.tagInput')
+          this.tag.title = tagInput.nodeValue;
+          // Still needing a don't add if already exists
+          this.tagService.createTag(this.tag);
+        }, false)
+  }
 
+  private filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.options.filter(optionValue => optionValue.toLowerCase().includes(filterValue));
+  }
+
+  getFilteredOptions(value: string): Observable<string[]> {
+    return of(value).pipe(
+      map(filterString => this.filter(filterString)),
+    );
+  }
+
+  onChange() {
+    this.filteredOptions$ = this.getFilteredOptions(this.input.nativeElement.value);
+  }
+
+  onSelectionChange($event){
+    this.filteredOptions$ = this.getFilteredOptions($event);
+  }
 
   handleSaveImage(e){
     var canvas = document.querySelector('canvas')
