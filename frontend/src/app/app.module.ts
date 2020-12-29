@@ -5,6 +5,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { ThemeModule } from "./@theme/theme.module";
 import { AppComponent } from "./app.component";
 import { AppRoutingModule } from "./app-routing.module";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   NbDatepickerModule,
   NbDialogModule,
@@ -17,10 +18,13 @@ import { NbSecurityModule, NbRoleProvider } from "@nebular/security";
 import { of } from "rxjs";
 
 import { MemeService } from './services/meme.service';
+import { SignupComponent } from './pages/signup/signup.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, SignupComponent],
   imports: [
+    FormsModule,
+    ReactiveFormsModule,
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,

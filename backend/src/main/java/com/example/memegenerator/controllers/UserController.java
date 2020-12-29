@@ -96,7 +96,7 @@ public class UserController {
 	// }
 
 	@PostMapping()
-	ResponseEntity<String> createUser(@Valid @RequestBody User user) {
+	public ResponseEntity<String> createUser(@Valid @RequestBody User user) {
 		
 		UserDto userDto = new UserDto();
 
@@ -108,7 +108,7 @@ public class UserController {
 	}
 
 	@PutMapping()
-	ResponseEntity<String> updateUser(@Valid @RequestBody User user) {
+	public ResponseEntity<String> updateUser(@Valid @RequestBody User user) {
 		
 		UserDto updateUserDto = new UserDto();
 
@@ -125,5 +125,10 @@ public class UserController {
 		//return ResponseEntity.ok("Id: " + id + ", token " + token);
 
 		return userService.activateUser(id, token);
+	}
+
+	@GetMapping(path = "/{id}")
+	public ResponseEntity<User> getUserInfo(@PathVariable long id){
+		return userService.getUserByIdResponseEntity(id);
 	}
 }
