@@ -20,8 +20,6 @@ export class CreatepageComponent implements OnInit{
   options: string[];
   filteredOptions$: Observable<string[]>;
   tag: Tag;
-  tags: Tag[];
-  titles: string[];
 
   @ViewChild('autoInput') input;
 
@@ -31,26 +29,26 @@ export class CreatepageComponent implements OnInit{
     self = this;
 
     this.fillCanvas();
-
-    //this.tagService.createTag(this.tag);
     this.tagService.getTags().pipe(
       tap((result)=>console.log(result))
-    ).subscribe((tags: Tag[])=>(this.tags = tags));
-    this.tags.forEach(tag => {
+    ).subscribe((tags: Tag[])=>{
+        this.tag = new Tag(tags.length, "test");
+        this.options = [];
+        tags.forEach(tag => this.options.push(tag.title))
+        this.filteredOptions$ = of(this.options);
+        this.activateButton(this.tag, this.tagService);
+      }
       
-    });
-    this.options = ['Vis', 'Corona', 'Citroen'];//this.titles;
-    this.filteredOptions$ = of(this.options);
-    this.activateButton();
+    );
   }
 
-  activateButton(){
-    var tagbutton = document.querySelector('.add-tag-button');
+  activateButton(tag: Tag, tagService: TagService){
+    const tagbutton = document.querySelector('.add-tag-button');
         tagbutton.addEventListener("click", function(event){
-          var tagInput = document.querySelector('.tagInput')
-          this.tag.title = tagInput.nodeValue;
+          let tagInput = <HTMLInputElement>document.getElementById('tag');
+          tag.title = tagInput.value;
           // Still needing a don't add if already exists
-          this.tagService.createTag(this.tag);
+          tagService.createTag(tag);
         }, false)
   }
 

@@ -15,6 +15,6 @@ export class TagService {
     }
 
     public getTags():Observable<Tag[]>{
-        return this.http.get<Tag[]>(`http://localhost:8080/tag`);
+        return this.http.get<Tag[]>(`http://localhost:8080/tag/`);
     }
 }
