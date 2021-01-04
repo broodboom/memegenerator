@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { User } from "app/models/User";
 import { environment } from "environments/environment";
-import { Observable } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 import { map, tap } from "rxjs/operators";
 import { ProfileService } from "./profile.service";
 
@@ -14,14 +14,32 @@ export interface LoginResponse {
   providedIn: "root",
 })
 export class AuthService {
-  private _loggedIn: boolean;
-  private _currentUser: User;
+  private _loggedIn: BehaviorSubject<boolean>;
+  private _currentUser: BehaviorSubject<User>;
 
-  constructor(protected httpClient: HttpClient, protected profileService: ProfileService) {}
+  constructor(
+    protected httpClient: HttpClient,
+    protected profileService: ProfileService
+  ) {
+    this._loggedIn = new BehaviorSubject<boolean>(false);
+    this._currentUser = new BehaviorSubject<User>(null);
+  }
 
-  public loggedIn = () => this._loggedIn;
+  loggedIn(): Observable<boolean> {
+    return this._loggedIn.asObservable();
+  }
 
-  public currentUser = () => this._currentUser;
+  currentUser(): Observable<User> {
+    return this._currentUser.asObservable();
+  }
+
+  getLoggedIn(): boolean {
+    return this._loggedIn.getValue();
+  }
+
+  getCurrentUser(): User {
+    return this._currentUser.getValue();
+  }
 
   public login(username: string, password: string): Observable<boolean> {
     const formData = new FormData();
@@ -30,20 +48,22 @@ export class AuthService {
 
     return this.httpClient.post(`${environment.apiUrl}/login`, formData).pipe(
       tap((response: LoginResponse) => {
-        this._loggedIn = response.status;
+        this._loggedIn.next(response.status);
 
         if (response.status) {
-          this.profileService.getUserInfo()
-            .subscribe((user: User) => (this._currentUser = user));
+          this.profileService
+            .getUserInfo()
+            .subscribe((user: User) => this._currentUser.next(user));
         }
       }),
-      map((response: LoginResponse) => response.status));
+      map((response: LoginResponse) => response.status)
+    );
   }
 
   public logout(): Observable<void> {
-    return this.httpClient.post<void>(`${environment.apiUrl}/logout`, {})
-    .pipe(
-      tap(() => (this._loggedIn = false))
-    );
+    this._loggedIn.next(false);
+    this._currentUser.next(null);
+
+    return this.httpClient.post<void>(`${environment.apiUrl}/logout`, {});
   }
 }

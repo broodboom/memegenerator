@@ -78,7 +78,7 @@ export class CreatepageComponent implements OnInit {
   saveMeme() {
     var canvas = document.querySelector("canvas");
 
-    const userId = this.authService.currentUser().id;
+    const userId = this.authService.getCurrentUser().id;
 
     canvas.toBlob(function (blob) {
       var newImg = document.createElement("img"),

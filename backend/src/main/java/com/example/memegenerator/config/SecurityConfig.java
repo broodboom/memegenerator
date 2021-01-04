@@ -79,8 +79,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     @Override
                     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                             AuthenticationException exception) throws IOException, ServletException {
-                        response.getWriter().write("{ \"status\": true }");
+                        response.getWriter().write("{ \"status\": false }");
                     }
-                }).and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                }).and().sessionManagement().maximumSessions(1);
     }
 }

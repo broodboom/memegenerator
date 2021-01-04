@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
     private authService: AuthService
   ) {
     // redirect to home if already logged in
-    if (this.authService.loggedIn()) {
+    if (this.authService.getLoggedIn()) {
       this.router.navigate(["/pages/dashboard"]);
     }
   }
@@ -57,11 +57,12 @@ export class LoginComponent implements OnInit {
       .pipe(first())
       .subscribe(
         (data) => {
-          this.router.navigate([this.returnUrl]);
-        },
-        (error) => {
-          this.error = error;
-          this.loading = false;
+          if (data) {
+            this.router.navigate([this.returnUrl]);
+          } else {
+            this.error = "Username or password incorrect";
+            this.loading = false;
+          }
         }
       );
   }
