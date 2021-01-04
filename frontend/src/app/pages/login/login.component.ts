@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
     private authService: AuthService
   ) {
     // redirect to home if already logged in
-    if (this.authService.loggedIn) {
+    if (this.authService.loggedIn()) {
       this.router.navigate(["/pages/dashboard"]);
     }
   }

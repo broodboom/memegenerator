@@ -16,12 +16,11 @@ export class AppComponent implements OnInit {
     private router: Router,
     private authService: AuthService
   ) {
-     //this.authService.currentUser.subscribe(x => this.currentUser = x);
   }
 
   // The next 2 functions are added for Admin Page without LogIn or register features
   get isAdmin() {
-    return false; // this.currentUser && this.currentUser.role === Role.Admin;
+    return this.authService.currentUser() && this.authService.currentUser().role === Role.Admin;
   }
 
   logout() {

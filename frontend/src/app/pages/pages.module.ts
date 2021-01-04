@@ -9,10 +9,7 @@ import { DashboardModule } from "./dashboard/dashboard.module";
 import { AdminModule } from "./admin/admin.module";
 import { LoginModule } from "./login/login.module";
 import { PagesRoutingModule } from "./pages-routing.module";
-import { DetailpageComponent } from "./detailpage/detailpage.component";
-import { CreatepageComponent } from "./createpage/createpage.component";
 import { LikeButtonModule } from "./likebutton/likebutton.module";
-import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   imports: [
@@ -24,10 +21,8 @@ import { ProfileComponent } from './profile/profile.component';
     LoginModule,
     LikeButtonModule,
     FormsModule,
-    ReactiveFormsModule,
-    CreatepageComponent,
-    ProfileComponent
+    ReactiveFormsModule
   ],
-  declarations: [PagesComponent, DetailpageComponent, CreatepageComponent],
+  declarations: [PagesComponent],
 })
 export class PagesModule {}

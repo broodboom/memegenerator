@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NbMenuItem } from '@nebular/theme';
-
-import { MENU_ITEMS } from './pages-menu';
+import { AuthService } from 'app/services/auth.service';
 
 @Component({
   selector: 'ngx-pages',
@@ -13,13 +12,12 @@ import { MENU_ITEMS } from './pages-menu';
     </ngx-one-column-layout>
   `,
 })
-export class PagesComponent /*implements OnInit*/{
+export class PagesComponent implements OnInit {
 
-  /*currentUser: any;
+  currentUser: any;
   menu: NbMenuItem[];
 
-  constructor(private AuthService: AuthenticationService){
-    this.currentUser = AuthService.currentUserValue;
+  constructor(private authService: AuthService){
   }
 
   ngOnInit(){
@@ -33,13 +31,29 @@ export class PagesComponent /*implements OnInit*/{
       {
         title: 'Admin',
         link: '/pages/admin',
-        hidden: this.currentUser.Role != 'Admin'? true:false,
+        icon: 'unlock-outline',
+        hidden: this.authService.currentUser()?.role != 'Admin'? true : false,
       },
       {
         title: 'Log In',
+        icon: 'power-outline',
         link: '/pages/login',
+      },
+      {
+        title: 'Create',
+        icon: 'plus-square-outline',
+        link: '/pages/create',
+      },
+      {
+        title: 'Like Button',
+        icon: 'heart-outline',
+        link: '/pages/likebutton',
+      },
+      {
+        title: 'Profile',
+        icon: 'person-outline',
+        link: '/pages/profile',
       }
-    ]
-  } */
-  menu = MENU_ITEMS;
+    ];
+  }
 }

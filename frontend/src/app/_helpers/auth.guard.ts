@@ -5,18 +5,19 @@ import {
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
 } from "@angular/router";
-import { AuthService } from 'app/services/auth.service';
+import { AuthService } from "app/services/auth.service";
 
 @Injectable({ providedIn: "root" })
 export class AuthGuard implements CanActivate {
-  constructor(
-    private router: Router,
-    private authService: AuthService
-  ) {}
+  constructor(private router: Router, private authService: AuthService) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    const currentUser = this.authService.currentUser;
-    if (currentUser) {
+    const currentUser = this.authService.currentUser();
+    const loggedIn = this.authService.loggedIn();
+
+    debugger;
+
+    if (loggedIn && currentUser) {
       // check if route is restricted by role
       if (
         route.data.roles &&
@@ -31,10 +32,11 @@ export class AuthGuard implements CanActivate {
       return true;
     }
 
-    // not logged in so redirect to login page with the return url
+    // not logged in so redirect to dashboard page with the return url
     this.router.navigate(["/pages/dashboard"], {
       queryParams: { returnUrl: state.url },
     });
+
     return false;
   }
 }
