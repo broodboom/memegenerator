@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Meme } from '../../shared/models/meme';
+import { Meme } from '../../shared/models/Meme';
 import { Observable } from 'rxjs';
 
 @Injectable({
