@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { MemeService } from "../../services/meme.service";
-import { Meme } from '../../models/Meme';
-import { AuthService } from '../../services/auth.service';
+import { Meme } from "../../models/Meme";
+import { AuthService } from "../../services/auth.service";
 
 let self: any;
 
@@ -11,7 +11,10 @@ let self: any;
   styleUrls: ["./createpage.component.scss"],
 })
 export class CreatepageComponent implements OnInit {
-  constructor(private memeService: MemeService, private authService: AuthService) {}
+  constructor(
+    private memeService: MemeService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
     self = this;
@@ -82,11 +85,11 @@ export class CreatepageComponent implements OnInit {
         url = URL.createObjectURL(blob);
 
       var meme: Meme = {
-        title: 'test',
+        title: "test",
         categoryId: 1,
         userId: userId,
-        imageblob: blob
-      }
+        imageblob: blob,
+      };
 
       self.memeService.CreateMeme(meme).subscribe((res) => {
         console.log(res);

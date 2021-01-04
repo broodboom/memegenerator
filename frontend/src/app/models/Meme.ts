@@ -5,8 +5,8 @@ export type Meme = {
   title: string;
   description?: string;
   imageblob?: Blob;
-  upvotes?: number;
-  downvotes?: number;
+  likes?: number;
+  dislikes?: number;
   imageSrc?: string;
   categoryId: number;
   userId: number;
