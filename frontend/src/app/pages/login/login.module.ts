@@ -1,22 +1,14 @@
 import { NgModule } from '@angular/core';
-import {
-  NbActionsModule,
-  NbButtonModule,
-  NbCardModule,
-  NbTabsetModule,
-  NbUserModule,
-  NbRadioModule,
-  NbSelectModule,
-  NbListModule,
-  NbIconModule,
-} from '@nebular/theme';
-
-import { ThemeModule } from '../@theme/theme.module';
-import { LoginComponent } from './login.component';
+import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NbCardModule, NbUserModule, NbButtonModule, NbTabsetModule, NbActionsModule, NbRadioModule, NbSelectModule, NbListModule, NbIconModule } from '@nebular/theme';
+import { ThemeModule } from 'app/@theme/theme.module';
+import { LoginComponent } from './login.component';
 
 @NgModule({
+  declarations: [LoginComponent],
   imports: [
+    CommonModule,
     FormsModule,
     ThemeModule,
     NbCardModule,
@@ -30,9 +22,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     NbIconModule,
     NbButtonModule,
     ReactiveFormsModule
-  ],
-  declarations: [
-    LoginComponent
-  ],
+  ]
 })
 export class LoginModule { }

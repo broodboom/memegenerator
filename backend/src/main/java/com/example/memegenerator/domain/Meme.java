@@ -44,12 +44,16 @@ public class Meme extends BaseEntity {
     public int dislikes;
 
     @ManyToOne
-    @JoinColumn(name = "imageid", nullable = true)
+    @JoinColumn(name = "imageid")
     public Image image;
 
     @ManyToOne
     @JoinColumn(name = "userid", nullable = false)
     public User user;
+
+    @ManyToOne
+    @JoinColumn(name = "categoryid", nullable = false)
+    public Category category;
 
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(name = "meme_tags", joinColumns = { @JoinColumn(name = "memeid") }, inverseJoinColumns = {
