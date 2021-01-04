@@ -1,4 +1,4 @@
-export interface Achievement {
-  id: number;
+export type Achievement = {
+  id?: number;
   title: string;
-}
+};

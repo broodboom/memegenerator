@@ -14,7 +14,7 @@ import { catchError, retry } from "rxjs/operators";
   providedIn: "root",
 })
 export class MemeService {
-  constructor(public http: HttpClient) {}
+  constructor(private http: HttpClient) {}
 
   httpOptions = {
     headers: new HttpHeaders({
@@ -56,6 +56,10 @@ export class MemeService {
     return this.http
       .get<Meme>(`${environment.apiUrl}/meme/` + id)
       .pipe(retry(1), catchError(this.handleError));
+  }
+
+  updateMeme(meme: Meme){
+    this.http.put<Meme>(`http://localhost:8080/meme/${meme.id}`, meme);
   }
 
   // Error handling

@@ -4,6 +4,7 @@ import { User } from "app/models/User";
 import { environment } from "environments/environment";
 import { Observable } from "rxjs";
 import { map, tap } from "rxjs/operators";
+import { ProfileService } from "./profile.service";
 
 export interface LoginResponse {
   status: boolean;
@@ -16,11 +17,11 @@ export class AuthService {
   private _loggedIn: boolean;
   private _currentUser: User;
 
-  constructor(protected httpClient: HttpClient) {}
+  constructor(protected httpClient: HttpClient, protected profileService: ProfileService) {}
 
   public loggedIn = () => this._loggedIn;
 
-  public currentUser = () => this.currentUser;
+  public currentUser = () => this._currentUser;
 
   public login(username: string, password: string): Observable<boolean> {
     const formData = new FormData();
@@ -31,19 +32,18 @@ export class AuthService {
       tap((response: LoginResponse) => {
         this._loggedIn = response.status;
 
-        if (this._loggedIn) {
-
+        if (response.status) {
+          this.profileService.getUserInfo()
+            .subscribe((user: User) => (this._currentUser = user));
         }
       }),
-      map(() => this._loggedIn)
-    );
+      map((response: LoginResponse) => response.status));
   }
 
   public logout(): Observable<void> {
-    return this.httpClient.post<void>(`${environment.apiUrl}/logout`, {}).pipe(
-      tap(() => {
-        this._loggedIn = false;
-      })
+    return this.httpClient.post<void>(`${environment.apiUrl}/logout`, {})
+    .pipe(
+      tap(() => (this._loggedIn = false))
     );
   }
 }
