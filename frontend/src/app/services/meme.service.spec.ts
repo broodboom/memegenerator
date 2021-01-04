@@ -1,6 +1,6 @@
+
 import { TestBed } from '@angular/core/testing';
 import { Meme } from 'app/models/Meme';
-
 import { MemeService } from './meme.service';
 
 describe('MemeService', () => {
@@ -19,8 +19,16 @@ describe('MemeService', () => {
     const memeId = 0;
     const memeTitle = 'abc';
     const memeImage = new Blob();
+    const categoryId = 0;
+    const userId = 0;
 
-    const dataMock = new Meme(memeTitle, memeImage, memeId);
+    const dataMock: Meme = {
+      id: memeId,
+      title: memeTitle,
+      imageblob: memeImage,
+      categoryId: categoryId,
+      userId: userId
+    };
 
     const result = service.CreateMemeFormData(dataMock);
 
