@@ -10,6 +10,7 @@ import { AdminModule } from "./admin/admin.module";
 import { LoginModule } from "./login/login.module";
 import { PagesRoutingModule } from "./pages-routing.module";
 import { LikeButtonModule } from "./likebutton/likebutton.module";
+import { CreatePageModule } from './createpage/createpage.module';
 
 @NgModule({
   imports: [
@@ -20,6 +21,7 @@ import { LikeButtonModule } from "./likebutton/likebutton.module";
     AdminModule,
     LoginModule,
     LikeButtonModule,
+    CreatePageModule,
     FormsModule,
     ReactiveFormsModule
   ],

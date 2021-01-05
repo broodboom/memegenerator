@@ -1,7 +1,11 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { MemeService } from "../../services/meme.service";
 import { Meme } from "../../models/Meme";
+import { Observable, of } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { AuthService } from "../../services/auth.service";
+import { TagService } from "app/services/tag.service";
+import { Tag } from "app/models/Tag";
 
 let self: any;
 
@@ -11,15 +15,63 @@ let self: any;
   styleUrls: ["./createpage.component.scss"],
 })
 export class CreatepageComponent implements OnInit {
+
+  options: string[];
+  filteredOptions$: Observable<string[]>;
+  tag: Tag;
+
+  @ViewChild('autoInput') input;
+
   constructor(
     private memeService: MemeService,
-    private authService: AuthService
+    private authService: AuthService,
+    private tagService: TagService
   ) {}
 
   ngOnInit() {
     self = this;
 
     this.fillCanvas();
+    this.tagService.getTags().pipe(
+      tap((result)=>console.log(result))
+    ).subscribe((tags: Tag[])=>{
+        this.tag = {title: "test", id: tags.length};
+        this.options = [];
+        tags.forEach(tag => this.options.push(tag.title))
+        this.filteredOptions$ = of(this.options);
+        this.activateButton(self.tag, this.tagService);
+      }
+      
+    );
+  }
+
+  activateButton(tag: Tag, tagService: TagService){
+    const tagbutton = document.querySelector('.add-tag-button');
+        tagbutton.addEventListener("click", function(event){
+          let tagInput = <HTMLInputElement>document.getElementById('tag');
+          tag.title = tagInput.value;
+          // Still needing a don't add if already exists
+          tagService.createTag(tag);
+        }, false)
+  }
+
+  private filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.options.filter(optionValue => optionValue.toLowerCase().includes(filterValue));
+  }
+
+  getFilteredOptions(value: string): Observable<string[]> {
+    return of(value).pipe(
+      map(filterString => this.filter(filterString)),
+    );
+  }
+
+  onChange() {
+    this.filteredOptions$ = this.getFilteredOptions(this.input.nativeElement.value);
+  }
+
+  onSelectionChange($event){
+    this.filteredOptions$ = this.getFilteredOptions($event);
   }
 
   handleSaveImage(e) {
