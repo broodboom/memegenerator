@@ -6,9 +6,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Entity
 public class Category extends BaseEntity {
 
@@ -22,7 +19,4 @@ public class Category extends BaseEntity {
     @Setter
     @NotNull
     public String name;
-
-    @OneToMany(mappedBy = "category")
-    public Set<Meme> memes = new HashSet<>();
 }
