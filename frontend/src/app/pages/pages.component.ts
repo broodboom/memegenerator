@@ -1,46 +1,87 @@
-import { Component, OnInit } from '@angular/core';
-import { NbMenuItem } from '@nebular/theme';
-import { AuthenticationService } from '../temp/authentication.service';
-
-import { MENU_ITEMS } from './pages-menu';
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { NbMenuItem } from "@nebular/theme";
+import { AuthService } from "app/services/auth.service";
+import {
+  Observable,
+  BehaviorSubject,
+  Subject,
+  Subscription,
+} from "rxjs";
 
 @Component({
-  selector: 'ngx-pages',
-  styleUrls: ['pages.component.scss'],
+  selector: "ngx-pages",
+  styleUrls: ["pages.component.scss"],
   template: `
     <ngx-one-column-layout>
-      <nb-menu [items]="menu"></nb-menu>
+      <nb-menu [items]="getMenu() | async"></nb-menu>
       <router-outlet></router-outlet>
     </ngx-one-column-layout>
   `,
 })
-export class PagesComponent /*implements OnInit*/{
+export class PagesComponent implements OnInit, OnDestroy {
+  private _menu: Subject<NbMenuItem[]>;
+  menu$: Observable<NbMenuItem[]>;
 
-  /*currentUser: any;
-  menu: NbMenuItem[];
+  loggedInSubscription: Subscription;
 
-  constructor(private AuthService: AuthenticationService){
-    this.currentUser = AuthService.currentUserValue;
+  constructor(private authService: AuthService) {
+    this._menu = new BehaviorSubject<NbMenuItem[]>([]);
+
+    this.loggedInSubscription = this.authService
+      .loggedIn()
+      .subscribe(() => this.updateMenu());
   }
 
-  ngOnInit(){
-    this.menu = [
+  ngOnDestroy(): void {
+    if (this.loggedInSubscription) {
+      this.loggedInSubscription.unsubscribe();
+    }
+  }
+
+  getMenu(): Observable<NbMenuItem[]> {
+    return this._menu.asObservable();
+  }
+
+  ngOnInit() {
+    this.updateMenu();
+  }
+
+  updateMenu() {
+    this._menu.next([
       {
-        title: 'Home',
-        icon: 'home-outline',
-        link: '/pages/dashboard',
+        title: "Home",
+        icon: "home-outline",
+        link: "/pages/dashboard",
         home: true,
       },
       {
-        title: 'Admin',
-        link: '/pages/admin',
-        hidden: this.currentUser.Role != 'Admin'? true:false,
+        title: "Admin",
+        link: "/pages/admin",
+        icon: "unlock-outline",
+        hidden:
+          this.authService.getCurrentUser()?.role != "Admin" ? true : false,
       },
       {
-        title: 'Log In',
-        link: '/pages/login',
-      }
-    ]
-  } */ 
-  menu = MENU_ITEMS;
+        title: "Log In",
+        icon: "log-in-outline",
+        link: "/pages/login",
+        hidden: this.authService.getLoggedIn(),
+      },
+      {
+        title: "Create",
+        icon: "plus-square-outline",
+        link: "/pages/create",
+      },
+      {
+        title: "Like Button",
+        icon: "heart-outline",
+        link: "/pages/likebutton",
+      },
+      {
+        title: "Profile",
+        icon: "person-outline",
+        link: "/pages/profile",
+      },
+    ]);
+  }
 }

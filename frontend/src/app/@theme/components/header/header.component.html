@@ -5,13 +5,10 @@
     </a>
     <a class="logo" href="#" (click)="navigateHome()"><span>Vissers</span></a>
   </div>
-  <!--<nb-select [selected]="currentTheme" (selectedChange)="changeTheme($event)" status="primary">
-    <nb-option *ngFor="let theme of themes" [value]="theme.value"> {{ theme.name }}</nb-option>
-  </nb-select>-->
 </div>
 
 <div class="header-container">
   <nb-actions size="small">
-    <nb-action class="user-action" icon="log-out-outline" *ngIf="authenticationService.currentUserValue" (click)="logout()"></nb-action>
+    <nb-action class="control-item" icon="log-out-outline" *ngIf="loggedIn" (click)="logout()"></nb-action>
   </nb-actions>
 </div>

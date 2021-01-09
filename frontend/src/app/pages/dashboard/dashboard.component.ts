@@ -1,4 +1,7 @@
-import {Component, OnDestroy} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import { Meme } from 'app/models/Meme';
+import { MemeService } from 'app/services/meme.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 //TODO: move this to a generic model folder
 class Card{
@@ -17,23 +20,7 @@ class Card{
   }
 }
 
-
-
-function getPlaceholderCards(){
-  let items = new Array();
-  var item1 = new Card("meme1", "https://placekitten.com/200/300", 1);
-  var item2 = new Card("meme2", "https://placekitten.com/200/300",2 );
-  var item3 = new Card("meme3", "https://placekitten.com/200/300", 3);
-  var item4 = new Card("meme4", "https://placekitten.com/200/300", 4);
-  items.push(item1);
-  items.push(item2);
-  items.push(item3);
-  items.push(item4);
-
-  return items;
-}
-
-
+let self: any;
 
 @Component({
   selector: 'ngx-dashboard',
@@ -42,9 +29,31 @@ function getPlaceholderCards(){
 })
 
 
-export class DashboardComponent {
-  
-  items = getPlaceholderCards();
+export class DashboardComponent implements OnInit{
 
- 
+  // items = getPlaceholderCards();
+  items = []
+  loading = false;
+
+  constructor(public memeService: MemeService, private sanitizer : DomSanitizer){}
+
+  loadNext(){
+    if(this.loading) {return}
+    this.loading = true;
+    // this.memeService.GetAllMemes().subscribe(meme => this.items.push(...meme));
+    this.loading = false;
+  }
+  ngOnInit(){
+    self = this;
+
+    this.memeService.GetAllMemes().subscribe(meme => this.inserItem(meme));
+  }
+
+  inserItem(meme: Meme[]){
+    meme.forEach(function(element){
+      element.imageSrc = 'data:image/png;base64,' + element.imageblob;
+
+      self.items.push(element)
+    })
+  }
 }

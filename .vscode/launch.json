@@ -6,16 +6,23 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - MemegeneratorApplication",
+            "request": "launch",
+            "mainClass": "com.example.memegenerator.MemegeneratorApplication",
+            "projectName": "assignment2"
+        },
+        {
+            "type": "java",
             "name": "Debug (Launch) - Current File",
             "request": "launch",
             "mainClass": "${file}"
         },
         {
             "type": "java",
-            "name": "Debug (Launch)-Assignment2Application<assignment2>",
+            "name": "Debug (Launch)-MemegeneratorApplication<memegenerator>",
             "request": "launch",
-            "mainClass": "com.example.assignment2.Assignment2Application",
-            "projectName": "assignment2"
+            "mainClass": "com.example.memegenerator.MemegeneratorApplication",
+            "projectName": "memegenerator"
         }
     ]
 }
