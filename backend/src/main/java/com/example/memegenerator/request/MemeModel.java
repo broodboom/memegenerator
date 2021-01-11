@@ -7,6 +7,10 @@ public class MemeModel {
 
     @Getter
     @Setter
+    public Long id;
+    
+    @Getter
+    @Setter
 
     public String title;
 

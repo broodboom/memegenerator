@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -51,9 +52,10 @@ public class MemeController {
         return memeService.getMemeById(id);
     }
 
-    @PostMapping(path = "/update/{meme}")
+    @PutMapping(path = "/update")
     public void updateMeme(@RequestBody MemeModel meme) {
         MemeDto memeDto = new MemeDto();
+        memeDto.id = meme.id;
         memeDto.title = meme.title;
         memeDto.description = meme.description;
         memeDto.imageblob = meme.imageblob;

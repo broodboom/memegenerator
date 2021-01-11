@@ -60,7 +60,7 @@ export class MemeService {
   }
 
   updateMeme(meme: Meme){
-    this.http.put<Meme>(`http://localhost:8080/meme/${meme.id}`, meme);
+    return this.http.put<Meme>(`http://localhost:8080/meme/update`, meme);
   }
 
   // Error handling
