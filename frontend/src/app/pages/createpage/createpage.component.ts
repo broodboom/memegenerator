@@ -6,6 +6,8 @@ import { map, tap } from 'rxjs/operators';
 import { AuthService } from "../../services/auth.service";
 import { TagService } from "app/services/tag.service";
 import { Tag } from "app/models/Tag";
+import { CategoryService } from "app/services/category.service";
+import { Category } from "app/models/Category";
 
 let self: any;
 
@@ -16,16 +18,20 @@ let self: any;
 })
 export class CreatepageComponent implements OnInit {
 
-  options: string[];
-  filteredOptions$: Observable<string[]>;
+  tagOptions: string[];
+  categoryOptions: string[];
+  tagFilteredOptions$: Observable<string[]>;
+  categoryFilteredOptions$: Observable<string[]>;
   tag: Tag;
 
-  @ViewChild('autoInput') input;
+  @ViewChild('tagInput') tagInput;
+  @ViewChild('categoryInput') categoryInput;
 
   constructor(
     private memeService: MemeService,
     private authService: AuthService,
-    private tagService: TagService
+    private tagService: TagService,
+    private categoryService: CategoryService
   ) {}
 
   ngOnInit() {
@@ -35,43 +41,85 @@ export class CreatepageComponent implements OnInit {
     this.tagService.getTags().pipe(
       tap((result)=>console.log(result))
     ).subscribe((tags: Tag[])=>{
-        this.tag = {title: "test", id: tags.length};
-        this.options = [];
-        tags.forEach(tag => this.options.push(tag.title))
-        this.filteredOptions$ = of(this.options);
-        this.activateButton(self.tag, this.tagService);
+        this.tag = {title: "test"};
+        this.tagOptions = [];
+        tags.forEach(tag => this.tagOptions.push(tag.title))
+        this.tagFilteredOptions$ = of(this.tagOptions);
+        this.activateTagButton(this.tag, this.tagService, tags);
       }
       
     );
+    this.categoryService.getCategories().pipe(
+      tap((result)=>console.log(result))
+    ).subscribe((categories: Category[])=>{
+      this.categoryOptions = [];
+      categories.forEach(category => this.categoryOptions.push(category.name))
+      this.categoryFilteredOptions$ = of(this.categoryOptions);
+      this.activateCategoryButton(this.categoryService);
+    })
   }
 
-  activateButton(tag: Tag, tagService: TagService){
+  activateTagButton(tag: Tag, tagService: TagService, tags: Tag[]){
     const tagbutton = document.querySelector('.add-tag-button');
         tagbutton.addEventListener("click", function(event){
           let tagInput = <HTMLInputElement>document.getElementById('tag');
           tag.title = tagInput.value;
-          // Still needing a don't add if already exists
-          tagService.createTag(tag);
+          let add = true;
+          tags.forEach(oldTag => {
+            if(tag.title == oldTag.title){
+              add = false;
+            }
+          })
+          if(add){
+            tagService.createTag(tag).subscribe((data: any)=> console.log(data));
+          }
         }, false)
   }
 
-  private filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.options.filter(optionValue => optionValue.toLowerCase().includes(filterValue));
+  activateCategoryButton(categoryService: CategoryService){
+    const categorybutton = document.querySelector('.add-category-button');
+        categorybutton.addEventListener("click", function(event){
+          let categoryInput = <HTMLInputElement>document.getElementById('category');
+          // Now the category id needs to be given to the new Meme
+        }, false)
   }
 
-  getFilteredOptions(value: string): Observable<string[]> {
+  private tagFilter(value: string): string[] {
+    const tagFilterValue = value.toLowerCase();
+    return this.tagOptions.filter(tagOptionValue => tagOptionValue.toLowerCase().includes(tagFilterValue));
+  }
+
+  private categoryFilter(value: string): string[] {
+    const categoryFilterValue = value.toLowerCase();
+    return this.categoryOptions.filter(categoryOptionValue => categoryOptionValue.toLowerCase().includes(categoryFilterValue));
+  }
+
+  getTagFilteredOptions(value: string): Observable<string[]> {
     return of(value).pipe(
-      map(filterString => this.filter(filterString)),
+      map(filterString => this.tagFilter(filterString)),
     );
   }
 
-  onChange() {
-    this.filteredOptions$ = this.getFilteredOptions(this.input.nativeElement.value);
+  getCategoryFilteredOptions(value: string): Observable<string[]> {
+    return of(value).pipe(
+      map(filterString => this.categoryFilter(filterString)),
+    );
   }
 
-  onSelectionChange($event){
-    this.filteredOptions$ = this.getFilteredOptions($event);
+  tagOnChange() {
+    this.tagFilteredOptions$ = this.getTagFilteredOptions(this.tagInput.nativeElement.value);
+  }
+
+  categoryOnChange() {
+    this.categoryFilteredOptions$ = this.getCategoryFilteredOptions(this.categoryInput.nativeElement.value);
+  }
+
+  tagOnSelectionChange($event){
+    this.tagFilteredOptions$ = this.getTagFilteredOptions($event);
+  }
+
+  categoryOnSelectionChange($event){
+    this.categoryFilteredOptions$ = this.getCategoryFilteredOptions($event);
   }
 
   handleSaveImage(e) {

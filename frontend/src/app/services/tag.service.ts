@@ -11,7 +11,7 @@ export class TagService {
     constructor(private http: HttpClient) { }
 
     public createTag(tag: Tag){
-        this.http.post<Tag>(`http://localhost:8080/tag/${tag.id}`, tag);
+        return this.http.post<Tag>(`http://localhost:8080/tag/create`, tag);
     }
 
     public getTags():Observable<Tag[]>{
