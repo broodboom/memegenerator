@@ -52,7 +52,7 @@ public class Meme extends BaseEntity {
     public User user;
 
     @ManyToOne
-    @JoinColumn(name = "categoryid", nullable = false)
+    @JoinColumn(name = "categoryid", nullable = true)
     public Category category;
 
     @ManyToMany(cascade = { CascadeType.ALL })
