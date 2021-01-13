@@ -14,4 +14,6 @@ public interface MemeService {
     void updateMeme(MemeDto meme);
 
     List<Meme> getMemes();
+
+    List<Meme> getFilteredMemes(long filter);
 }

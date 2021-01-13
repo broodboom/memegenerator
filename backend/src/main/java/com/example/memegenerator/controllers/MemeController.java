@@ -71,4 +71,9 @@ public class MemeController {
 
         memeService.updateMeme(memeDto);
     }
+
+    @GetMapping(path="/category/{id}")
+    public List<Meme> getFilteredMemes(@PathVariable long id){
+        return memeService.getFilteredMemes(id);
+    }
 }

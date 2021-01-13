@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.example.memegenerator.domain.Meme;
 import com.example.memegenerator.repository.MemeRepository;
@@ -79,4 +80,16 @@ public class MemeServiceImpl implements MemeService {
 
         return all;
     }
+
+    @Override
+    public List<Meme> getFilteredMemes(long filter) {
+        List<Meme> all = (List<Meme>) memeRepository.findAll();
+        all.sort(Comparator.comparing(Meme::getCreatedat).reversed());
+        List<Meme> filtered = all.stream()
+                .filter( t-> t.category != null)
+                .filter(t -> t.category.id.equals(filter))
+                .collect(Collectors.toList());
+        return filtered;
+    }
+
 }
