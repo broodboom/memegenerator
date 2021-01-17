@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.HttpMethod;
 
 import com.example.memegenerator.security.Role;
-import com.example.memegenerator.service.UserService;
+import com.example.memegenerator.domain.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +19,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -61,7 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().cors().and().authorizeRequests().antMatchers(HttpMethod.GET, HOME_PATH).permitAll()
-                .antMatchers(HttpMethod.GET, USER_PATH).hasRole(Role.Admin.toString())
+                .antMatchers(HttpMethod.GET, USER_PATH).hasRole(Role.ADMIN.toString())
                 .antMatchers(HttpMethod.POST, USER_PATH).permitAll().antMatchers(HttpMethod.PUT, USER_PATH).permitAll()
                 .antMatchers(HttpMethod.POST, PASSWORD_RESET_REQUEST_PATH).permitAll()
                 .antMatchers(HttpMethod.POST, PASSWORD_RESET_PATH).permitAll()

@@ -1,6 +1,6 @@
 import { Tag } from "./Tag";
 
-export type Meme = {
+export interface Meme {
   id?: number;
   title: string;
   description?: string;

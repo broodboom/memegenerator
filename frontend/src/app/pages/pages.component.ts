@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { NbMenuItem } from "@nebular/theme";
-import { AuthService } from "app/services/auth.service";
+import { AuthService } from "app/services/auth/auth.service";
 import {
   Observable,
   BehaviorSubject,
@@ -59,7 +59,7 @@ export class PagesComponent implements OnInit, OnDestroy {
         link: "/pages/admin",
         icon: "unlock-outline",
         hidden:
-          this.authService.getCurrentUser()?.role != "Admin" ? true : false,
+          this.authService.getCurrentUser()?.role != "ADMIN" ? true : false,
       },
       {
         title: "Log In",

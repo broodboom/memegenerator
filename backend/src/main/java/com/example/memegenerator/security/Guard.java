@@ -1,6 +1,6 @@
 package com.example.memegenerator.security;
 
-import com.example.memegenerator.domain.User;
+import com.example.memegenerator.data.entity.User;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -41,10 +41,10 @@ public class Guard {
     }
 
     private boolean isAdmin(final User user, final int userId) {
-        return user.getRole().equals(Role.Admin) && user.getId() == userId;
+        return user.getRole().equals(Role.ADMIN) && user.getId() == userId;
     }
 
     private boolean isUser(final User user, final int userId) {
-        return user.getRole().equals(Role.User) && user.getId() == userId;
+        return user.getRole().equals(Role.USER) && user.getId() == userId;
     }
 }

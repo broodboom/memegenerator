@@ -8,6 +8,7 @@ public class SecurityContextUtil {
     }
 
     public static UserDetailsAdapter getSecurityContextUser() {
+        
         return (UserDetailsAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

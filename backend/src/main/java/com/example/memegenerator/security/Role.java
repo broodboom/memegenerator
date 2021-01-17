@@ -5,10 +5,13 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public enum Role {
-    User(Collections.singletonList(new SimpleGrantedAuthority("user"))),
-    Admin(Collections.singletonList(new SimpleGrantedAuthority("admin")));
+
+    USER(Collections.singletonList(new SimpleGrantedAuthority("USER"))), ADMIN(new ArrayList<GrantedAuthority>(
+            Arrays.asList(new SimpleGrantedAuthority("ADMIN"), new SimpleGrantedAuthority("USER"))));
 
     private final Collection<GrantedAuthority> authorities;
 
