@@ -21,11 +21,11 @@ public class TagController {
     TagService tagService;
 
     @PostMapping(path = "/create")
-    public void createTag(@RequestBody Tag tag) throws IOException {
+    public Tag createTag(@RequestBody Tag tag) throws IOException {
         TagDto tagDto = new TagDto();
         tagDto.title = tag.title;
 
-        tagService.createTag(tagDto);
+        return tagService.createTag(tagDto);
     }
 
     @GetMapping(path = "/")

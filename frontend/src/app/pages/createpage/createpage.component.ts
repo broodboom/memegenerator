@@ -8,6 +8,7 @@ import { TagService } from "app/services/tag.service";
 import { Tag } from "app/models/Tag";
 import { CategoryService } from "app/services/category.service";
 import { Category } from "app/models/Category";
+import { HttpResponse } from "@angular/common/http";
 
 let self: any;
 
@@ -19,10 +20,13 @@ let self: any;
 export class CreatepageComponent implements OnInit {
 
   tagOptions: string[];
+  tagIds: number[];
   categoryOptions: string[];
+  categoryIds: number[];
   tagFilteredOptions$: Observable<string[]>;
   categoryFilteredOptions$: Observable<string[]>;
-  tag: Tag;
+  addedCategoryId: number;
+  addedTags: Tag[];
 
   @ViewChild('tagInput') tagInput;
   @ViewChild('categoryInput') categoryInput;
@@ -31,21 +35,26 @@ export class CreatepageComponent implements OnInit {
     private memeService: MemeService,
     private authService: AuthService,
     private tagService: TagService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
   ) {}
 
   ngOnInit() {
     self = this;
-
+    self.addedCategoryId = 0;
+    self.addedTags = [];
+    self.tagIds = [];
+    self.categoryIds = [];
     this.fillCanvas();
     this.tagService.getTags().pipe(
       tap((result)=>console.log(result))
     ).subscribe((tags: Tag[])=>{
-        this.tag = {title: "test"};
         this.tagOptions = [];
-        tags.forEach(tag => this.tagOptions.push(tag.title))
+        tags.forEach(tag => {
+          this.tagOptions.push(tag.title);
+          this.tagIds.push(tag.id);
+        })
         this.tagFilteredOptions$ = of(this.tagOptions);
-        this.activateTagButton(this.tag, this.tagService, tags);
+        this.activateTagButton({title: "test"}, this.tagService, tags);
       }
       
     );
@@ -53,9 +62,12 @@ export class CreatepageComponent implements OnInit {
       tap((result)=>console.log(result))
     ).subscribe((categories: Category[])=>{
       this.categoryOptions = [];
-      categories.forEach(category => this.categoryOptions.push(category.name))
+      categories.forEach(category => {
+        this.categoryOptions.push(category.name);
+        this.categoryIds.push(category.id);
+      })
       this.categoryFilteredOptions$ = of(this.categoryOptions);
-      this.activateCategoryButton(this.categoryService);
+      this.activateCategoryButton(this.categoryOptions);
     })
   }
 
@@ -65,22 +77,56 @@ export class CreatepageComponent implements OnInit {
           let tagInput = <HTMLInputElement>document.getElementById('tag');
           tag.title = tagInput.value;
           let add = true;
+          let tagId = null;
           tags.forEach(oldTag => {
             if(tag.title == oldTag.title){
               add = false;
+              tagId = oldTag.id;
             }
           })
           if(add){
-            tagService.createTag(tag).subscribe((data: any)=> console.log(data));
+            tagService.createTag(tag).subscribe((data: any)=> {
+              console.log(data);
+              tagId = data.body.id;
+              let addedTag = {id: tagId, title: tagInput.value};
+              let condition = true;
+              self.addedTags.forEach(oldAddedTag => {
+                if(oldAddedTag.title == tag.title){
+                  condition = false;
+                }
+              });
+              if(condition){
+                self.addedTags.push(addedTag);
+              }
+            });
+          }
+          else{
+            let addedTag = {id: tagId, title: tagInput.value};
+            let condition = true;
+            self.addedTags.forEach(oldAddedTag => {
+              if(oldAddedTag.title == tag.title){
+                condition = false;
+              }
+            });
+            if(condition){
+              self.addedTags.push(addedTag);
+            }
           }
         }, false)
   }
 
-  activateCategoryButton(categoryService: CategoryService){
+  activateCategoryButton(categoryOptions: string[]){
     const categorybutton = document.querySelector('.add-category-button');
         categorybutton.addEventListener("click", function(event){
           let categoryInput = <HTMLInputElement>document.getElementById('category');
           // Now the category id needs to be given to the new Meme
+          let number = 0;
+          categoryOptions.forEach(option => {
+            if(option == categoryInput.innerText){
+              self.addedCategoryId = self.categoryIds[number];
+            }
+            number = number + 1;
+          });
         }, false)
   }
 
@@ -89,20 +135,9 @@ export class CreatepageComponent implements OnInit {
     return this.tagOptions.filter(tagOptionValue => tagOptionValue.toLowerCase().includes(tagFilterValue));
   }
 
-  private categoryFilter(value: string): string[] {
-    const categoryFilterValue = value.toLowerCase();
-    return this.categoryOptions.filter(categoryOptionValue => categoryOptionValue.toLowerCase().includes(categoryFilterValue));
-  }
-
   getTagFilteredOptions(value: string): Observable<string[]> {
     return of(value).pipe(
       map(filterString => this.tagFilter(filterString)),
-    );
-  }
-
-  getCategoryFilteredOptions(value: string): Observable<string[]> {
-    return of(value).pipe(
-      map(filterString => this.categoryFilter(filterString)),
     );
   }
 
@@ -110,16 +145,8 @@ export class CreatepageComponent implements OnInit {
     this.tagFilteredOptions$ = this.getTagFilteredOptions(this.tagInput.nativeElement.value);
   }
 
-  categoryOnChange() {
-    this.categoryFilteredOptions$ = this.getCategoryFilteredOptions(this.categoryInput.nativeElement.value);
-  }
-
   tagOnSelectionChange($event){
     this.tagFilteredOptions$ = this.getTagFilteredOptions($event);
-  }
-
-  categoryOnSelectionChange($event){
-    this.categoryFilteredOptions$ = this.getCategoryFilteredOptions($event);
   }
 
   handleSaveImage(e) {
@@ -184,17 +211,18 @@ export class CreatepageComponent implements OnInit {
       var newImg = document.createElement("img"),
         url = URL.createObjectURL(blob);
 
-      var meme: Meme = {
-        title: "test",
-        categoryId: 1,
-        userId: userId,
-        imageblob: blob,
-      };
-
-      self.memeService.CreateMeme(meme).subscribe((res) => {
-        console.log(res);
-      });
-
+        var meme: Meme = {
+          title: "test",
+          categoryId: self.addedCategoryId,
+          userId: userId,
+          imageblob: blob,
+          tags: self.addedTags
+        };
+  
+        self.memeService.CreateMeme(meme).subscribe((res: HttpResponse<any>) => {
+          console.log(res.body);
+        });
+      
       newImg.onload = function () {
         // no longer need to read the blob so it's revoked
         URL.revokeObjectURL(url);

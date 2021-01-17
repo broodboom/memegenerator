@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.memegenerator.domain.Meme;
+import com.example.memegenerator.domain.Tag;
 import com.example.memegenerator.repository.MemeRepository;
+import com.example.memegenerator.repository.TagRepository;
 import com.example.memegenerator.request.MemeModel;
 import com.example.memegenerator.service.MemeService;
 import com.example.memegenerator.service.UserService;
@@ -21,9 +23,12 @@ public class MemeServiceImpl implements MemeService {
     MemeRepository memeRepository;
 
     @Autowired
+    TagRepository tagRepository;
+
+    @Autowired
     UserService userService;
 
-    public void createMeme(MemeDto meme, Long id) {
+    public Meme createMeme(MemeDto meme, Long id) {
         Meme dbMeme = new Meme();
         dbMeme.title = meme.title;
         dbMeme.description = meme.description;
@@ -32,9 +37,17 @@ public class MemeServiceImpl implements MemeService {
         dbMeme.dislikes = meme.dislikes;
         dbMeme.createdat = new Timestamp(System.currentTimeMillis());
 
+        for (Tag element : meme.tags) {
+            Optional<Tag> dbTag = tagRepository.findById(element.id);
+
+            if(!dbTag.isPresent()) continue;
+
+            dbMeme.tags.add(dbTag.get());
+        }
+
         dbMeme.user = userService.getDbUserByUserId(id);
 
-        memeRepository.save(dbMeme);
+        return memeRepository.save(dbMeme);
     }
 
     @Override
@@ -76,4 +89,5 @@ public class MemeServiceImpl implements MemeService {
 
         return all;
     }
+
 }
