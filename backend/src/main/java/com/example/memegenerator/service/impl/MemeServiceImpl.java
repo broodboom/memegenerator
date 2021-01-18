@@ -1,12 +1,15 @@
 package com.example.memegenerator.service.impl;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import com.example.memegenerator.domain.Meme;
 import com.example.memegenerator.domain.Tag;
+import com.example.memegenerator.domain.User;
 import com.example.memegenerator.repository.MemeRepository;
 import com.example.memegenerator.repository.TagRepository;
 import com.example.memegenerator.request.MemeModel;
@@ -30,6 +33,8 @@ public class MemeServiceImpl implements MemeService {
     UserService userService;
 
     public Meme createMeme(MemeDto meme, Long id) {
+        if(!userAllowedToCreate(id)) return new Meme();
+
         Meme dbMeme = new Meme();
         dbMeme.title = meme.title;
         dbMeme.description = meme.description;
@@ -63,6 +68,7 @@ public class MemeServiceImpl implements MemeService {
         memeModel.imageblob = meme.get().imageblob;
         memeModel.likes = meme.get().likes;
         memeModel.dislikes = meme.get().dislikes;
+        memeModel.user = meme.get().user;
 
         return memeModel;
     }
@@ -91,5 +97,35 @@ public class MemeServiceImpl implements MemeService {
         all.sort(Comparator.comparing(Meme::getCreatedat).reversed());
 
         return all;
+    }
+
+    @Override
+    public Boolean userAllowedToCreate(Long userId) {
+        boolean result = false;
+
+        User user = userService.getUserById(userId);
+
+        var currentDate = LocalDate.now();
+        Integer memesAddedCount = memeRepository.countAddedRecordsTodayByUser(currentDate.toString(), userId);
+
+        Integer userAmountToPost = 0;
+        if(user.points < 100){
+            userAmountToPost = 1;
+        }else if(user.points < 500 ){
+            userAmountToPost = 5;
+        }
+        else if(user.points < 1000 ){
+            userAmountToPost = 10;
+        }else{
+            userAmountToPost = -1;
+            result = true;
+        }
+
+
+        if(userAmountToPost != -1){
+            result = userAmountToPost < memesAddedCount;
+        }
+
+        return result;
     }
 }

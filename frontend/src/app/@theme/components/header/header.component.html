@@ -8,6 +8,9 @@
 </div>
 
 <div class="header-container">
+  <div size="small" class="control-item" *ngIf="loggedIn">
+    points: {{ user.points }}
+  </div>
   <nb-actions size="small">
     <nb-action class="control-item" icon="log-out-outline" *ngIf="loggedIn" (click)="logout()"></nb-action>
   </nb-actions>

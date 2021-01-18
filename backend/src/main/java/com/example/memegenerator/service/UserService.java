@@ -93,6 +93,19 @@ public class UserService implements UserDetailsService {
         return ResponseEntity.ok("User " + userOptional.get().username + " has been updated");
     }
 
+    public ResponseEntity<String> updateUserPoints(Long userId, int pointsToAdd){
+        Optional<User> userOptional = userRepository.findById(userId);
+
+        if (!userOptional.isPresent())
+            return ResponseEntity.badRequest().body("User with id " + userId + " not found");
+
+        userOptional.get().points = userOptional.get().points + pointsToAdd;
+
+        userRepository.save(userOptional.get());
+
+        return ResponseEntity.ok("User " + userOptional.get().username + " has been updated");
+    }
+
     public User getUserById(long id) {
         Optional<User> user = userRepository.findById(id);
 

@@ -15,14 +15,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 import com.example.memegenerator.domain.Meme;
 import com.example.memegenerator.domain.Tag;
 import com.example.memegenerator.request.MemeModel;
 import com.example.memegenerator.shared.dto.MemeDto;
 import com.example.memegenerator.shared.dto.TagDto;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.example.memegenerator.service.MemeService;
 
@@ -80,5 +78,10 @@ public class MemeController {
         memeDto.dislikes = meme.dislikes;
 
         memeService.updateMeme(memeDto);
+    }
+
+    @GetMapping(path = "/checkAllowed/{id}")
+    public Boolean userAllowedToCreateMeme(@PathVariable long id){
+        return memeService.userAllowedToCreate(id);
     }
 }
