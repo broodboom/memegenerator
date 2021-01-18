@@ -27,6 +27,11 @@ export class CreatepageComponent implements OnInit {
   categoryFilteredOptions$: Observable<string[]>;
   addedCategoryId: number;
   addedTags: Tag[];
+  allowedToMakeMemes: boolean;
+  allowedToAddDescription: boolean;
+  title: string;
+  description: string;
+  points: number;
 
   @ViewChild('tagInput') tagInput;
   @ViewChild('categoryInput') categoryInput;
@@ -44,6 +49,8 @@ export class CreatepageComponent implements OnInit {
     self.addedTags = [];
     self.tagIds = [];
     self.categoryIds = [];
+    this.userAllowedToMakeMeme();
+    this.userAllowedToAddDescription();
     this.fillCanvas();
     this.tagService.getTags().pipe(
       tap((result)=>console.log(result))
@@ -68,7 +75,22 @@ export class CreatepageComponent implements OnInit {
       })
       this.categoryFilteredOptions$ = of(this.categoryOptions);
       this.activateCategoryButton(this.categoryOptions);
-    })
+    });
+  }
+
+  userAllowedToMakeMeme(){
+    const user = this.authService.getCurrentUser();
+
+    this.memeService.GetUserIsAllowedToCreateMeme(user.id).subscribe(result => {
+      this.allowedToMakeMemes = result;
+    });
+  }
+
+  userAllowedToAddDescription(){
+    const user = this.authService.getCurrentUser();
+
+    this.points = user.points;
+    this.allowedToAddDescription = user.points >= 500;
   }
 
   activateTagButton(tag: Tag, tagService: TagService, tags: Tag[]){
@@ -170,6 +192,28 @@ export class CreatepageComponent implements OnInit {
     reader.readAsDataURL(e.target.files[0]);
   }
 
+  handleSaveImageFromTemplate(e) {
+    var canvas = document.querySelector("canvas");
+    console.log(canvas);
+    var ctx = canvas.getContext("2d");
+    var reader = new FileReader();
+    reader.onload = function (event) {
+      var img = new Image();
+      img.onload = function () {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+      };
+      img.src = event.target.result as string;
+      console.log("img src:  ");
+      var temp = event.target.result as string;
+      var image = document.querySelector("canvas");
+      canvas.setAttribute("src", img.src);
+    };
+
+    fetch(e.target.src).then(r => r.blob()).then(blobFile => reader.readAsDataURL(blobFile));
+  }
+
   fillCanvas() {
     var inputField = document.querySelector("input");
     var canvas = document.querySelector("canvas");
@@ -211,7 +255,8 @@ export class CreatepageComponent implements OnInit {
         url = URL.createObjectURL(blob);
 
         var meme: Meme = {
-          title: "test",
+          title: self.title,
+          description: self.description,
           categoryId: self.addedCategoryId,
           userId: userId,
           imageblob: blob,

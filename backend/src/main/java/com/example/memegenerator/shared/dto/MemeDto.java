@@ -35,4 +35,8 @@ public class MemeDto {
     @Getter
     @Setter
     public Tag[] tags;
+
+    @Getter
+    @Setter
+    public int categoryId;
 }

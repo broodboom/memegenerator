@@ -34,6 +34,8 @@ export class MemeService {
     result.append("title", data.title);
     result.append("userId", data.userId.toString());
     result.append("tags", JSON.stringify(data.tags));
+    result.append("description", data.description);
+    result.append("categoryId", data.categoryId.toString());
 
     return result;
   }
@@ -47,6 +49,12 @@ export class MemeService {
   GetAllMemes(): Observable<Meme[]> {
     return this.http
       .get<Meme[]>(`${environment.apiUrl}/meme/`, this.httpOptions)
+      .pipe(retry(1), catchError(this.handleError));
+  }
+
+  GetUserIsAllowedToCreateMeme(id): Observable<boolean> {
+    return this.http
+      .get<boolean>(`${environment.apiUrl}/meme/checkAllowed/` + id, this.httpOptions)
       .pipe(retry(1), catchError(this.handleError));
   }
 

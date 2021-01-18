@@ -16,4 +16,5 @@ public interface MemeService {
     List<Meme> getMemes();
 
     List<Meme> getFilteredMemes(long filter);
+    Boolean userAllowedToCreate(Long userId);
 }

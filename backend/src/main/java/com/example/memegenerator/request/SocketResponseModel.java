@@ -11,4 +11,8 @@ public class SocketResponseModel {
     @Getter
     @Setter
     public Boolean isUpvote;
+
+    @Getter
+    @Setter
+    public Long userId;
 }
