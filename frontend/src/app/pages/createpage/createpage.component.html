@@ -1,9 +1,14 @@
 <div class="container">
 
+  <div>
+    <h1 style="color:red;" *ngIf="!allowedToMakeMemes">You made too many memes today for your points. Please wait till tommorow with making the meme.</h1>
+  </div>
+
   <form>
       <!-- <img  id="image" crossorigin="anonymous" src="" display="hidden"> -->
    <input type ="text" id="title" placeholder="Text for Image">
-   <input type="text" id="inp" placeholder="Title for image">
+   <input type="text" id="inp" [(ngModel)]="title" name="title" placeholder="Title for image">
+   <input type="text" id="description" [(ngModel)]="description" name="description" placeholder="Description for image" *ngIf="allowedToAddDescription">
    <input type="file" id="imageLoader"name="imageLoader"/>
 
   </form>
@@ -30,8 +35,12 @@
   <canvas id="canvas" class="canvas_image">
   </canvas>
 
-
-
-
-  <button class="save-button">Save button</button>
+  <button class="save-button" [disabled]="!allowedToMakeMemes">Save button</button>
+  <div>
+    <img src="../../../assets/templateImages/dion.jpg" (click)="handleSaveImageFromTemplate($event)" alt="template1">
+    <img src="../../../assets/templateImages/fistingBaby.png" (click)="handleSaveImageFromTemplate($event)" alt="template2" *ngIf="points >= 5">
+    <img src="../../../assets/templateImages/scaredCat.png" (click)="handleSaveImageFromTemplate($event)" alt="template3" *ngIf="points >= 100">
+    <img src="../../../assets/templateImages/skeleton.png" (click)="handleSaveImageFromTemplate($event)" alt="template4" *ngIf="points >= 500">
+    <img src="../../../assets/templateImages/watchingBack.png" (click)="handleSaveImageFromTemplate($event)" alt="template5" *ngIf="points >= 1000">
+  </div>
 </div>
