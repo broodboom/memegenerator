@@ -34,6 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String PASSWORD_RESET_REQUEST_PATH = "/users/password-reset-request";
     private static final String PASSWORD_RESET_PATH = "/users/password-reset";
     private static final String MEME_PATH = "/meme";
+    private static final String LIKEDISLIKE_PATH = "/likedislike";
 
     @Autowired
     UserService userDetailService;
@@ -65,6 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, PASSWORD_RESET_REQUEST_PATH).permitAll()
                 .antMatchers(HttpMethod.POST, PASSWORD_RESET_PATH).permitAll()
                 .antMatchers(HttpMethod.GET, "/users/activate/{id:\\d+}/{token:\\d+}").permitAll()
+                .antMatchers(LIKEDISLIKE_PATH).permitAll()
                 .antMatchers(MEME_PATH).permitAll().anyRequest().permitAll().and().httpBasic().and().formLogin()
                 .successHandler(new AuthenticationSuccessHandler() {
 

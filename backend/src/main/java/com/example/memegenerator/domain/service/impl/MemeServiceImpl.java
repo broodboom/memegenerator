@@ -1,12 +1,15 @@
 package com.example.memegenerator.domain.service.impl;
 
 import java.sql.Timestamp;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
 import com.example.memegenerator.data.entity.Meme;
+import com.example.memegenerator.data.entity.Tag;
 import com.example.memegenerator.data.repository.MemeRepository;
 import com.example.memegenerator.domain.service.MemeService;
+import com.example.memegenerator.data.repository.TagRepository;
 import com.example.memegenerator.domain.service.UserService;
 import com.example.memegenerator.web.dto.MemeDto;
 
@@ -20,9 +23,12 @@ public class MemeServiceImpl implements MemeService {
     MemeRepository memeRepository;
 
     @Autowired
+    TagRepository tagRepository;
+
+    @Autowired
     UserService userService;
 
-    public void createMeme(MemeDto meme, Long id) {
+    public Meme createMeme(MemeDto meme, Long id) {
 
         Meme dbMeme = new Meme();
         dbMeme.title = meme.title;
@@ -32,9 +38,17 @@ public class MemeServiceImpl implements MemeService {
         dbMeme.dislikes = meme.dislikes;
         dbMeme.createdat = new Timestamp(System.currentTimeMillis());
 
+        for (Tag element : meme.tags) {
+            Optional<Tag> dbTag = tagRepository.findById(element.id);
+
+            if(!dbTag.isPresent()) continue;
+
+            dbMeme.tags.add(dbTag.get());
+        }
+
         dbMeme.user = userService.getDbUserByUserId(id);
 
-        memeRepository.save(dbMeme);
+        return memeRepository.save(dbMeme);
     }
 
     @Override
@@ -79,6 +93,10 @@ public class MemeServiceImpl implements MemeService {
 
     @Override
     public List<Meme> getMemes() {
+
+        List<Meme> all = (List<Meme>) memeRepository.findAll();
+
+        all.sort(Comparator.comparing(Meme::getCreatedat).reversed());
 
         return (List<Meme>) memeRepository.findAll();
     }

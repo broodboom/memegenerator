@@ -1,5 +1,7 @@
 package com.example.memegenerator.web.dto;
 
+import com.example.memegenerator.data.entity.Tag;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,4 +20,6 @@ public class MemeDto {
     public int likes;
 
     public int dislikes;
+
+    public Tag[] tags;
 }

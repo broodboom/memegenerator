@@ -7,7 +7,7 @@ import com.example.memegenerator.web.dto.MemeDto;
 
 public interface MemeService {
     
-    void createMeme(MemeDto meme, Long id);
+    Meme createMeme(MemeDto meme, Long id);
 
     MemeDto getMemeById(long id);
 

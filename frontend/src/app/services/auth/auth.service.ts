@@ -41,7 +41,7 @@ export class AuthService {
     return this._currentUser.getValue();
   }
 
-  public login(username: string, password: string): Observable<boolean> {
+  login(username: string, password: string): Observable<boolean> {
     const formData = new FormData();
     formData.append("username", username);
     formData.append("password", password);
@@ -60,7 +60,7 @@ export class AuthService {
     );
   }
 
-  public logout(): Observable<void> {
+  logout(): Observable<void> {
     this._loggedIn.next(false);
     this._currentUser.next(null);
 

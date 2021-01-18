@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import { Meme } from 'app/models/Meme';
 import { MemeService } from 'app/services/meme/meme.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { WebSocketAPI } from './WebSocketAPI';
 
 //TODO: move this to a generic model folder
 class Card{
@@ -20,6 +21,18 @@ class Card{
   }
 }
 
+class ResponseClass {
+  memeId: string;
+  isUpvote: boolean;
+
+  constructor(jsonStr: string) {
+    let jsonObj: any = JSON.parse(jsonStr);
+    for (let prop in jsonObj) {
+        this[prop] = jsonObj[prop];
+    }
+}
+}
+
 let self: any;
 
 @Component({
@@ -32,6 +45,7 @@ let self: any;
 export class DashboardComponent implements OnInit{
 
   // items = getPlaceholderCards();
+  webSocketAPI: WebSocketAPI;
   items = []
   loading = false;
 
@@ -45,8 +59,33 @@ export class DashboardComponent implements OnInit{
   }
   ngOnInit(){
     self = this;
-
+    this.webSocketAPI = new WebSocketAPI(this);
+    
+    this.connect();
     this.memeService.GetAllMemes().subscribe(meme => this.inserItem(meme));
+  }
+
+  ngOnDestroy(){
+    this.disconnect();
+  }
+
+  sendMessage(voteType, item){
+    let response;
+    if(voteType === "u"){
+      response = {memeId: item.id,isUpvote: true}
+    }else{
+      response = {memeId: item.id,isUpvote: false}
+    }
+
+    this.webSocketAPI._send(response);
+  }
+
+  connect(){
+    this.webSocketAPI._connect();
+  }
+
+  disconnect(){
+    this.webSocketAPI._disconnect();
   }
 
   inserItem(meme: Meme[]){
@@ -55,5 +94,19 @@ export class DashboardComponent implements OnInit{
 
       self.items.push(element)
     })
+  }
+
+  handleMessage(message){
+    let fObj: ResponseClass = new ResponseClass(message);
+    var item2 = self.items.filter(function(item) {
+      return item.id === fObj.memeId;
+    })[0];
+
+    if(fObj.isUpvote){
+      item2.likes++;
+    }else{
+      item2.dislikes++;
+    }
+    //this.items = message;
   }
 }

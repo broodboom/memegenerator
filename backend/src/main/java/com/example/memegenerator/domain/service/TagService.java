@@ -7,7 +7,7 @@ import com.example.memegenerator.web.dto.TagDto;
 
 public interface TagService {
     
-    void createTag(TagDto tag);
+    Tag createTag(TagDto tag);
 
     List<Tag> getTags();
 }

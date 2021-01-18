@@ -1,5 +1,6 @@
 package com.example.memegenerator.web.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.example.memegenerator.data.entity.Tag;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,15 +24,13 @@ public class TagController {
     TagService tagService;
 
     @PostMapping(path = "/create/{tag}")
-    public ResponseEntity<?> createTag(Tag tag) {
+    public ResponseEntity<Tag> createTag(@RequestBody Tag tag) throws IOException {
 
         TagDto tagDto = new TagDto();
 
         tagDto.title = tag.title;
 
-        tagService.createTag(tagDto);
-
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<Tag>(tagService.createTag(tagDto), HttpStatus.CREATED);
     }
 
     @GetMapping(path = "/")

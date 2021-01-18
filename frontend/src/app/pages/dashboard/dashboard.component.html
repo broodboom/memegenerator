@@ -7,10 +7,10 @@
       </nb-card-body>
       <nb-card-footer>
         <nb-card-footer__votes-block>
-          <nb-card-footer__votes-block-up>
+          <nb-card-footer__votes-block-up (click)="sendMessage('u', item)">
             Upvotes: {{item.likes}}
           </nb-card-footer__votes-block-up>
-          <nb-card-footer__votes-block-down>
+          <nb-card-footer__votes-block-down (click)="sendMessage('d', item)">
             Downvotes: {{item.dislikes}}
           </nb-card-footer__votes-block-down>
         </nb-card-footer__votes-block>
