@@ -7,15 +7,26 @@
    <input type="file" id="imageLoader"name="imageLoader"/>
 
   </form>
+
   <form>
-    <input #autoInput nbInput type="text" id="tag" (input)="onChange()" placeholder="Enter tag" [nbAutocomplete]="auto" autocomplete="off" class="tagInput"/>
-    <nb-autocomplete #auto (selectedChange)="onSelectionChange($event)">
-      <nb-option *ngFor="let option of filteredOptions$ | async" [value]="option">
-        {{ option }}
+    <input #tagInput nbInput type="text" id="tag" (input)="tagOnChange()" placeholder="Enter tag" [nbAutocomplete]="tagAuto" autocomplete="off" class="tagInput"/>
+    <nb-autocomplete #tagAuto (selectedChange)="tagOnSelectionChange($event)">
+      <nb-option *ngFor="let tagOption of tagFilteredOptions$ | async" [value]="tagOption">
+        {{ tagOption }}
       </nb-option>
     </nb-autocomplete>
     <button class="add-tag-button">Add tag</button>
   </form>
+
+  <form>
+    <nb-select id="category" placeholder="Select Category" class="categoryInput">
+      <nb-option *ngFor="let categoryOption of categoryFilteredOptions$ | async" [value]="categoryOption">
+        {{ categoryOption }}
+      </nb-option>
+    </nb-select>
+    <button class="add-category-button">Add category</button>
+  </form>
+  
   <canvas id="canvas" class="canvas_image">
   </canvas>
 

@@ -10,6 +10,7 @@ import com.example.memegenerator.shared.dto.TagDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,11 +21,11 @@ public class TagController {
     TagService tagService;
 
     @PostMapping(path = "/create/{tag}")
-    public void createTag(Tag tag) throws IOException {
+    public Tag createTag(@RequestBody Tag tag) throws IOException {
         TagDto tagDto = new TagDto();
         tagDto.title = tag.title;
 
-        tagService.createTag(tagDto);
+        return tagService.createTag(tagDto);
     }
 
     @GetMapping(path = "/")

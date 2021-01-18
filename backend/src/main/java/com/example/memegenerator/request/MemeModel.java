@@ -1,10 +1,16 @@
 package com.example.memegenerator.request;
 
+import com.example.memegenerator.domain.Tag;
+
 import lombok.Getter;
 import lombok.Setter;
 
 public class MemeModel {
 
+    @Getter
+    @Setter
+    public Long id;
+    
     @Getter
     @Setter
 
@@ -25,4 +31,8 @@ public class MemeModel {
     @Getter
     @Setter
     public int dislikes;
+
+    @Getter
+    @Setter
+    public Tag[] tags;
 }

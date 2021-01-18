@@ -21,12 +21,12 @@ public class TagServiceImpl implements TagService {
     @Autowired
     MemeService memeService;
 
-    public void createTag(TagDto tag) {
+    public Tag createTag(TagDto tag) {
         Tag dbTag = new Tag();
         dbTag.title = tag.title;
         dbTag.createdat = new Timestamp(System.currentTimeMillis());
 
-        tagRepository.save(dbTag);
+        return tagRepository.save(dbTag);
     }
 
     @Override

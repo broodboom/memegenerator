@@ -23,28 +23,25 @@ export class MemeService {
     }),
   };
 
+  httpOptionsWithResponse = {
+    observe: "response" as const,
+  }
+
   CreateMemeFormData(data: Meme): FormData {
     var result = new FormData();
 
     result.append("imageblob", data.imageblob);
     result.append("title", data.title);
-    result.append("userId", data.id.toString())
+    result.append("userId", data.id.toString());
+    result.append("tags", JSON.stringify(data.tags));
 
     return result;
   }
 
-  CreateMeme(data): Observable<HttpEvent<any>> {
-    const req = new HttpRequest(
-      "POST",
-      `${environment.apiUrl}/meme/`,
-      this.CreateMemeFormData(data),
-      {
-        reportProgress: true,
-        responseType: "json",
-      }
-    );
-
-    return this.http.request(req);
+  CreateMeme(data): Observable<any> {
+    return this.http
+      .post<Meme>(`${environment.apiUrl}/meme/`, this.CreateMemeFormData(data), this.httpOptionsWithResponse)
+      .pipe(retry(1), catchError(this.handleError));
   }
 
   GetAllMemes(): Observable<Meme[]> {
