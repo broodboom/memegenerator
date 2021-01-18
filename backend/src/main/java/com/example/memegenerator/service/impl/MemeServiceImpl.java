@@ -1,6 +1,7 @@
 package com.example.memegenerator.service.impl;
 
 import java.sql.Timestamp;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -86,6 +87,8 @@ public class MemeServiceImpl implements MemeService {
     @Override
     public List<Meme> getMemes() {
         List<Meme> all = (List<Meme>) memeRepository.findAll();
+
+        all.sort(Comparator.comparing(Meme::getCreatedat).reversed());
 
         return all;
     }

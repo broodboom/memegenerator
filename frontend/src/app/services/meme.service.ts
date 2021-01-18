@@ -32,7 +32,7 @@ export class MemeService {
 
     result.append("imageblob", data.imageblob);
     result.append("title", data.title);
-    result.append("userId", data.id.toString());
+    result.append("userId", data.userId.toString());
     result.append("tags", JSON.stringify(data.tags));
 
     return result;
