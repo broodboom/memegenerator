@@ -14,9 +14,9 @@ public class Category extends BaseEntity {
      */
     private static final long serialVersionUID = 1L;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "title", nullable = false)
     @Getter
     @Setter
     @NotNull
-    public String name;
+    public String title;
 }

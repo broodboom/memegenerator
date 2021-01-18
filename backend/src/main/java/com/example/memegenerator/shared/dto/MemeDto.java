@@ -1,5 +1,7 @@
 package com.example.memegenerator.shared.dto;
 
+import com.example.memegenerator.domain.Tag;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,4 +31,8 @@ public class MemeDto {
     @Getter
     @Setter
     public int dislikes;
+
+    @Getter
+    @Setter
+    public Tag[] tags;
 }
