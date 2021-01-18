@@ -1,116 +1,91 @@
 package com.example.memegenerator.domain.service.impl;
 
-import java.sql.Timestamp;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+import com.example.memegenerator.data.entity.Category;
 import com.example.memegenerator.data.entity.Meme;
-import com.example.memegenerator.data.entity.Tag;
+import com.example.memegenerator.data.repository.CategoryRepository;
 import com.example.memegenerator.data.repository.MemeRepository;
 import com.example.memegenerator.domain.service.MemeService;
 import com.example.memegenerator.data.repository.TagRepository;
-import com.example.memegenerator.domain.service.UserService;
+import com.example.memegenerator.data.repository.UserRepository;
 import com.example.memegenerator.web.dto.MemeDto;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class MemeServiceImpl implements MemeService {
 
     @Autowired
-    MemeRepository memeRepository;
+    final MemeRepository memeRepository;
 
     @Autowired
-    TagRepository tagRepository;
+    final TagRepository tagRepository;
 
     @Autowired
-    UserService userService;
+    final CategoryRepository categoryRepository;
 
-    public Meme createMeme(MemeDto meme, Long id) {
+    @Autowired
+    final UserRepository userRepository;
 
-        Meme dbMeme = new Meme();
-        dbMeme.title = meme.title;
-        dbMeme.description = meme.description;
-        dbMeme.imageblob = meme.imageblob;
-        dbMeme.likes = meme.likes;
-        dbMeme.dislikes = meme.dislikes;
-        dbMeme.createdat = new Timestamp(System.currentTimeMillis());
+    @Autowired
+    final ModelMapper modelMapper;
 
-        for (Tag element : meme.tags) {
-            Optional<Tag> dbTag = tagRepository.findById(element.id);
+    public Meme createMeme(MemeDto memeDto, Long userId) throws NoSuchElementException {
 
-            if (!dbTag.isPresent())
-                continue;
+        Meme meme = modelMapper.map(memeDto, Meme.class);
 
-            dbMeme.tags.add(dbTag.get());
-        }
+        meme.user = userRepository.findById(userId).orElseThrow();
 
-        dbMeme.user = userService.getDbUserByUserId(id);
-
-        return memeRepository.save(dbMeme);
+        return memeRepository.save(meme);
     }
 
     @Override
-    public MemeDto getMemeById(long id) {
+    public MemeDto getMemeById(long memeId) throws NoSuchElementException {
 
-        Optional<Meme> dbMeme = memeRepository.findById(id);
+        Meme meme = memeRepository.findById(memeId).orElseThrow();
 
-        if (!dbMeme.isPresent()) {
-            return new MemeDto();
-        }
-
-        MemeDto memeModel = new MemeDto();
-        memeModel.id = dbMeme.get().id;
-        memeModel.title = dbMeme.get().title;
-        memeModel.description = dbMeme.get().description;
-        memeModel.imageblob = dbMeme.get().imageblob;
-        memeModel.likes = dbMeme.get().likes;
-        memeModel.dislikes = dbMeme.get().dislikes;
-
-        return memeModel;
+        return modelMapper.map(meme, MemeDto.class);
     }
 
     @Override
-    public void updateMeme(MemeDto meme) {
+    public void updateMeme(MemeDto memeDto) throws NoSuchElementException {
 
-        Optional<Meme> dbMeme = memeRepository.findById(meme.id);
+        Meme meme = memeRepository.findById(memeDto.id).orElseThrow();
 
-        if (!dbMeme.isPresent()) {
-            return;
-        }
+        modelMapper.map(meme, memeDto);
 
-        Meme dbMemeTemp = dbMeme.get();
-
-        dbMemeTemp.title = meme.title;
-        dbMemeTemp.description = meme.description;
-        dbMemeTemp.imageblob = meme.imageblob;
-        dbMemeTemp.likes = meme.likes;
-        dbMemeTemp.dislikes = meme.dislikes;
-
-        memeRepository.save(dbMemeTemp);
+        memeRepository.save(meme);
     }
 
     @Override
     public List<Meme> getMemes() {
 
-        List<Meme> all = (List<Meme>) memeRepository.findAll();
+        List<Meme> allMemes = memeRepository.findAll();
 
-        all.sort(Comparator.comparing(Meme::getCreatedat).reversed());
+        allMemes.sort(Comparator.comparing(Meme::getCreatedat).reversed());
 
-        return (List<Meme>) memeRepository.findAll();
+        return allMemes;
     }
 
     @Override
-    public List<Meme> getFilteredMemes(long filter) {
+    public List<Meme> getFilteredMemes(long categoryId) throws NoSuchElementException {
 
-        List<Meme> all = (List<Meme>) memeRepository.findAll();
+        List<Meme> allMemes = memeRepository.findAll();
 
-        all.sort(Comparator.comparing(Meme::getCreatedat).reversed());
-        
-        return all.stream().filter(t -> t.category != null).filter(t -> t.category.id.equals(filter))
+        Category category = categoryRepository.findById(categoryId).orElseThrow();
+
+        allMemes.sort(Comparator.comparing(Meme::getCreatedat).reversed());
+
+        return allMemes.stream().filter(t -> t.category != null).filter(t -> t.category.id.equals(category.id))
                 .collect(Collectors.toList());
     }
 }
