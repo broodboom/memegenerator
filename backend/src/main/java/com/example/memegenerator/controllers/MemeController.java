@@ -38,10 +38,10 @@ public class MemeController {
 
     @PostMapping(path = "/")
     public Meme createMeme(@RequestParam("imageblob") MultipartFile imageblob, String title, String userId,
-            @RequestParam("tags") String tagsString) throws IOException {
+            @RequestParam("tags") String tagsString, String description) throws IOException {
         MemeDto memeDto = new MemeDto();
         memeDto.title = title;
-        memeDto.description = "";
+        memeDto.description = description;
         memeDto.imageblob = imageblob.getBytes();
         memeDto.likes = 0;
         memeDto.dislikes = 0;

@@ -31,6 +31,7 @@ export class CreatepageComponent implements OnInit {
   allowedToAddDescription: boolean;
   title: string;
   description: string;
+  points: number;
 
   @ViewChild('tagInput') tagInput;
   @ViewChild('categoryInput') categoryInput;
@@ -88,6 +89,7 @@ export class CreatepageComponent implements OnInit {
   userAllowedToAddDescription(){
     const user = this.authService.getCurrentUser();
 
+    this.points = user.points;
     this.allowedToAddDescription = user.points >= 500;
   }
 
@@ -190,6 +192,28 @@ export class CreatepageComponent implements OnInit {
     reader.readAsDataURL(e.target.files[0]);
   }
 
+  handleSaveImageFromTemplate(e) {
+    var canvas = document.querySelector("canvas");
+    console.log(canvas);
+    var ctx = canvas.getContext("2d");
+    var reader = new FileReader();
+    reader.onload = function (event) {
+      var img = new Image();
+      img.onload = function () {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+      };
+      img.src = event.target.result as string;
+      console.log("img src:  ");
+      var temp = event.target.result as string;
+      var image = document.querySelector("canvas");
+      canvas.setAttribute("src", img.src);
+    };
+
+    fetch(e.target.src).then(r => r.blob()).then(blobFile => reader.readAsDataURL(blobFile));
+  }
+
   fillCanvas() {
     var inputField = document.querySelector("input");
     var canvas = document.querySelector("canvas");
@@ -222,7 +246,6 @@ export class CreatepageComponent implements OnInit {
   }
 
   saveMeme() {
-    debugger;
     var canvas = document.querySelector("canvas");
 
     const userId = self.authService.getCurrentUser().id;

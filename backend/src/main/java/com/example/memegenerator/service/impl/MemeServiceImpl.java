@@ -55,16 +55,20 @@ public class MemeServiceImpl implements MemeService {
         dbMeme.dislikes = meme.dislikes;
         dbMeme.createdat = new Timestamp(System.currentTimeMillis());
 
-        // Convert byte[] to BufferedImage
-        BufferedImage bufferedImage = this.createImageFromBytes(dbMeme.imageblob);
+        dbMeme.user = userService.getDbUserByUserId(id);
 
-        // Create watermarked image
-        BufferedImage bufferedImageWithWatermark = this.addTextWatermark("PREMIUM MEME", bufferedImage);
+        if(dbMeme.user.points >=1000){
+            // Convert byte[] to BufferedImage
+            BufferedImage bufferedImage = this.createImageFromBytes(dbMeme.imageblob);
 
-        // Convert BufferedImage to byte[]
-        byte[] watermarkedMeme = this.createBytesFromImage(bufferedImageWithWatermark);
+            // Create watermarked image
+            BufferedImage bufferedImageWithWatermark = this.addTextWatermark("PREMIUM MEME", bufferedImage);
 
-        dbMeme.imageblob = watermarkedMeme;
+            // Convert BufferedImage to byte[]
+            byte[] watermarkedMeme = this.createBytesFromImage(bufferedImageWithWatermark);
+
+            dbMeme.imageblob = watermarkedMeme;
+        }
 
         for (Tag element : meme.tags) {
             Optional<Tag> dbTag = tagRepository.findById(element.id);
@@ -74,8 +78,6 @@ public class MemeServiceImpl implements MemeService {
 
             dbMeme.tags.add(dbTag.get());
         }
-
-        dbMeme.user = userService.getDbUserByUserId(id);
 
         return memeRepository.save(dbMeme);
     }
