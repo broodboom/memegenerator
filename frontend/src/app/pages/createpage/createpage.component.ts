@@ -26,6 +26,10 @@ export class CreatepageComponent implements OnInit {
   categoryFilteredOptions$: Observable<string[]>;
   addedCategoryId: number;
   addedTags: Tag[];
+  allowedToMakeMemes: boolean;
+  allowedToAddDescription: boolean;
+  title: string;
+  description: string;
 
   @ViewChild("tagInput") tagInput;
   @ViewChild("categoryInput") categoryInput;
@@ -43,6 +47,8 @@ export class CreatepageComponent implements OnInit {
     self.addedTags = [];
     self.tagIds = [];
     self.categoryIds = [];
+    this.userAllowedToMakeMeme();
+    this.userAllowedToAddDescription();
     this.fillCanvas();
     this.tagService
       .getTags()
@@ -67,7 +73,21 @@ export class CreatepageComponent implements OnInit {
         });
         this.categoryFilteredOptions$ = of(this.categoryOptions);
         this.activateCategoryButton(this.categoryOptions);
-      });
+    });
+  }
+
+  userAllowedToMakeMeme(){
+    const user = this.authService.getCurrentUser();
+
+    this.memeService.GetUserIsAllowedToCreateMeme(user.id).subscribe(result => {
+      this.allowedToMakeMemes = result;
+    });
+  }
+
+  userAllowedToAddDescription(){
+    const user = this.authService.getCurrentUser();
+
+    this.allowedToAddDescription = user.points >= 500;
   }
 
   activateTagButton(tag: Tag, tagService: TagService, tags: Tag[]) {
@@ -209,6 +229,7 @@ export class CreatepageComponent implements OnInit {
   }
 
   saveMeme() {
+    debugger;
     var canvas = document.querySelector("canvas");
 
     const userId = self.authService.getCurrentUser().id;
@@ -218,7 +239,8 @@ export class CreatepageComponent implements OnInit {
         url = URL.createObjectURL(blob);
 
       var meme: Meme = {
-        title: "test",
+          title: self.title,
+          description: self.description,
         categoryId: self.addedCategoryId,
         userId: userId,
         imageblob: blob,

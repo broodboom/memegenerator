@@ -123,7 +123,7 @@ public class MemeServiceImpl implements MemeService {
         }
 
         if (userAmountToPost != -1) {
-            result = userAmountToPost < memesAddedCount;
+            result = userAmountToPost > memesAddedCount;
         }
 
         return result;

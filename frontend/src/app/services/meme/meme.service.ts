@@ -49,6 +49,12 @@ export class MemeService {
       .pipe(retry(1), catchError(this.handleError));
   }
 
+  GetUserIsAllowedToCreateMeme(id): Observable<boolean> {
+    return this.http
+      .get<boolean>(`${environment.apiUrl}/meme/checkAllowed/` + id, this.httpOptions)
+      .pipe(retry(1), catchError(this.handleError));
+  }
+
   getMeme(id): Observable<Meme> {
     return this.http
       .get<Meme>(`${environment.apiUrl}/meme/` + id)
