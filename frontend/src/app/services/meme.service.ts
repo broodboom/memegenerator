@@ -59,6 +59,11 @@ export class MemeService {
       .pipe(retry(1), catchError(this.handleError));
   }
 
+  GetAllMemesFilteredOnCategory(category): Observable<Meme> {
+    return this.http
+    .get<Meme>(`${environment.apiUrl}/meme/category` + category)
+    .pipe(retry(1), catchError(this.handleError));
+  }
   updateMeme(meme: Meme){
     this.http.put<Meme>(`http://localhost:8080/meme/${meme.id}`, meme);
   }
