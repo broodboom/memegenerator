@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import { Meme } from 'app/models/Meme';
-import { MemeService } from 'app/services/meme.service';
+import { MemeService } from 'app/services/meme/meme.service';
 import { DomSanitizer } from '@angular/platform-browser';
 
 //TODO: move this to a generic model folder

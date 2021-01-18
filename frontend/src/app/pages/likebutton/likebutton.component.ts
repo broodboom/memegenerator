@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Meme } from "app/models/Meme";
 import { tap } from "rxjs/operators";
-import { MemeService } from "../../services/meme.service";
+import { MemeService } from "../../services/meme/meme.service";
 
 @Component({
   selector: "ngx-likebutton",

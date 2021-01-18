@@ -17,7 +17,7 @@ import {
 import { NbSecurityModule, NbRoleProvider } from "@nebular/security";
 import { of } from "rxjs";
 
-import { MemeService } from './services/meme.service';
+import { MemeService } from './services/meme/meme.service';
 import { SignupComponent } from './pages/signup/signup.component';
 
 @NgModule({

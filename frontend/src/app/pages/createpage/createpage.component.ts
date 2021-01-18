@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { MemeService } from "../../services/meme.service";
+import { MemeService } from "../../services/meme/meme.service";
 import { Meme } from "../../models/Meme";
 import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { AuthService } from "../../services/auth.service";
-import { TagService } from "app/services/tag.service";
+import { AuthService } from "../../services/auth/auth.service";
+import { TagService } from "app/services/tag/tag.service";
 import { Tag } from "app/models/Tag";
 
 let self: any;
@@ -41,7 +41,7 @@ export class CreatepageComponent implements OnInit {
         this.filteredOptions$ = of(this.options);
         this.activateButton(self.tag, this.tagService);
       }
-      
+
     );
   }
 

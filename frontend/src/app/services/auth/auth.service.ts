@@ -4,7 +4,7 @@ import { User } from "app/models/User";
 import { environment } from "environments/environment";
 import { BehaviorSubject, Observable } from "rxjs";
 import { map, tap } from "rxjs/operators";
-import { ProfileService } from "./profile.service";
+import { ProfileService } from "../profile/profile.service";
 
 export interface LoginResponse {
   status: boolean;

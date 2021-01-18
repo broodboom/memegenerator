@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { User } from "app/models/User";
-import { ProfileService } from "../../services/profile.service";
+import { ProfileService } from "../../services/profile/profile.service";
 
 let self: any;
 

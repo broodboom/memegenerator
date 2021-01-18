@@ -8,7 +8,7 @@ import {
 
 import { map, takeUntil } from "rxjs/operators";
 import { Subject, Subscription } from "rxjs";
-import { AuthService } from "app/services/auth.service";
+import { AuthService } from "app/services/auth/auth.service";
 import { Router } from "@angular/router";
 
 @Component({
