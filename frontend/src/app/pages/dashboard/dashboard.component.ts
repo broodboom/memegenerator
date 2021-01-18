@@ -62,12 +62,13 @@ export class DashboardComponent implements OnInit{
   
   ngOnInit(){
     self = this;
+    
     this.webSocketAPI = new WebSocketAPI(this);
     this.connect();
-    this.route.params.forEach((params: Params) => {
-      let category = +params['category']; // (+) converts string 'id' to a number
+    this.route.queryParamMap.forEach((params: Params) => {
+      let category = params.params.category; 
       if(category != null){
-        this.memeService.GetAllMemesFilteredOnCategory(category);
+        this.memeService.GetAllMemesFilteredOnCategory(category).subscribe(meme => this.inserItem(meme));
       }
       else{
         this.memeService.GetAllMemes().subscribe(meme => this.inserItem(meme));

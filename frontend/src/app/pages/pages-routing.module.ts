@@ -22,6 +22,10 @@ const routes: Routes = [
         component: DashboardComponent,
       },
       {
+        path: "dashboard/:category",
+        component: DashboardComponent
+      },
+      {
         path: "admin",
         component: AdminComponent,
         canActivate: [AuthGuard],
