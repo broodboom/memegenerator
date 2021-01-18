@@ -22,6 +22,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   user: any;
 
   loggedInSubscription: Subscription;
+  currentUserSubscription: Subscription;
   loggedIn: boolean;
 
   themes = [
@@ -59,7 +60,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.currentTheme = this.themeService.currentTheme;
 
-    this.loggedInSubscription = this.authService.loggedIn().subscribe((result) => (this.loggedIn = result));
+    this.loggedInSubscription = this.authService.loggedIn().subscribe((result) => {
+      this.loggedIn = result;
+    });
+
+    this.currentUserSubscription = this.authService.currentUser().subscribe((result) => {
+      this.user = result;
+    });
 
     const { xl } = this.breakpointService.getBreakpointsMap();
     this.themeService
@@ -86,6 +93,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.loggedInSubscription.unsubscribe();
     }
 
+    if(this.currentUserSubscription){
+      this.currentUserSubscription.unsubscribe();
+    }
+
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -108,5 +119,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   logout() {
     this.authService.logout().subscribe();
     this.router.navigate(["/pages/dashboard"]);
+    this.user = null;
   }
 }
