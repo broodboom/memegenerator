@@ -40,4 +40,8 @@ public class MemeModel {
     @Getter
     @Setter
     public User user;
+
+    @Getter
+    @Setter
+    public long categoryId;
 }

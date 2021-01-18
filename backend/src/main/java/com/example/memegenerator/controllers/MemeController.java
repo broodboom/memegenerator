@@ -38,13 +38,14 @@ public class MemeController {
 
     @PostMapping(path = "/")
     public Meme createMeme(@RequestParam("imageblob") MultipartFile imageblob, String title, String userId,
-            @RequestParam("tags") String tagsString, String description) throws IOException {
+            @RequestParam("tags") String tagsString, String description, String categoryId) throws IOException {
         MemeDto memeDto = new MemeDto();
         memeDto.title = title;
         memeDto.description = description;
         memeDto.imageblob = imageblob.getBytes();
         memeDto.likes = 0;
         memeDto.dislikes = 0;
+        memeDto.categoryId = Integer.parseInt(categoryId);
         Gson gson = new Gson();
         TagDto[] tags = gson.fromJson(tagsString, TagDto[].class);
         memeDto.tags = new Tag[tags.length];

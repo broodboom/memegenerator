@@ -96,6 +96,7 @@ public class MemeServiceImpl implements MemeService {
         memeModel.likes = meme.get().likes;
         memeModel.dislikes = meme.get().dislikes;
         memeModel.user = meme.get().user;
+        memeModel.categoryId = meme.get().category.id;
 
         return memeModel;
     }
