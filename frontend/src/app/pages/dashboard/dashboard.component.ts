@@ -3,6 +3,7 @@ import { Meme } from 'app/models/Meme';
 import { MemeService } from 'app/services/meme/meme.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { WebSocketAPI } from './WebSocketAPI';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 //TODO: move this to a generic model folder
 class Card{
@@ -49,7 +50,7 @@ export class DashboardComponent implements OnInit{
   items = []
   loading = false;
 
-  constructor(public memeService: MemeService, private sanitizer : DomSanitizer){}
+  constructor(public memeService: MemeService, private sanitizer : DomSanitizer, private route: ActivatedRoute){}
 
   loadNext(){
     if(this.loading) {return}
@@ -57,12 +58,21 @@ export class DashboardComponent implements OnInit{
     // this.memeService.GetAllMemes().subscribe(meme => this.items.push(...meme));
     this.loading = false;
   }
+
+  
   ngOnInit(){
     self = this;
     this.webSocketAPI = new WebSocketAPI(this);
-    
     this.connect();
-    this.memeService.GetAllMemes().subscribe(meme => this.inserItem(meme));
+    this.route.params.forEach((params: Params) => {
+      let category = +params['category']; // (+) converts string 'id' to a number
+      if(category != null){
+        this.memeService.GetAllMemesFilteredOnCategory(category);
+      }
+      else{
+        this.memeService.GetAllMemes().subscribe(meme => this.inserItem(meme));
+      } 
+  });
   }
 
   ngOnDestroy(){
