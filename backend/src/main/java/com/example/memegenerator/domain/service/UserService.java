@@ -26,4 +26,6 @@ public interface UserService {
     void resetPassword(String confirmationToken, String password) throws NoSuchElementException;
 
     void activateUser(Long userId, String confirmationToken) throws NoSuchElementException;
+
+    void updateUserPoints(Long userId, int pointsToAdd) throws NoSuchElementException;
 }

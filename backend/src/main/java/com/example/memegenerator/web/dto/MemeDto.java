@@ -25,4 +25,6 @@ public class MemeDto {
     public int dislikes;
 
     public Tag[] tags;
+
+    public UserDto user;
 }

@@ -139,4 +139,13 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
         return new Random().nextInt(9000) + 1000;
     }
+
+    public void updateUserPoints(Long userId, int pointsToAdd) throws NoSuchElementException {
+
+        User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
+
+        user.points = user.points + pointsToAdd;
+
+        userRepository.save(user);
+    }
 }

@@ -115,4 +115,16 @@ public class MemeController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping(path = "/checkAllowed/{id}")
+    public ResponseEntity<Boolean> userAllowedToCreateMeme(@PathVariable long userId){
+
+        try {
+
+            return new ResponseEntity<>(memeService.userAllowedToCreate(userId), HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }

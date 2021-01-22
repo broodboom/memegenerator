@@ -13,4 +13,6 @@ public class SocketResponseDto {
     public Long memeId;
 
     public Boolean isUpvote;
+
+    public Long userId;
 }

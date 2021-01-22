@@ -1,5 +1,6 @@
 package com.example.memegenerator.domain.service.impl;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -7,6 +8,7 @@ import java.util.stream.Collectors;
 
 import com.example.memegenerator.data.entity.Category;
 import com.example.memegenerator.data.entity.Meme;
+import com.example.memegenerator.data.entity.User;
 import com.example.memegenerator.data.repository.CategoryRepository;
 import com.example.memegenerator.data.repository.MemeRepository;
 import com.example.memegenerator.domain.service.MemeService;
@@ -69,7 +71,8 @@ public class MemeServiceImpl implements MemeService {
 
         List<Meme> allMemes = memeRepository.findAll();
 
-        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new NoSuchElementException("Category not found"));
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new NoSuchElementException("Category not found"));
 
         allMemes.sort(Comparator.comparing(Meme::getCreatedat).reversed());
 
@@ -77,5 +80,34 @@ public class MemeServiceImpl implements MemeService {
                 .filter(t -> t.category.id.equals(category.id)).collect(Collectors.toList());
 
         return filteredMemes.stream().map(meme -> modelMapper.map(meme, MemeDto.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public Boolean userAllowedToCreate(Long userId) throws NoSuchElementException {
+
+        boolean result = false;
+
+        User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        var currentDate = LocalDate.now();
+        Integer memesAddedCount = memeRepository.countAddedRecordsTodayByUser(currentDate.toString(), userId);
+
+        Integer userAmountToPost = 0;
+        if (user.points < 100) {
+            userAmountToPost = 1;
+        } else if (user.points < 500) {
+            userAmountToPost = 5;
+        } else if (user.points < 1000) {
+            userAmountToPost = 10;
+        } else {
+            userAmountToPost = -1;
+            result = true;
+        }
+
+        if (userAmountToPost != -1) {
+            result = userAmountToPost < memesAddedCount;
+        }
+
+        return result;
     }
 }
