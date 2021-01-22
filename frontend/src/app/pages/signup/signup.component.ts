@@ -71,18 +71,8 @@ export class SignupComponent implements OnInit {
       apiUrl: "http://localhost:8080",
     };
 
-    // Default options are marked with *
-    // const response = fetch('localhost:8080/users', {
-    //   method: 'POST',
-    //   mode: 'cors',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify(this.user) // body data type must match "Content-Type" header
-    // })
-
     this.httpClient
-      .post<User>(`${environment.apiUrl}/users`, this.user, this.httpOptions)
+      .post<User>(`${environment.apiUrl}/user`, this.user, this.httpOptions)
       .subscribe((res) => {
         console.log(res);
       });

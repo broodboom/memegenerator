@@ -21,7 +21,7 @@ export class ProfileService {
 
   updateUserInfo(user: User): Observable<User> {
     return this.http.put<User>(
-      `${environment.apiUrl}/users`,
+      `${environment.apiUrl}/user`,
       user,
       this.httpOptions
     );
@@ -29,7 +29,7 @@ export class ProfileService {
 
   getUserInfo(): Observable<User> {
     return this.http
-      .get<User>(`${environment.apiUrl}/users/` + 10)
+      .get<User>(`${environment.apiUrl}/user/` + 10)
       .pipe(retry(1), catchError(this.handleError));
   }
 

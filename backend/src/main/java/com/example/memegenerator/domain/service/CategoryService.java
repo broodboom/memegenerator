@@ -2,9 +2,9 @@ package com.example.memegenerator.domain.service;
 
 import java.util.List;
 
-import com.example.memegenerator.data.entity.Category;
+import com.example.memegenerator.web.dto.CategoryDto;
 
 public interface CategoryService {
 
-    List<Category> getCategories();
+    List<CategoryDto> getCategories();
 }

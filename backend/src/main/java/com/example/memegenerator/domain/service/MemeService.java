@@ -1,19 +1,19 @@
 package com.example.memegenerator.domain.service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
-import com.example.memegenerator.data.entity.Meme;
 import com.example.memegenerator.web.dto.MemeDto;
 
 public interface MemeService {
     
-    Meme createMeme(MemeDto meme, Long id);
+    MemeDto createMeme(MemeDto meme, Long id) throws NoSuchElementException;
 
-    MemeDto getMemeById(long id);
+    MemeDto getMemeById(long id) throws NoSuchElementException;
 
-    void updateMeme(MemeDto meme);
+    MemeDto updateMeme(MemeDto meme) throws NoSuchElementException;
 
-    List<Meme> getMemes();
+    List<MemeDto> getMemes();
 
-    List<Meme> getFilteredMemes(long filter);
+    List<MemeDto> getFilteredMemes(long filter) throws NoSuchElementException;
 }

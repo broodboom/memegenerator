@@ -1,41 +1,38 @@
 package com.example.memegenerator.domain.service.impl;
 
-import java.sql.Timestamp;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.example.memegenerator.data.entity.Tag;
 import com.example.memegenerator.data.repository.TagRepository;
-import com.example.memegenerator.domain.service.MemeService;
 import com.example.memegenerator.domain.service.TagService;
 import com.example.memegenerator.web.dto.TagDto;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class TagServiceImpl implements TagService {
 
-    @Autowired
-    TagRepository tagRepository;
+    private final TagRepository tagRepository;
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    MemeService memeService;
+    public TagDto createTag(TagDto tagDto) {
 
-    public Tag createTag(TagDto tag) {
+        Tag tag = modelMapper.map(tagDto, Tag.class);
 
-        Tag dbTag = new Tag();
+        Tag savedTag = tagRepository.save(tag);
 
-        dbTag.title = tag.title;
-        dbTag.createdat = new Timestamp(System.currentTimeMillis());
-
-        return tagRepository.save(dbTag);
+        return modelMapper.map(savedTag, TagDto.class);
     }
 
-    @Override
-    public List<Tag> getTags() {
+    public List<TagDto> getTags() {
 
-        List<Tag> all = (List<Tag>) tagRepository.findAll();
+        List<Tag> allTags = tagRepository.findAll();
 
-        return all;
+        return allTags.stream().map(tag -> modelMapper.map(tag, TagDto.class)).collect(Collectors.toList());
     }
 }

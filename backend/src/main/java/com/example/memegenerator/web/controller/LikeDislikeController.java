@@ -1,44 +1,55 @@
 package com.example.memegenerator.web.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.RequiredArgsConstructor;
+
 import com.example.memegenerator.web.dto.SocketResponseDto;
 
+import java.util.NoSuchElementException;
+
 import com.example.memegenerator.domain.service.MemeService;
+import com.example.memegenerator.domain.service.UserService;
 import com.example.memegenerator.web.dto.MemeDto;
 
 @RestController
 @RequestMapping("likedislike")
+@RequiredArgsConstructor
 public class LikeDislikeController {
 
-    @Autowired
-    MemeService memeService;
+    private final MemeService memeService;
+    private final UserService userService;
 
     @MessageMapping("/")
-    public SocketResponseDto likedislike(@RequestBody SocketResponseDto response) {
-        MemeDto meme = memeService.getMemeById(response.memeId);
+    public ResponseEntity<SocketResponseDto> likedislike(@RequestBody SocketResponseDto response) {
 
-        if (response.isUpvote) {
-            meme.likes++;
-        } else {
-            meme.dislikes++;
+        try {
+
+            MemeDto memeDto = memeService.getMemeById(response.memeId);
+
+            if (response.isUpvote) {
+
+                memeDto.likes++;
+                userService.updateUserPoints(response.userId, 1);
+                userService.updateUserPoints(response.userId, 1);
+            } else {
+
+                memeDto.dislikes++;
+                userService.updateUserPoints(response.userId, 1);
+            }
+
+            memeService.updateMeme(memeDto);
+
+            return new ResponseEntity<SocketResponseDto>(response, HttpStatus.OK);
+
+        } catch (NoSuchElementException e) {
+
+            return new ResponseEntity<SocketResponseDto>(response, HttpStatus.NOT_FOUND);
         }
-
-        MemeDto memeDto = new MemeDto();
-        memeDto.title = meme.title;
-        memeDto.description = meme.description;
-        memeDto.imageblob = meme.imageblob;
-        memeDto.likes = meme.likes;
-        memeDto.dislikes = meme.dislikes;
-        memeDto.id = response.memeId;
-
-        memeService.updateMeme(memeDto);
-
-        return response;
     }
 }

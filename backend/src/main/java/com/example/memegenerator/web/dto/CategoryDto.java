@@ -7,10 +7,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SocketResponseDto {
+public class CategoryDto {
 
-    @NotNull
-    public Long memeId;
-
-    public Boolean isUpvote;
+	@NotNull
+	public String title;
 }

@@ -1,8 +1,12 @@
 package com.example.memegenerator.web.controller;
 
+import java.util.NoSuchElementException;
+
+import javax.ejb.DuplicateKeyException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,50 +16,66 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.memegenerator.data.entity.User;
 import com.example.memegenerator.web.dto.UserDto;
 import com.example.memegenerator.domain.service.UserService;
 
 @RestController
-@RequestMapping("users")
+@RequestMapping("user")
 public class UserController {
 
 	@Autowired
 	UserService userService;
 
 	@PostMapping()
-	public ResponseEntity<String> createUser(@Valid @RequestBody User user) {
+	public ResponseEntity<String> createUser(@Valid @RequestBody UserDto userDto) {
 
-		UserDto userDto = new UserDto();
+		try {
 
-		userDto.username = user.username;
-		userDto.email = user.email;
-		userDto.password = user.password;
+			userService.createUser(userDto);
 
-		return userService.createUser(userDto);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (NoSuchElementException e) {
+
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@PutMapping()
-	public ResponseEntity<String> updateUser(@Valid @RequestBody User user) {
+	public ResponseEntity<String> updateUser(@Valid @RequestBody UserDto userDto) {
 
-		UserDto updateUserDto = new UserDto();
+		try {
 
-		updateUserDto.username = user.username;
-		updateUserDto.email = user.email;
-		updateUserDto.password = user.password;
+			userService.updateUser(userDto);
 
-		return userService.updateUser(user, updateUserDto);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (NoSuchElementException | DuplicateKeyException e) {
+
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@GetMapping(path = "/activate/{id}/{token}")
-	public ResponseEntity<String> getUser(@PathVariable long id, @PathVariable int token) {
-	
-		return userService.activateUser(id, token);
+	public ResponseEntity<String> activateUser(@PathVariable long userId, @PathVariable String token) {
+
+		try {
+
+			userService.activateUser(userId, token);
+
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (NoSuchElementException e) {
+
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@GetMapping(path = "/{id}")
-	public ResponseEntity<User> getUserInfo(@PathVariable long id) {
+	public ResponseEntity<UserDto> getUserInfo(@PathVariable long userId) {
+		try {
 
-		return userService.getUserByIdResponseEntity(id);
+			return new ResponseEntity<UserDto>(userService.getUserById(userId), HttpStatus.OK);
+		} catch (NoSuchElementException e) {
+
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 	}
 }

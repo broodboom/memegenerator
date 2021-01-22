@@ -1,5 +1,7 @@
 package com.example.memegenerator.web.dto;
 
+import javax.validation.constraints.NotNull;
+
 import com.example.memegenerator.data.entity.Tag;
 
 import lombok.Getter;
@@ -11,6 +13,7 @@ public class MemeDto {
 
     public long id;
 
+    @NotNull
     public String title;
 
     public String description;

@@ -1,9 +1,4 @@
-import {
-  HttpClient,
-  HttpEvent,
-  HttpHeaders,
-  HttpRequest,
-} from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Meme } from "app/models/Meme";
 import { environment } from "environments/environment";
@@ -25,7 +20,7 @@ export class MemeService {
 
   httpOptionsWithResponse = {
     observe: "response" as const,
-  }
+  };
 
   CreateMemeFormData(data: Meme): FormData {
     var result = new FormData();
@@ -40,7 +35,11 @@ export class MemeService {
 
   CreateMeme(data): Observable<any> {
     return this.http
-      .post<Meme>(`${environment.apiUrl}/meme/`, this.CreateMemeFormData(data), this.httpOptionsWithResponse)
+      .post<Meme>(
+        `${environment.apiUrl}/meme/`,
+        this.CreateMemeFormData(data),
+        this.httpOptionsWithResponse
+      )
       .pipe(retry(1), catchError(this.handleError));
   }
 
@@ -58,10 +57,10 @@ export class MemeService {
 
   GetAllMemesFilteredOnCategory(category): Observable<Meme> {
     return this.http
-    .get<Meme>(`${environment.apiUrl}/meme/category` + category)
-    .pipe(retry(1), catchError(this.handleError));
+      .get<Meme>(`${environment.apiUrl}/meme/category` + category)
+      .pipe(retry(1), catchError(this.handleError));
   }
-  updateMeme(meme: Meme){
+  updateMeme(meme: Meme) {
     this.http.put<Meme>(`http://localhost:8080/meme/${meme.id}`, meme);
   }
 

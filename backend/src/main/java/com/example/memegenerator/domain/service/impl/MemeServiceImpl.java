@@ -10,12 +10,10 @@ import com.example.memegenerator.data.entity.Meme;
 import com.example.memegenerator.data.repository.CategoryRepository;
 import com.example.memegenerator.data.repository.MemeRepository;
 import com.example.memegenerator.domain.service.MemeService;
-import com.example.memegenerator.data.repository.TagRepository;
 import com.example.memegenerator.data.repository.UserRepository;
 import com.example.memegenerator.web.dto.MemeDto;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -24,68 +22,60 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemeServiceImpl implements MemeService {
 
-    @Autowired
-    final MemeRepository memeRepository;
+    private final MemeRepository memeRepository;
+    private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    final TagRepository tagRepository;
-
-    @Autowired
-    final CategoryRepository categoryRepository;
-
-    @Autowired
-    final UserRepository userRepository;
-
-    @Autowired
-    final ModelMapper modelMapper;
-
-    public Meme createMeme(MemeDto memeDto, Long userId) throws NoSuchElementException {
+    public MemeDto createMeme(MemeDto memeDto, Long userId) throws NoSuchElementException {
 
         Meme meme = modelMapper.map(memeDto, Meme.class);
 
-        meme.user = userRepository.findById(userId).orElseThrow();
+        meme.user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
 
-        return memeRepository.save(meme);
+        Meme savedMeme = memeRepository.save(meme);
+
+        return modelMapper.map(savedMeme, MemeDto.class);
     }
 
-    @Override
     public MemeDto getMemeById(long memeId) throws NoSuchElementException {
 
-        Meme meme = memeRepository.findById(memeId).orElseThrow();
+        Meme meme = memeRepository.findById(memeId).orElseThrow(() -> new NoSuchElementException("Meme not found"));
 
         return modelMapper.map(meme, MemeDto.class);
     }
 
-    @Override
-    public void updateMeme(MemeDto memeDto) throws NoSuchElementException {
+    public MemeDto updateMeme(MemeDto memeDto) throws NoSuchElementException {
 
-        Meme meme = memeRepository.findById(memeDto.id).orElseThrow();
+        Meme meme = memeRepository.findById(memeDto.id).orElseThrow(() -> new NoSuchElementException("Meme not found"));
 
         modelMapper.map(meme, memeDto);
 
-        memeRepository.save(meme);
+        Meme savedMeme = memeRepository.save(meme);
+
+        return modelMapper.map(savedMeme, MemeDto.class);
     }
 
-    @Override
-    public List<Meme> getMemes() {
+    public List<MemeDto> getMemes() {
 
         List<Meme> allMemes = memeRepository.findAll();
 
         allMemes.sort(Comparator.comparing(Meme::getCreatedat).reversed());
 
-        return allMemes;
+        return allMemes.stream().map(meme -> modelMapper.map(meme, MemeDto.class)).collect(Collectors.toList());
     }
 
-    @Override
-    public List<Meme> getFilteredMemes(long categoryId) throws NoSuchElementException {
+    public List<MemeDto> getFilteredMemes(long categoryId) throws NoSuchElementException {
 
         List<Meme> allMemes = memeRepository.findAll();
 
-        Category category = categoryRepository.findById(categoryId).orElseThrow();
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new NoSuchElementException("Category not found"));
 
         allMemes.sort(Comparator.comparing(Meme::getCreatedat).reversed());
 
-        return allMemes.stream().filter(t -> t.category != null).filter(t -> t.category.id.equals(category.id))
-                .collect(Collectors.toList());
+        List<Meme> filteredMemes = allMemes.stream().filter(t -> t.category != null)
+                .filter(t -> t.category.id.equals(category.id)).collect(Collectors.toList());
+
+        return filteredMemes.stream().map(meme -> modelMapper.map(meme, MemeDto.class)).collect(Collectors.toList());
     }
 }

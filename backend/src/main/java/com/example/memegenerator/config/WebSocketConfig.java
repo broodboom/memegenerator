@@ -9,14 +9,19 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+    private static final String LIKE_DISLIKE_PATH = "/likedislike";
+
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/likedislike");
-        config.setApplicationDestinationPrefixes("/likedislike");
+
+        config.enableSimpleBroker(LIKE_DISLIKE_PATH);
+        config.setApplicationDestinationPrefixes(LIKE_DISLIKE_PATH);
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws").setAllowedOrigins("http://localhost:4200").withSockJS();
+
+        registry.addEndpoint("/ws").setAllowedOrigins("*").withSockJS();
     }
 }
