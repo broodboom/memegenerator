@@ -27,4 +27,6 @@ public class MemeDto {
     public Tag[] tags;
 
     public UserDto user;
+
+    public long categoryId;
 }

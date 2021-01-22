@@ -29,6 +29,8 @@ export class MemeService {
     result.append("title", data.title);
     result.append("userId", data.userId.toString());
     result.append("tags", JSON.stringify(data.tags));
+    result.append("description", data.description);
+    result.append("categoryId", data.categoryId.toString());
 
     return result;
   }
