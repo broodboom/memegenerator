@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+import javax.imageio.ImageIO;
+
 import com.example.memegenerator.data.entity.Category;
 import com.example.memegenerator.data.entity.Meme;
 import com.example.memegenerator.data.entity.User;
@@ -14,6 +16,16 @@ import com.example.memegenerator.data.repository.MemeRepository;
 import com.example.memegenerator.domain.service.MemeService;
 import com.example.memegenerator.data.repository.UserRepository;
 import com.example.memegenerator.web.dto.MemeDto;
+
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.awt.Graphics2D;
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -34,6 +46,12 @@ public class MemeServiceImpl implements MemeService {
         Meme meme = modelMapper.map(memeDto, Meme.class);
 
         meme.user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        BufferedImage bufferedImage = createImageFromBytes(meme.imageblob);
+        BufferedImage bufferedImageWithWatermark = addTextWatermark("PREMIUM MEME", bufferedImage);
+        byte[] watermarkedMeme = createBytesFromImage(bufferedImageWithWatermark);
+
+        meme.imageblob = watermarkedMeme;
 
         Meme savedMeme = memeRepository.save(meme);
 
@@ -109,5 +127,55 @@ public class MemeServiceImpl implements MemeService {
         }
 
         return result;
+    }
+
+    private BufferedImage createImageFromBytes(byte[] imageData) {
+
+        ByteArrayInputStream bais = new ByteArrayInputStream(imageData);
+
+        try {
+
+            return ImageIO.read(bais);
+        } catch (IOException e) {
+
+            throw new RuntimeException(e);
+        }
+    }
+
+    private BufferedImage addTextWatermark(String text, BufferedImage sourceImage) {
+
+        Graphics2D g2d = (Graphics2D) sourceImage.getGraphics();
+
+        AlphaComposite alphaChannel = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f);
+        g2d.setComposite(alphaChannel);
+        g2d.setColor(Color.WHITE);
+        g2d.setFont(new Font("Arial", Font.BOLD, 64));
+        FontMetrics fontMetrics = g2d.getFontMetrics();
+        java.awt.geom.Rectangle2D rect = fontMetrics.getStringBounds(text, g2d);
+
+        int centerX = (sourceImage.getWidth() - (int) rect.getWidth()) / 2;
+        int centerY = sourceImage.getHeight() / 2;
+
+        g2d.drawString(text, centerX, centerY);
+
+        return sourceImage;
+    }
+
+    private byte[] createBytesFromImage(BufferedImage image) {
+
+        try {
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+            ImageIO.write(image, "png", baos);
+
+            byte[] imageBytes = baos.toByteArray();
+            baos.close();
+            return imageBytes;
+
+        } catch (IOException e) {
+
+            throw new RuntimeException(e);
+        }
     }
 }
