@@ -73,9 +73,9 @@ export class PagesComponent implements OnInit, OnDestroy {
         link: "/pages/create",
       },
       {
-        title: "Like Button",
-        icon: "heart-outline",
-        link: "/pages/likebutton",
+        title: "Sign up",
+        icon: "person-add-outline",
+        link: "/pages/signup",
       },
       {
         title: "Profile",

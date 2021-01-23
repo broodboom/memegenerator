@@ -47,11 +47,13 @@ public class MemeServiceImpl implements MemeService {
 
         meme.user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
 
-        BufferedImage bufferedImage = createImageFromBytes(meme.imageblob);
-        BufferedImage bufferedImageWithWatermark = addTextWatermark("PREMIUM MEME", bufferedImage);
-        byte[] watermarkedMeme = createBytesFromImage(bufferedImageWithWatermark);
+        if (meme.user.points >= 1000) {
 
-        meme.imageblob = watermarkedMeme;
+            BufferedImage bufferedImage = createImageFromBytes(meme.imageblob);
+            BufferedImage bufferedImageWithWatermark = addTextWatermark("PREMIUM MEME", bufferedImage);
+            byte[] watermarkedMeme = createBytesFromImage(bufferedImageWithWatermark);
+            meme.imageblob = watermarkedMeme;
+        }
 
         Meme savedMeme = memeRepository.save(meme);
 
