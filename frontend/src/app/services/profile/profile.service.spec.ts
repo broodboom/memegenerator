@@ -5,79 +5,48 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 import { Observable } from 'rxjs';
 import { ProfileService } from './profile.service';
-
-export class HttpClientStub {
-  request(): Observable<any> {
-    return Observable.of({});
-  }
-
-  get(): Observable<any> {
-    // Fake user
-    const user: User = {
-      username: 'test',
-      password: 'test',
-      email: 'test@test.com'
-    };
-
-    return Observable.of(user);
-  }
-
-  put(): Observable<any> {
-    return Observable.of({});
-  }
-}
+import { HttpTestingController, HttpClientTestingModule } from '@angular/common/http/testing';
+import { environment } from "environments/environment";
 
 describe('ProfileService', () => {
   let service: ProfileService;
 
-  const httpClientStub = new HttpClientStub();
+  let httpMock: HttpTestingController;
+
+  let httpClient: HttpClient;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        {
-          provide: HttpClient,
-          useValue: httpClientStub
-        }
-      ]
+      imports: [HttpClientTestingModule]
     });
     service = TestBed.inject(ProfileService);
+    httpMock = TestBed.get(HttpTestingController);
+    httpClient = TestBed.get(HttpClient);
   });
 
-  // it('should update a profile', (done) => {
-
-  //   const user: User = {
-  //     username: 'test',
-  //     password: 'test',
-  //     email: 'test@mail.com'
-  //   };
-
-  //   spyOn(service, 'updateUserInfo').and.returnValue({})
-
-  //   spyOn(httpClientStub, 'put').and.callThrough();
-
-  //   service.updateUserInfo(user)
-
-  //   expect(service.updateUserInfo(user)).toHaveBeenCalledWith(user)
-
-  //   done();
-  // })
-
-  it('should update an user', (done) => {
-    const user: User = {
+  it('should update the profile', () => {
+    const profile: User = {
       username: 'test',
       password: 'test',
       email: 'test@test.com'
     };
 
-    spyOn(service, 'updateUserInfo').and.returnValue({});
+    service.updateUserInfo(profile).subscribe((p) => {
+      expect(p).not.toEqual(profile)
+    })
 
-    spyOn(httpClientStub, 'put').and.callThrough();
+    const request = httpMock.expectOne(`${environment.apiUrl}/user`);
 
-    service.updateUserInfo(user)
+    expect(request.request.method).toEqual('PUT');
 
-    expect(service.updateUserInfo).toHaveBeenCalledWith(user);
+    const updatedUser : User = {
+      username: 'test 2',
+      password:  'test 2',
+      email: 'test2@test.com'
+    }
 
-    done();
-  });
+    request.flush(updatedUser);
+
+    httpMock.verify();
+  })
 });

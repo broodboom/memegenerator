@@ -6,6 +6,7 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { HttpTestingController, HttpClientTestingModule } from '@angular/common/http/testing';
+import { environment } from "environments/environment";
 
 describe('MemeService', () => {
   let service: MemeService;
@@ -39,7 +40,7 @@ describe('MemeService', () => {
       expect(m.body).toEqual(meme);
     });
      
-    const request = httpMock.expectOne('http://localhost:8080/meme/');
+    const request = httpMock.expectOne(`${environment.apiUrl}/meme/`);
 
     expect(request.request.method).toEqual('POST');
 
@@ -71,7 +72,7 @@ describe('MemeService', () => {
       expect(m).toEqual(fakeMemes)
     });
      
-    const request = httpMock.expectOne('http://localhost:8080/meme/');
+    const request = httpMock.expectOne(`${environment.apiUrl}/meme/`);
 
     expect(request.request.method).toEqual('GET');
 

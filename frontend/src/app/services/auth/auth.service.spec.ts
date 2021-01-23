@@ -34,16 +34,4 @@ describe("AuthService", () => {
     });
     service = TestBed.inject(AuthService);
   });
-
-  it("should be created", () => {
-    expect(service).toBeTruthy();
-  });
-
-  it("should have a login function", (done) => {
-    service.login("", "").subscribe((loginResponse: boolean) => {
-      loginResponse ? done() : fail();
-    });
-  });
-
-  it("should have a logout function", () => {});
 });
