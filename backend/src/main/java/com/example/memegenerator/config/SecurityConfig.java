@@ -35,7 +35,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String PASSWORD_RESET_PATH = "/user/password-reset";
     private static final String MEME_PATH = "/meme";
     private static final String LIKEDISLIKE_PATH = "/likedislike";
-
+    private static final String LOGIN_PATH = "/login";
+    private static final String LOGOUT_PATH = "/logout";
     private static final String HOME_PATH = "/";
     private static final String GET_CATEGORIES_PATH = "/category";
 
@@ -68,8 +69,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable().cors().and().authorizeRequests()
                 .antMatchers(HttpMethod.GET, HOME_PATH).permitAll()
                 .antMatchers(HttpMethod.GET, GET_CATEGORIES_PATH).permitAll()
-                .antMatchers(HttpMethod.GET, USER_PATH).hasRole(Role.ADMIN.toString())
+                .antMatchers(HttpMethod.GET, USER_PATH).hasRole(Role.Admin.toString())
                 .antMatchers(HttpMethod.POST, USER_PATH).permitAll()
+                .antMatchers(HttpMethod.POST, LOGIN_PATH).permitAll()
+                .antMatchers(HttpMethod.POST, LOGOUT_PATH).permitAll()
                 .antMatchers(HttpMethod.PUT, USER_PATH).permitAll()
                 .antMatchers(HttpMethod.POST, PASSWORD_RESET_REQUEST_PATH).permitAll()
                 .antMatchers(HttpMethod.POST, PASSWORD_RESET_PATH).permitAll()

@@ -41,10 +41,10 @@ public class Guard {
     }
 
     private boolean isAdmin(final User user, final int userId) {
-        return user.getRole().equals(Role.ADMIN) && user.getId() == userId;
+        return user.getRole().equals(Role.Admin) && user.getId() == userId;
     }
 
     private boolean isUser(final User user, final int userId) {
-        return user.getRole().equals(Role.USER) && user.getId() == userId;
+        return user.getRole().equals(Role.User) && user.getId() == userId;
     }
 }

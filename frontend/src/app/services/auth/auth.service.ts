@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { User } from "app/models/User";
 import { environment } from "environments/environment";
@@ -25,6 +25,13 @@ export class AuthService {
     this._currentUser = new BehaviorSubject<User>(null);
   }
 
+  httpOptions = {
+    headers: new HttpHeaders({
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    }),
+  };
+
   loggedIn(): Observable<boolean> {
     return this._loggedIn.asObservable();
   }
@@ -46,7 +53,7 @@ export class AuthService {
     formData.append("username", username);
     formData.append("password", password);
 
-    return this.httpClient.post(`${environment.apiUrl}/login`, formData).pipe(
+    return this.httpClient.post(`${environment.apiUrl}/login`, formData, this.httpOptions).pipe(
       tap((response: LoginResponse) => {
         this._loggedIn.next(response.status);
 
@@ -64,6 +71,6 @@ export class AuthService {
     this._loggedIn.next(false);
     this._currentUser.next(null);
 
-    return this.httpClient.post<void>(`${environment.apiUrl}/logout`, {});
+    return this.httpClient.post<void>(`${environment.apiUrl}/logout`, {}, this.httpOptions);
   }
 }

@@ -59,7 +59,7 @@ export class PagesComponent implements OnInit, OnDestroy {
         link: "/pages/admin",
         icon: "unlock-outline",
         hidden:
-          this.authService.getCurrentUser()?.role != "ADMIN" ? true : false,
+          this.authService.getCurrentUser()?.role != "Admin" ? true : false,
       },
       {
         title: "Log In",
