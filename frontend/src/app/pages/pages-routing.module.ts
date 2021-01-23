@@ -50,8 +50,7 @@ const routes: Routes = [
       {
         path: "signup",
         component: SignupComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ["Admin", "User"] },
+        canActivate: [AuthGuard]
       },
       {
         path: "profile",
