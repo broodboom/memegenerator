@@ -48,16 +48,20 @@ let self: any;
 
 
 export class DashboardComponent implements OnInit{
+  searchValue: string
   categoryOptions: string[];
   categoryIds: number[];
   categoryFilteredOptions$: Observable<string[]>;
   addedCategoryId: number;
   webSocketAPI: WebSocketAPI;
   items = []
+  searchItems = []
   loading = false;
 
   constructor(public memeService: MemeService, private categoryService: CategoryService,private sanitizer : DomSanitizer, private route: ActivatedRoute
-    , private router: Router){}
+    , private router: Router){
+      this.searchValue = ""
+    }
 
   loadNext(){
     if(this.loading) {return}
@@ -66,6 +70,9 @@ export class DashboardComponent implements OnInit{
     this.loading = false;
   }
 
+  searchMemes(){
+    this.searchItems = this.items.filter((i) => i.title == this.searchValue);
+  }
   
   ngOnInit(){
     self = this;
