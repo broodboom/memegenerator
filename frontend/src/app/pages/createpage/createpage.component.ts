@@ -31,6 +31,7 @@ export class CreatepageComponent implements OnInit {
   allowedToAddDescription: boolean;
   title: string;
   description: string;
+  notifier: NotifierService;
 
   @ViewChild("tagInput") tagInput;
   @ViewChild("categoryInput") categoryInput;
@@ -40,8 +41,10 @@ export class CreatepageComponent implements OnInit {
     private authService: AuthService,
     private tagService: TagService,
     private categoryService: CategoryService,
-    private notifier: NotifierService
-  ) {}
+    notifier: NotifierService
+  ) {
+    this.notifier = notifier;
+  }
 
   ngOnInit() {
     self = this;
@@ -55,14 +58,14 @@ export class CreatepageComponent implements OnInit {
     this.tagService
       .getTags()
       .pipe(tap((result) => console.log(result)))
-      .subscribe((tags: Tag[]) => {
+      .subscribe((tags: HttpResponse<any>) => {
         this.tagOptions = [];
-        tags.forEach((tag) => {
+        tags.body.forEach((tag) => {
           this.tagOptions.push(tag.title);
           this.tagIds.push(tag.id);
         });
         this.tagFilteredOptions$ = of(this.tagOptions);
-        this.activateTagButton({ title: "test" }, this.tagService, tags);
+        this.activateTagButton({ title: "test" }, this.tagService, tags.body);
       });
     this.categoryService
       .getCategories()
@@ -107,6 +110,7 @@ export class CreatepageComponent implements OnInit {
             tagId = oldTag.id;
           }
         });
+        let addedTagsNotification = "";
         if (add) {
           tagService.createTag(tag).subscribe((data: any) => {
             console.log(data);
@@ -117,9 +121,21 @@ export class CreatepageComponent implements OnInit {
               if (oldAddedTag.title == tag.title) {
                 condition = false;
               }
+              if(addedTagsNotification == ""){
+                addedTagsNotification = oldAddedTag.title;
+              }
+              else{
+                addedTagsNotification = addedTagsNotification + ", " + oldAddedTag.title;
+              }
             });
             if (condition) {
               self.addedTags.push(addedTag);
+              if(addedTagsNotification == ""){
+                addedTagsNotification = tagInput.value;
+              }
+              else{
+                addedTagsNotification = addedTagsNotification + ", " + tagInput.value;
+              }
             }
           });
         } else {
@@ -129,12 +145,24 @@ export class CreatepageComponent implements OnInit {
             if (oldAddedTag.title == tag.title) {
               condition = false;
             }
+            if(addedTagsNotification == ""){
+              addedTagsNotification = oldAddedTag.title;
+            }
+            else{
+              addedTagsNotification = addedTagsNotification + ", " + oldAddedTag.title;
+            }
           });
           if (condition) {
             self.addedTags.push(addedTag);
+            if(addedTagsNotification == ""){
+              addedTagsNotification = tagInput.value;
+            }
+            else{
+              addedTagsNotification = addedTagsNotification + ", " + tagInput.value;
+            }
           }
         }
-        self.notifier.notify('success', `The Tag ${tagInput.value} has been added!`)
+        self.notifier.show({type: 'info', message: `The tag ${tagInput.value} has been added!\nYour tags are now: ${addedTagsNotification}`});
       },
       false
     );
@@ -155,6 +183,7 @@ export class CreatepageComponent implements OnInit {
           }
           number = number + 1;
         });
+        self.notifier.show({type: 'info', message: `The category ${categoryInput.innerText} has been added!\nYour category is now: ${categoryInput.innerText}`});
       },
       false
     );
