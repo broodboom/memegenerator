@@ -32,14 +32,18 @@ public class LikeDislikeController {
 
             MemeDto memeDto = memeService.getMemeById(response.memeId);
 
+            if(response.userId == memeDto.user.id){
+                return new ResponseEntity<SocketResponseDto>(response, HttpStatus.OK);
+            }
+
             if (response.isUpvote) {
 
-                memeDto.likes++;
+                memeDto.likes = memeDto.likes + 1;
                 userService.updateUserPoints(response.userId, 1);
-                userService.updateUserPoints(response.userId, 1);
+                userService.updateUserPoints(memeDto.user.id, 1);
             } else {
 
-                memeDto.dislikes++;
+                memeDto.dislikes = memeDto.dislikes + 1;
                 userService.updateUserPoints(response.userId, 1);
             }
 

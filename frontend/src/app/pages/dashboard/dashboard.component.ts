@@ -7,7 +7,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { CategoryService } from "app/services/category/category.service";
 import { Category } from "app/models/Category";
 import { Observable, of } from 'rxjs';
-import { FormGroup, FormControl, Validators} from '@angular/forms';
+import { AuthService } from 'app/services/auth/auth.service';
 
 //TODO: move this to a generic model folder
 class Card{
@@ -57,7 +57,7 @@ export class DashboardComponent implements OnInit{
   loading = false;
 
   constructor(public memeService: MemeService, private categoryService: CategoryService,private sanitizer : DomSanitizer, private route: ActivatedRoute
-    , private router: Router){}
+    , private router: Router, private authService: AuthService){}
 
   loadNext(){
     if(this.loading) {return}
@@ -101,14 +101,16 @@ export class DashboardComponent implements OnInit{
   }
 
   sendMessage(voteType, item){
-    let response;
-    if(voteType === "u"){
-      response = {memeId: item.id,isUpvote: true}
-    }else{
-      response = {memeId: item.id,isUpvote: false}
-    }
+    if(this.authService.getCurrentUser()){
+      let response;
+      if(voteType === "u"){
+        response = {memeId: item.id,isUpvote: true, userId: this.authService.getCurrentUser().id}
+      }else{
+        response = {memeId: item.id,isUpvote: false, userId: this.authService.getCurrentUser().id}
+      }
 
-    this.webSocketAPI._send(response);
+      this.webSocketAPI._send(response);
+    }
   }
 
   connect(){

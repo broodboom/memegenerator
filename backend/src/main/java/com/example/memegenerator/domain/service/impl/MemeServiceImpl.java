@@ -71,7 +71,7 @@ public class MemeServiceImpl implements MemeService {
 
         Meme meme = memeRepository.findById(memeDto.id).orElseThrow(() -> new NoSuchElementException("Meme not found"));
 
-        modelMapper.map(meme, memeDto);
+        modelMapper.map(memeDto, meme);
 
         Meme savedMeme = memeRepository.save(meme);
 
