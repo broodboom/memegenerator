@@ -1,3 +1,13 @@
+
+<form>
+  <select id="category" placeholder="Select Category" class="categoryInput" (change)="getFilters($event)">
+    <option *ngFor="let categoryOption of categoryFilteredOptions$ | async let i = index" [attr.data-index]="i"  [value]="i">
+      {{ categoryOption }}
+    </option>
+  </select>
+  <!-- <button class="add-category-button">Add category</button> -->
+</form>
+
 <nb-list class="dashboardlist" nbInfiniteList [threshold]="500" (bottomThreshold)="loadNext()">
   <nb-list-item *ngFor="let item of items">
     <nb-card id={{item.id}}>

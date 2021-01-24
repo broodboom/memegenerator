@@ -28,7 +28,7 @@ public class UserController {
 	UserService userService;
 
 	@PostMapping()
-	public ResponseEntity<String> createUser(@Valid @RequestBody UserDto userDto) {
+	public ResponseEntity<String> createUser(@Valid @RequestBody UserDto userDto) throws DuplicateKeyException {
 
 		try {
 

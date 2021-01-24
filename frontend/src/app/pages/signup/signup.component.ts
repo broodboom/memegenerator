@@ -3,12 +3,7 @@ import {
   HttpHeaders,
 } from "@angular/common/http";
 import { Component, OnInit } from "@angular/core";
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
+import { FormsModule, ReactiveFormsModule,FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { throwError } from "rxjs";
 import { User } from "app/models/User";
 
@@ -18,17 +13,14 @@ import { User } from "app/models/User";
   styleUrls: ["./signup.component.scss"],
 })
 export class SignupComponent implements OnInit {
-  signupForm = new FormGroup({
-    username: new FormControl(""),
-    password: new FormControl(""),
-    email: new FormControl(""),
-  });
 
   user: User;
+  signupForm: FormGroup;
 
   constructor(
+    
     private formBuilder: FormBuilder,
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
   ) {}
 
   httpOptions = {

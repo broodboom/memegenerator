@@ -14,7 +14,7 @@ import javax.ejb.DuplicateKeyException;
 @Service
 public interface UserService {
 
-    UserDto createUser(UserDto userDto) throws NoSuchElementException;
+    UserDto createUser(UserDto userDto) throws NoSuchElementException, DuplicateKeyException;
 
     UserDto updateUser(UserDto userDto) throws NoSuchElementException, DuplicateKeyException;
 

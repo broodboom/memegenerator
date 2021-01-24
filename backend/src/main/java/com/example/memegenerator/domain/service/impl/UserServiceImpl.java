@@ -9,6 +9,7 @@ import javax.ejb.DuplicateKeyException;
 import com.example.memegenerator.data.entity.User;
 import com.example.memegenerator.domain.service.JavaMailSender;
 import com.example.memegenerator.domain.service.UserService;
+import com.example.memegenerator.security.Role;
 import com.example.memegenerator.security.UserDetailsAdapter;
 import com.example.memegenerator.data.repository.UserRepository;
 import com.example.memegenerator.web.dto.SmallUserDto;
@@ -35,14 +36,14 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     private final JavaMailSender javaMailSender;
     private final ModelMapper modelMapper;
 
-    public UserDto createUser(UserDto userDto) throws NoSuchElementException {
+    public UserDto createUser(UserDto userDto) throws DuplicateKeyException {
+        
+        if(userRepository.findByEmail(userDto.email).isPresent()) throw new DuplicateKeyException("Email is already in use");
 
-        userRepository.findByEmail(userDto.email)
-                .orElseThrow(() -> new NoSuchElementException("Email is already in use"));
-        userRepository.findByUsername(userDto.username)
-                .orElseThrow(() -> new NoSuchElementException("Username is already in use"));
+        if(userRepository.findUserByUsername(userDto.username).isPresent()) throw new DuplicateKeyException("Username is already in use");
 
         User user = modelMapper.map(userDto, User.class);
+        user.role =Role.User;
         user.password = bCryptPasswordEncoder.encode(userDto.password);
         user.confirmationToken = this.randomInt();
 
