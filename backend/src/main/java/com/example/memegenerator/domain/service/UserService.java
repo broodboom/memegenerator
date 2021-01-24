@@ -4,6 +4,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.example.memegenerator.web.dto.SmallUserDto;
 import com.example.memegenerator.web.dto.UserDto;
 
 import java.util.NoSuchElementException;
@@ -17,7 +18,7 @@ public interface UserService {
 
     UserDto updateUser(UserDto userDto) throws NoSuchElementException, DuplicateKeyException;
 
-    UserDto getUserById(long userId) throws NoSuchElementException;
+    SmallUserDto getUserById(long userId) throws NoSuchElementException;
 
     UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 

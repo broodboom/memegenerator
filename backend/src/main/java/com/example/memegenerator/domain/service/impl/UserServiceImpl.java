@@ -11,6 +11,7 @@ import com.example.memegenerator.domain.service.JavaMailSender;
 import com.example.memegenerator.domain.service.UserService;
 import com.example.memegenerator.security.UserDetailsAdapter;
 import com.example.memegenerator.data.repository.UserRepository;
+import com.example.memegenerator.web.dto.SmallUserDto;
 import com.example.memegenerator.web.dto.UserDto;
 
 import org.modelmapper.ModelMapper;
@@ -78,11 +79,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return modelMapper.map(savedUser, UserDto.class);
     }
 
-    public UserDto getUserById(long userId) throws NoSuchElementException {
+    public SmallUserDto getUserById(long userId) throws NoSuchElementException {
 
         User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
 
-        return modelMapper.map(user, UserDto.class);
+        return modelMapper.map(user, SmallUserDto.class);
     }
 
     @Override

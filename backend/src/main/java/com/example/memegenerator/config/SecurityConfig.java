@@ -68,7 +68,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
         http.csrf().disable().cors().and().authorizeRequests()
                 .antMatchers(HttpMethod.GET, HOME_PATH).permitAll()
                 .antMatchers(HttpMethod.GET, GET_CATEGORIES_PATH).permitAll()
-                .antMatchers(HttpMethod.GET, USER_PATH).hasRole(Role.Admin.toString())
+                .antMatchers(HttpMethod.GET, USER_PATH).permitAll()
                 .antMatchers(HttpMethod.POST, USER_PATH).permitAll()
                 .antMatchers(HttpMethod.POST, LOGIN_PATH).permitAll()
                 .antMatchers(HttpMethod.POST, LOGOUT_PATH).permitAll()
