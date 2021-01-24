@@ -9,6 +9,7 @@ import { Tag } from "app/models/Tag";
 import { CategoryService } from "app/services/category/category.service";
 import { Category } from "app/models/Category";
 import { HttpResponse } from "@angular/common/http";
+import { NotifierService } from "angular-notifier";
 
 let self: any;
 
@@ -38,7 +39,8 @@ export class CreatepageComponent implements OnInit {
     private memeService: MemeService,
     private authService: AuthService,
     private tagService: TagService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private notifier: NotifierService
   ) {}
 
   ngOnInit() {
@@ -132,6 +134,7 @@ export class CreatepageComponent implements OnInit {
             self.addedTags.push(addedTag);
           }
         }
+        self.notifier.notify('success', `The Tag ${tagInput.value} has been added!`)
       },
       false
     );

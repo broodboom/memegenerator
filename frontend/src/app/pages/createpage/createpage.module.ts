@@ -16,6 +16,7 @@ import { HttpClientModule } from '@angular/common/http'
 import { ThemeModule } from '../../@theme/theme.module';
 import { CreatepageComponent } from './createpage.component';
 import { FormsModule } from '@angular/forms';
+import { NotifierModule } from 'angular-notifier';
 
 @NgModule({
   imports: [
@@ -32,7 +33,8 @@ import { FormsModule } from '@angular/forms';
     NbIconModule,
     NbButtonModule,
     HttpClientModule,
-    NbAutocompleteModule
+    NbAutocompleteModule,
+    NotifierModule
   ],
   declarations: [
     CreatepageComponent
