@@ -2,6 +2,8 @@ package com.example.memegenerator.web.dto;
 
 import javax.validation.constraints.NotNull;
 
+import com.example.memegenerator.security.Role;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,4 +20,6 @@ public class SmallUserDto {
 	public String email;
 
 	public int activated;
+
+	public Role role;
 }
