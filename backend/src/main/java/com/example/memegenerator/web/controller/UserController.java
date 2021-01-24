@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.memegenerator.web.dto.SmallUserDto;
 import com.example.memegenerator.web.dto.UserDto;
 import com.example.memegenerator.domain.service.UserService;
 
@@ -69,10 +70,10 @@ public class UserController {
 	}
 
 	@GetMapping(path = "/{userId}")
-	public ResponseEntity<UserDto> getUserInfo(@PathVariable long userId) {
+	public ResponseEntity<SmallUserDto> getUserInfo(@PathVariable long userId) {
 		try {
 
-			return new ResponseEntity<UserDto>(userService.getUserById(userId), HttpStatus.OK);
+			return new ResponseEntity<SmallUserDto>(userService.getUserById(userId), HttpStatus.OK);
 		} catch (NoSuchElementException e) {
 
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
