@@ -36,6 +36,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     private final JavaMailSender javaMailSender;
     private final ModelMapper modelMapper;
 
+    
+    /** 
+     * @param userDto
+     * @return UserDto
+     * @throws DuplicateKeyException
+     */
     public UserDto createUser(UserDto userDto) throws DuplicateKeyException {
         
         if(userRepository.findByEmail(userDto.email).isPresent()) throw new DuplicateKeyException("Email is already in use");
@@ -63,6 +69,13 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return modelMapper.map(savedUser, UserDto.class);
     }
 
+    
+    /** 
+     * @param userDto
+     * @return UserDto
+     * @throws NoSuchElementException
+     * @throws DuplicateKeyException
+     */
     public UserDto updateUser(UserDto userDto) throws NoSuchElementException, DuplicateKeyException {
 
         User user = userRepository.findByEmail(userDto.email)
@@ -80,6 +93,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return modelMapper.map(savedUser, UserDto.class);
     }
 
+    
+    /** 
+     * @param userId
+     * @return SmallUserDto
+     * @throws NoSuchElementException
+     */
     public SmallUserDto getUserById(long userId) throws NoSuchElementException {
 
         User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
@@ -87,12 +106,23 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return modelMapper.map(user, SmallUserDto.class);
     }
 
+    
+    /** 
+     * @param username
+     * @return UserDetails
+     * @throws UsernameNotFoundException
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         return new UserDetailsAdapter(userRepository.findUserByUsername(username));
     }
 
+    
+    /** 
+     * @param email
+     * @throws NoSuchElementException
+     */
     public void requestPasswordReset(String email) throws NoSuchElementException {
 
         User user = userRepository.findByEmail(email).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
@@ -112,6 +142,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         javaMailSender.getJavaMailSender().send(message);
     }
 
+    
+    /** 
+     * @param confirmationToken
+     * @param password
+     * @throws NoSuchElementException
+     */
     public void resetPassword(String confirmationToken, String password) throws NoSuchElementException {
 
         User user = userRepository.findByToken(confirmationToken)
@@ -123,6 +159,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         userRepository.save(user);
     }
 
+    
+    /** 
+     * @param userId
+     * @param confirmationToken
+     * @throws NoSuchElementException
+     */
     public void activateUser(Long userId, String confirmationToken) throws NoSuchElementException {
 
         User user = userRepository.findByToken(confirmationToken)
@@ -137,11 +179,21 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         userRepository.save(user);
     }
 
+    
+    /** 
+     * @return int
+     */
     private int randomInt() {
 
         return new Random().nextInt(9000) + 1000;
     }
 
+    
+    /** 
+     * @param userId
+     * @param pointsToAdd
+     * @throws NoSuchElementException
+     */
     public void updateUserPoints(Long userId, int pointsToAdd) throws NoSuchElementException {
 
         User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));

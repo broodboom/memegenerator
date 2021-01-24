@@ -12,6 +12,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     private static final String LIKE_DISLIKE_PATH = "/likedislike";
 
+    
+    /** 
+     * @param config
+     */
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
 
@@ -19,6 +23,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         config.setApplicationDestinationPrefixes(LIKE_DISLIKE_PATH);
     }
 
+    
+    /** 
+     * @param registry
+     */
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
 

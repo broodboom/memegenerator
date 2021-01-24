@@ -41,6 +41,13 @@ public class MemeServiceImpl implements MemeService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
+    
+    /** 
+     * @param memeDto
+     * @param userId
+     * @return MemeDto
+     * @throws NoSuchElementException
+     */
     public MemeDto createMeme(MemeDto memeDto, Long userId) throws NoSuchElementException {
 
         Meme meme = modelMapper.map(memeDto, Meme.class);
@@ -60,6 +67,12 @@ public class MemeServiceImpl implements MemeService {
         return modelMapper.map(savedMeme, MemeDto.class);
     }
 
+    
+    /** 
+     * @param memeId
+     * @return MemeDto
+     * @throws NoSuchElementException
+     */
     public MemeDto getMemeById(long memeId) throws NoSuchElementException {
 
         Meme meme = memeRepository.findById(memeId).orElseThrow(() -> new NoSuchElementException("Meme not found"));
@@ -67,6 +80,12 @@ public class MemeServiceImpl implements MemeService {
         return modelMapper.map(meme, MemeDto.class);
     }
 
+    
+    /** 
+     * @param memeDto
+     * @return MemeDto
+     * @throws NoSuchElementException
+     */
     public MemeDto updateMeme(MemeDto memeDto) throws NoSuchElementException {
 
         Meme meme = memeRepository.findById(memeDto.id).orElseThrow(() -> new NoSuchElementException("Meme not found"));
@@ -78,6 +97,10 @@ public class MemeServiceImpl implements MemeService {
         return modelMapper.map(savedMeme, MemeDto.class);
     }
 
+    
+    /** 
+     * @return List<MemeDto>
+     */
     public List<MemeDto> getMemes() {
 
         List<Meme> allMemes = memeRepository.findAll();
@@ -87,6 +110,12 @@ public class MemeServiceImpl implements MemeService {
         return allMemes.stream().map(meme -> modelMapper.map(meme, MemeDto.class)).collect(Collectors.toList());
     }
 
+    
+    /** 
+     * @param categoryId
+     * @return List<MemeDto>
+     * @throws NoSuchElementException
+     */
     public List<MemeDto> getFilteredMemes(long categoryId) throws NoSuchElementException {
 
         List<Meme> allMemes = memeRepository.findAll();
@@ -102,6 +131,12 @@ public class MemeServiceImpl implements MemeService {
         return filteredMemes.stream().map(meme -> modelMapper.map(meme, MemeDto.class)).collect(Collectors.toList());
     }
 
+    
+    /** 
+     * @param userId
+     * @return boolean
+     * @throws NoSuchElementException
+     */
     @Override
     public boolean userAllowedToCreate(Long userId) throws NoSuchElementException {
 
@@ -131,6 +166,11 @@ public class MemeServiceImpl implements MemeService {
         return result;
     }
 
+    
+    /** 
+     * @param imageData
+     * @return BufferedImage
+     */
     private BufferedImage createImageFromBytes(byte[] imageData) {
 
         ByteArrayInputStream bais = new ByteArrayInputStream(imageData);
@@ -144,6 +184,12 @@ public class MemeServiceImpl implements MemeService {
         }
     }
 
+    
+    /** 
+     * @param text
+     * @param sourceImage
+     * @return BufferedImage
+     */
     private BufferedImage addTextWatermark(String text, BufferedImage sourceImage) {
 
         Graphics2D g2d = (Graphics2D) sourceImage.getGraphics();
@@ -163,6 +209,11 @@ public class MemeServiceImpl implements MemeService {
         return sourceImage;
     }
 
+    
+    /** 
+     * @param image
+     * @return byte[]
+     */
     private byte[] createBytesFromImage(BufferedImage image) {
 
         try {

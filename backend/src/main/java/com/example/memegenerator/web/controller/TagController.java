@@ -24,12 +24,21 @@ public class TagController {
 
     private final TagService tagService;
 
+    
+    /** 
+     * @param tagDto
+     * @return ResponseEntity<TagDto>
+     */
     @PostMapping(path = "/create/{tag}")
     public ResponseEntity<TagDto> createTag(@Valid @RequestBody TagDto tagDto) {
 
         return new ResponseEntity<TagDto>(tagService.createTag(tagDto), HttpStatus.CREATED);
     }
 
+    
+    /** 
+     * @return ResponseEntity<List<TagDto>>
+     */
     @GetMapping(path = "/")
     public ResponseEntity<List<TagDto>> getTags() {
 

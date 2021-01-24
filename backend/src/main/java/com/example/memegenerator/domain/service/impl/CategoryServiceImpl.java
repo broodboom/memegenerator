@@ -20,6 +20,10 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
 
+    
+    /** 
+     * @return List<CategoryDto>
+     */
     public List<CategoryDto> getCategories() {
 
         List<Category> allCategories = categoryRepository.findAll();

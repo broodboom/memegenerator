@@ -25,6 +25,11 @@ public class LikeDislikeController {
     private final MemeService memeService;
     private final UserService userService;
 
+    
+    /** 
+     * @param response
+     * @return ResponseEntity<SocketResponseDto>
+     */
     @MessageMapping("/")
     public ResponseEntity<SocketResponseDto> likedislike(@RequestBody SocketResponseDto response) {
 

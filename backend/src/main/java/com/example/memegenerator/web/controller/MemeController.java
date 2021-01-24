@@ -33,12 +33,26 @@ public class MemeController {
 
     private final MemeService memeService;
 
+    
+    /** 
+     * @return ResponseEntity<List<MemeDto>>
+     */
     @GetMapping(path = "/")
     public ResponseEntity<List<MemeDto>> getMemes() {
 
         return new ResponseEntity<List<MemeDto>>(memeService.getMemes(), HttpStatus.OK);
     }
 
+    
+    /** 
+     * @param imageblob
+     * @param title
+     * @param userId
+     * @param tagsString
+     * @param categoryId
+     * @param description
+     * @return ResponseEntity<MemeDto>
+     */
     @PostMapping(path = "/")
     public ResponseEntity<MemeDto> createMeme(@RequestParam("imageblob") MultipartFile imageblob, String title,
             String userId, @RequestParam("tags") String tagsString, long categoryId, String description) {
@@ -81,6 +95,11 @@ public class MemeController {
         }
     }
 
+    
+    /** 
+     * @param memeId
+     * @return ResponseEntity<MemeDto>
+     */
     @GetMapping(path = "/{memeId}")
     public ResponseEntity<MemeDto> getMemeById(@PathVariable long memeId) {
 
@@ -93,6 +112,11 @@ public class MemeController {
         }
     }
 
+    
+    /** 
+     * @param memeDto
+     * @return ResponseEntity<MemeDto>
+     */
     @PutMapping(path = "/update")
     public ResponseEntity<MemeDto> updateMeme(@Valid @RequestBody MemeDto memeDto) {
 
@@ -105,6 +129,11 @@ public class MemeController {
         }
     }
 
+    
+    /** 
+     * @param categoryId
+     * @return ResponseEntity<List<MemeDto>>
+     */
     @GetMapping(path = "/category/{categoryId}")
     public ResponseEntity<List<MemeDto>> getFilteredMemes(@PathVariable long categoryId) {
 
@@ -117,6 +146,11 @@ public class MemeController {
         }
     }
 
+    
+    /** 
+     * @param userId
+     * @return ResponseEntity<Boolean>
+     */
     @GetMapping(path = "/checkAllowed/{userId}")
     public ResponseEntity<Boolean> userAllowedToCreateMeme(@PathVariable long userId){
 

@@ -8,6 +8,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class JavaMailSender {
     
+    
+    /** 
+     * @return JavaMailSenderImpl
+     */
     public JavaMailSenderImpl getJavaMailSender() {
 
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();

@@ -17,42 +17,70 @@ public class UserDetailsAdapter implements UserDetails {
         this.user = user.get();
     }
 
-	@Override
+	
+    /** 
+     * @return Collection<? extends GrantedAuthority>
+     */
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
         return user.getRole().getAuthorities();
     }
 
+    
+    /** 
+     * @return String
+     */
     @Override
     public String getPassword() {
 
         return user.getPassword();
     }
 
+    
+    /** 
+     * @return String
+     */
     @Override
     public String getUsername() {
 
         return user.getUsername();
     }
 
+    
+    /** 
+     * @return boolean
+     */
     @Override
     public boolean isAccountNonExpired() {
 
         return user.isActivated();
     }
 
+    
+    /** 
+     * @return boolean
+     */
     @Override
     public boolean isAccountNonLocked() {
 
         return user.isActivated();
     }
 
+    
+    /** 
+     * @return boolean
+     */
     @Override
     public boolean isCredentialsNonExpired() {
 
         return user.isActivated();
     }
 
+    
+    /** 
+     * @return boolean
+     */
     @Override
     public boolean isEnabled() {
         

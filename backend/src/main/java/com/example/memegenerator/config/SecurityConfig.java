@@ -44,6 +44,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
     @Autowired
     UserServiceImpl userService;
 
+    
+    /** 
+     * @param passwordEncoder
+     * @return AuthenticationProvider
+     */
     @Bean
     protected AuthenticationProvider authenticationProvider(BCryptPasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -52,17 +57,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
         return authProvider;
     }
 
+    
+    /** 
+     * @return BCryptPasswordEncoder
+     */
     @Bean
     protected BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    
+    /** 
+     * @param auth
+     */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) {
         assert auth != null;
         auth.authenticationProvider(authenticationProvider(passwordEncoder()));
     }
 
+    
+    /** 
+     * @param http
+     * @throws Exception
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().cors().and().authorizeRequests()
@@ -96,6 +114,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 }).and().sessionManagement().maximumSessions(1);
     }
 
+    
+    /** 
+     * @param registry
+     */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**").allowedMethods("*");

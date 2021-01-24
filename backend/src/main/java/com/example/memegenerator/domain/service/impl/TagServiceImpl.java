@@ -20,6 +20,11 @@ public class TagServiceImpl implements TagService {
     private final TagRepository tagRepository;
     private final ModelMapper modelMapper;
 
+    
+    /** 
+     * @param tagDto
+     * @return TagDto
+     */
     public TagDto createTag(TagDto tagDto) {
 
         Tag tag = modelMapper.map(tagDto, Tag.class);
@@ -29,6 +34,10 @@ public class TagServiceImpl implements TagService {
         return modelMapper.map(savedTag, TagDto.class);
     }
 
+    
+    /** 
+     * @return List<TagDto>
+     */
     public List<TagDto> getTags() {
 
         List<Tag> allTags = tagRepository.findAll();

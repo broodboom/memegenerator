@@ -27,6 +27,12 @@ public class UserController {
 	@Autowired
 	UserService userService;
 
+	
+	/** 
+	 * @param userDto
+	 * @return ResponseEntity<String>
+	 * @throws DuplicateKeyException
+	 */
 	@PostMapping()
 	public ResponseEntity<String> createUser(@Valid @RequestBody UserDto userDto) throws DuplicateKeyException {
 
@@ -41,6 +47,11 @@ public class UserController {
 		}
 	}
 
+	
+	/** 
+	 * @param userDto
+	 * @return ResponseEntity<String>
+	 */
 	@PutMapping()
 	public ResponseEntity<String> updateUser(@Valid @RequestBody UserDto userDto) {
 
@@ -55,6 +66,12 @@ public class UserController {
 		}
 	}
 
+	
+	/** 
+	 * @param userId
+	 * @param token
+	 * @return ResponseEntity<String>
+	 */
 	@GetMapping(path = "/activate/{userId}/{token}")
 	public ResponseEntity<String> activateUser(@PathVariable long userId, @PathVariable String token) {
 
@@ -69,6 +86,11 @@ public class UserController {
 		}
 	}
 
+	
+	/** 
+	 * @param userId
+	 * @return ResponseEntity<SmallUserDto>
+	 */
 	@GetMapping(path = "/{userId}")
 	public ResponseEntity<SmallUserDto> getUserInfo(@PathVariable long userId) {
 		try {

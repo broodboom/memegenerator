@@ -20,6 +20,10 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
+    
+    /** 
+     * @return ResponseEntity<List<CategoryDto>>
+     */
     @GetMapping(path = "/")
     public ResponseEntity<List<CategoryDto>> getCategories() {
 
