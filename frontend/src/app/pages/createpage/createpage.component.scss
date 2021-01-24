@@ -6,6 +6,61 @@
 .canvas_image{
   min-width: 640px;
   min-height: 640px;
+  max-width: 100%;
+  max-height: auto;
   background-color: gray;
 
+}
+
+.create-container{
+  display: flex;
+  flex-direction: row;
+  max-width: 100%;
+
+  &-preselected{
+    overflow-y: scroll;
+    flex-direction: row;
+    padding-top: 1rem;
+    background: gray;
+    margin-left: 1rem;
+    max-width: 40%;
+    max-height: 640px;
+    padding: 2rem 0rem 2rem 0.5rem;
+
+    & img{
+      margin-left: 1rem;
+      margin-bottom: 1rem;
+      max-width: 45%;
+    }
+  }
+}
+
+.canvas-container{
+  max-width: 70%;
+  
+}
+
+.text-field{
+  margin-top: 1rem;
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+}
+
+.introduction{
+  max-width: 30%;
+}
+
+.categoryInput{
+  margin-bottom: 1rem;
+}
+
+.save-button{
+  padding: 1rem;
+  margin-top: 1rem;
+  width: 20%;
+}
+
+.button-field{
+  display: flex;
+  flex-direction: column;
 }

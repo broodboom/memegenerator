@@ -1,60 +1,49 @@
 <div class="container">
+
   <div>
     <h1 style="color:red;" *ngIf="!allowedToMakeMemes">You made too many memes today for your points. Please wait till tommorow with making the meme.</h1>
   </div>
 
-  <form>
-    <input type="text" id="title" placeholder="Text for Image" />
-    <input type="text" id="inp" placeholder="Title for image" />
-   <input type="text" id="description" [(ngModel)]="description" name="description" placeholder="Description for image" *ngIf="allowedToAddDescription">
-    <input type="file" id="imageLoader" name="imageLoader" />
-  </form>
-
-  <form>
-    <input
-      #tagInput
-      nbInput
-      type="text"
-      id="tag"
-      (input)="tagOnChange()"
-      placeholder="Enter tag"
-      [nbAutocomplete]="tagAuto"
-      autocomplete="off"
-      class="tagInput"
-    />
-    <nb-autocomplete #tagAuto (selectedChange)="tagOnSelectionChange($event)">
-      <nb-option
-        *ngFor="let tagOption of tagFilteredOptions$ | async"
-        [value]="tagOption"
-      >
-        {{ tagOption }}
-      </nb-option>
-    </nb-autocomplete>
-    <button class="add-tag-button">Add tag</button>
-  </form>
-
-  <form>
-    <nb-select
-      id="category"
-      placeholder="Select Category"
-      class="categoryInput"
-    >
-      <nb-option
-        *ngFor="let categoryOption of categoryFilteredOptions$ | async"
-        [value]="categoryOption"
-      >
-        {{ categoryOption }}
-      </nb-option>
-    </nb-select>
-    <button class="add-category-button">Add category</button>
-  </form>
-  <div>
-    <img src="../../../assets/templateImages/dion.jpg" (click)="handleSaveImageFromTemplate($event)" alt="template1">
-    <img src="../../../assets/templateImages/fistingBaby.png" (click)="handleSaveImageFromTemplate($event)" alt="template2" *ngIf="points >= 5">
-    <img src="../../../assets/templateImages/scaredCat.png" (click)="handleSaveImageFromTemplate($event)" alt="template3" *ngIf="points >= 100">
-    <img src="../../../assets/templateImages/skeleton.png" (click)="handleSaveImageFromTemplate($event)" alt="template4" *ngIf="points >= 500">
-    <img src="../../../assets/templateImages/watchingBack.png" (click)="handleSaveImageFromTemplate($event)" alt="template5" *ngIf="points >= 1000">
+  <h1>Memecreator</h1>
+  <div class="introduction">
+    <p>Upload a image to create a meme or select one from the templates if you have enough points</p>
   </div>
-  <canvas id="canvas" class="canvas_image"> </canvas>
-  <button class="save-button" [disabled]="!allowedToMakeMemes">Save button</button>
+  <div class="create-container">
+    <div class="canvas-container">
+      <canvas id="canvas" class="canvas_image" (change)="handleSaveImage($event)"> 
+      </canvas>
+      <form>
+        <input type ="text" id="title" placeholder="Text for Image" class="text-field">
+        <input type="text" id="inp" [(ngModel)]="title" name="title" placeholder="Title for image" class="text-field">
+        <input type="text" id="description" [(ngModel)]="description" name="description" placeholder="Description for image" *ngIf="allowedToAddDescription" class="text-field">
+        <input #tagInput nbInput type="text" id="tag" (input)="tagOnChange()" placeholder="Enter tag" [nbAutocomplete]="tagAuto" autocomplete="off" class="tagInput"/>
+          <nb-autocomplete #tagAuto (selectedChange)="tagOnSelectionChange($event)">
+            <nb-option *ngFor="let tagOption of tagFilteredOptions$ | async" [value]="tagOption">
+              {{ tagOption }}
+            </nb-option>
+          </nb-autocomplete>
+          <button class="add-tag-button">Add tag</button>
+      </form>
+      <form>
+        <nb-select id="category" placeholder="Select Category" class="categoryInput">
+          <nb-option *ngFor="let categoryOption of categoryFilteredOptions$ | async" [value]="categoryOption">
+            {{ categoryOption }}
+          </nb-option>
+        </nb-select>
+        <!-- <button class="add-category-button">Add category</button> -->
+      </form>
+      <div class="button-field">
+        <input type="file" id="imageLoader"name="imageLoader"/>
+        <button class="save-button" [disabled]="!allowedToMakeMemes">Save meme</button>
+     </div>
+    </div>
+    <div class="create-container-preselected">
+      <img src="../../../assets/templateImages/dion.jpg" (click)="handleSaveImageFromTemplate($event)" alt="template1">
+      <img src="../../../assets/templateImages/fistingBaby.png" (click)="handleSaveImageFromTemplate($event)" alt="template2" *ngIf="points >= 50">
+      <img src="../../../assets/templateImages/scaredCat.png" (click)="handleSaveImageFromTemplate($event)" alt="template3" *ngIf="points >= 100">
+      <img src="../../../assets/templateImages/skeleton.png" (click)="handleSaveImageFromTemplate($event)" alt="template4" *ngIf="points >= 500">
+      <img src="../../../assets/templateImages/watchingBack.png" (click)="handleSaveImageFromTemplate($event)" alt="template5" *ngIf="points >= 1000">
+    </div>
+  </div>
+  
 </div>

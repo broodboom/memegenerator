@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { MemeService } from "../../services/meme/meme.service";
 import { Meme } from "../../models/Meme";
-import { Observable, of } from "rxjs";
-import { map, tap } from "rxjs/operators";
+import { Observable, of } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { AuthService } from "../../services/auth/auth.service";
 import { TagService } from "app/services/tag/tag.service";
 import { Tag } from "app/models/Tag";
@@ -18,6 +18,7 @@ let self: any;
   styleUrls: ["./createpage.component.scss"],
 })
 export class CreatepageComponent implements OnInit {
+
   tagOptions: string[];
   tagIds: number[];
   categoryOptions: string[];
@@ -32,14 +33,14 @@ export class CreatepageComponent implements OnInit {
   description: string;
   points: number;
 
-  @ViewChild("tagInput") tagInput;
-  @ViewChild("categoryInput") categoryInput;
+  @ViewChild('tagInput') tagInput;
+  @ViewChild('categoryInput') categoryInput;
 
   constructor(
     private memeService: MemeService,
     private authService: AuthService,
     private tagService: TagService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
   ) {}
 
   ngOnInit() {
@@ -51,29 +52,29 @@ export class CreatepageComponent implements OnInit {
     this.userAllowedToMakeMeme();
     this.userAllowedToAddDescription();
     this.fillCanvas();
-    this.tagService
-      .getTags()
-      .pipe(tap((result) => console.log(result)))
-      .subscribe((tags: Tag[]) => {
+    this.tagService.getTags().pipe(
+      tap((result)=>console.log(result))
+    ).subscribe((tags: Tag[])=>{
         this.tagOptions = [];
-        tags.forEach((tag) => {
+        tags.forEach(tag => {
           this.tagOptions.push(tag.title);
           this.tagIds.push(tag.id);
-        });
+        })
         this.tagFilteredOptions$ = of(this.tagOptions);
-        this.activateTagButton({ title: "test" }, this.tagService, tags);
-      });
-    this.categoryService
-      .getCategories()
-      .pipe(tap((result) => console.log(result)))
-      .subscribe((categories: Category[]) => {
-        this.categoryOptions = [];
-        categories.forEach((category) => {
-          this.categoryOptions.push(category.title);
-          this.categoryIds.push(category.id);
-        });
-        this.categoryFilteredOptions$ = of(this.categoryOptions);
-        this.activateCategoryButton(this.categoryOptions);
+        this.activateTagButton({title: "test"}, this.tagService, tags);
+      }
+      
+    );
+    this.categoryService.getCategories().pipe(
+      tap((result)=>console.log(result))
+    ).subscribe((categories: Category[])=>{
+      this.categoryOptions = [];
+      categories.forEach(category => {
+        this.categoryOptions.push(category.title);
+        this.categoryIds.push(category.id);
+      })
+      this.categoryFilteredOptions$ = of(this.categoryOptions);
+      this.activateCategoryButton(this.categoryOptions);
     });
   }
 
@@ -88,94 +89,84 @@ export class CreatepageComponent implements OnInit {
   userAllowedToAddDescription(){
     const user = this.authService.getCurrentUser();
 
+    this.points = user.points;
     this.allowedToAddDescription = user.points >= 500;
   }
 
-  activateTagButton(tag: Tag, tagService: TagService, tags: Tag[]) {
-    const tagbutton = document.querySelector(".add-tag-button");
-    tagbutton.addEventListener(
-      "click",
-      function (event) {
-        let tagInput = <HTMLInputElement>document.getElementById("tag");
-        tag.title = tagInput.value;
-        let add = true;
-        let tagId = null;
-        tags.forEach((oldTag) => {
-          if (tag.title == oldTag.title) {
-            add = false;
-            tagId = oldTag.id;
+  activateTagButton(tag: Tag, tagService: TagService, tags: Tag[]){
+    const tagbutton = document.querySelector('.add-tag-button');
+        tagbutton.addEventListener("click", function(event){
+          let tagInput = <HTMLInputElement>document.getElementById('tag');
+          tag.title = tagInput.value;
+          let add = true;
+          let tagId = null;
+          tags.forEach(oldTag => {
+            if(tag.title == oldTag.title){
+              add = false;
+              tagId = oldTag.id;
+            }
+          })
+          if(add){
+            tagService.createTag(tag).subscribe((data: any)=> {
+              console.log(data);
+              tagId = data.body.id;
+              let addedTag = {id: tagId, title: tagInput.value};
+              let condition = true;
+              self.addedTags.forEach(oldAddedTag => {
+                if(oldAddedTag.title == tag.title){
+                  condition = false;
+                }
+              });
+              if(condition){
+                self.addedTags.push(addedTag);
+              }
+            });
           }
-        });
-        if (add) {
-          tagService.createTag(tag).subscribe((data: any) => {
-            console.log(data);
-            tagId = data.body.id;
-            let addedTag = { id: tagId, title: tagInput.value };
+          else{
+            let addedTag = {id: tagId, title: tagInput.value};
             let condition = true;
-            self.addedTags.forEach((oldAddedTag) => {
-              if (oldAddedTag.title == tag.title) {
+            self.addedTags.forEach(oldAddedTag => {
+              if(oldAddedTag.title == tag.title){
                 condition = false;
               }
             });
-            if (condition) {
+            if(condition){
               self.addedTags.push(addedTag);
             }
-          });
-        } else {
-          let addedTag = { id: tagId, title: tagInput.value };
-          let condition = true;
-          self.addedTags.forEach((oldAddedTag) => {
-            if (oldAddedTag.title == tag.title) {
-              condition = false;
-            }
-          });
-          if (condition) {
-            self.addedTags.push(addedTag);
           }
-        }
-      },
-      false
-    );
+        }, false)
   }
 
-  activateCategoryButton(categoryOptions: string[]) {
-    const categorybutton = document.querySelector(".add-category-button");
-    categorybutton.addEventListener(
-      "click",
-      function (event) {
-        let categoryInput = <HTMLInputElement>(
-          document.getElementById("category")
-        );
-        let number = 0;
-        categoryOptions.forEach((option) => {
-          if (option == categoryInput.innerText) {
-            self.addedCategoryId = self.categoryIds[number];
-          }
-          number = number + 1;
-        });
-      },
-      false
-    );
+  activateCategoryButton(categoryOptions: string[]){
+    const categorybutton = document.querySelector('.add-category-button');
+        categorybutton.addEventListener("click", function(event){
+          let categoryInput = <HTMLInputElement>document.getElementById('category');
+          let number = 0;
+          categoryOptions.forEach(option => {
+            if(option == categoryInput.innerText){
+              self.addedCategoryId = self.categoryIds[number];
+            }
+            number = number + 1;
+          });
+        }, false)
   }
 
   private tagFilter(value: string): string[] {
     const tagFilterValue = value.toLowerCase();
-    return this.tagOptions.filter((tagOptionValue) =>
-      tagOptionValue.toLowerCase().includes(tagFilterValue)
-    );
+    return this.tagOptions.filter(tagOptionValue => tagOptionValue.toLowerCase().includes(tagFilterValue));
   }
 
   getTagFilteredOptions(value: string): Observable<string[]> {
-    return of(value).pipe(map((filterString) => this.tagFilter(filterString)));
-  }
-
-  tagOnChange() {
-    this.tagFilteredOptions$ = this.getTagFilteredOptions(
-      this.tagInput.nativeElement.value
+    return of(value).pipe(
+      map(filterString => this.tagFilter(filterString)),
     );
   }
 
-  tagOnSelectionChange($event) {
+  tagOnChange() {
+    this.tagFilteredOptions$ = this.getTagFilteredOptions(this.tagInput.nativeElement.value);
+  }
+
+  tagOnSelectionChange($event){
     this.tagFilteredOptions$ = this.getTagFilteredOptions($event);
   }
 
@@ -193,11 +184,14 @@ export class CreatepageComponent implements OnInit {
       };
       img.src = event.target.result as string;
       console.log("img src:  ");
+      var temp = event.target.result as string;
+      var image = document.querySelector("canvas");
       canvas.setAttribute("src", img.src);
     };
 
     reader.readAsDataURL(e.target.files[0]);
   }
+
   handleSaveImageFromTemplate(e) {
     var canvas = document.querySelector("canvas");
     console.log(canvas);
@@ -220,7 +214,6 @@ export class CreatepageComponent implements OnInit {
     fetch(e.target.src).then(r => r.blob()).then(blobFile => reader.readAsDataURL(blobFile));
   }
 
-
   fillCanvas() {
     var inputField = document.querySelector("input");
     var canvas = document.querySelector("canvas");
@@ -239,12 +232,12 @@ export class CreatepageComponent implements OnInit {
       var tempImg = new Image();
       tempImg.src = temp;
       ctx.drawImage(tempImg, 0, 0);
-      //refill text
       ctx.fillStyle = "black";
       ctx.fillText(inputField.value, 40, 80);
     });
 
     var imageLoader = document.getElementById("imageLoader");
+    console.log(imageLoader);
     imageLoader.addEventListener("change", this.handleSaveImage, false);
 
     var savebutton = document.querySelector(".save-button");
@@ -252,7 +245,6 @@ export class CreatepageComponent implements OnInit {
   }
 
   saveMeme() {
-    debugger;
     var canvas = document.querySelector("canvas");
 
     const userId = self.authService.getCurrentUser().id;
@@ -261,18 +253,18 @@ export class CreatepageComponent implements OnInit {
       var newImg = document.createElement("img"),
         url = URL.createObjectURL(blob);
 
-      var meme: Meme = {
+        var meme: Meme = {
           title: self.title,
           description: self.description,
-        categoryId: self.addedCategoryId,
-        userId: userId,
-        imageblob: blob,
-        tags: self.addedTags,
-      };
+          categoryId: self.addedCategoryId,
+          userId: userId,
+          imageblob: blob,
+          tags: self.addedTags
+        };
 
-      self.memeService.CreateMeme(meme).subscribe((res: HttpResponse<any>) => {
-        console.log(res.body);
-      });
+        self.memeService.CreateMeme(meme).subscribe((res: HttpResponse<any>) => {
+          console.log(res.body);
+        });
 
       newImg.onload = function () {
         // no longer need to read the blob so it's revoked
