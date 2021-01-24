@@ -4,6 +4,10 @@ import { MemeService } from 'app/services/meme/meme.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { WebSocketAPI } from './WebSocketAPI';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { CategoryService } from "app/services/category/category.service";
+import { Category } from "app/models/Category";
+import { Observable, of } from 'rxjs';
+import { FormGroup, FormControl, Validators} from '@angular/forms';
 
 //TODO: move this to a generic model folder
 class Card{
@@ -31,7 +35,7 @@ class ResponseClass {
     for (let prop in jsonObj) {
         this[prop] = jsonObj[prop];
     }
-}
+  }
 }
 
 let self: any;
@@ -44,13 +48,16 @@ let self: any;
 
 
 export class DashboardComponent implements OnInit{
-
-  // items = getPlaceholderCards();
+  categoryOptions: string[];
+  categoryIds: number[];
+  categoryFilteredOptions$: Observable<string[]>;
+  addedCategoryId: number;
   webSocketAPI: WebSocketAPI;
   items = []
   loading = false;
 
-  constructor(public memeService: MemeService, private sanitizer : DomSanitizer, private route: ActivatedRoute){}
+  constructor(public memeService: MemeService, private categoryService: CategoryService,private sanitizer : DomSanitizer, private route: ActivatedRoute
+    , private router: Router){}
 
   loadNext(){
     if(this.loading) {return}
@@ -62,10 +69,11 @@ export class DashboardComponent implements OnInit{
   
   ngOnInit(){
     self = this;
-    
+    self.categoryIds = [];
     this.webSocketAPI = new WebSocketAPI(this);
     this.connect();
     this.route.queryParamMap.forEach((params: Params) => {
+      console.log("params: ",params.params.category);
       let category = params.params.category; 
       if(category != null){
         this.memeService.GetAllMemesFilteredOnCategory(category).subscribe(meme => this.inserItem(meme));
@@ -73,6 +81,18 @@ export class DashboardComponent implements OnInit{
       else{
         this.memeService.GetAllMemes().subscribe(meme => this.inserItem(meme));
       } 
+      this.categoryService.getCategories().pipe(
+      ).subscribe((categories: Category[])=>{
+        this.categoryOptions = [];
+        categories.forEach(category => {
+          this.categoryOptions.push(category.title);
+          this.categoryIds.push(category.id);
+        })
+        this.categoryFilteredOptions$ = of(this.categoryOptions);
+        this.addFilters(this.categoryOptions);
+        // this.activateCategoryButton(this.categoryOptions);
+      });
+      
   });
   }
 
@@ -118,6 +138,22 @@ export class DashboardComponent implements OnInit{
     }else{
       item2.dislikes++;
     }
-    //this.items = message;
+  }
+  
+  getFilters(e){
+    console.log(e.target.value);
+    self.items = [];
+    this.memeService.GetAllMemesFilteredOnCategory(e.target.value).subscribe(meme => this.inserItem(meme));
+  }
+
+  addFilters(categoryOptions: string[]){
+    let categoryInput = <HTMLInputElement>document.getElementById('category');
+    let number = 0;
+    categoryOptions.forEach(option => {
+      if(option == categoryInput.innerText){
+        self.addedCategoryId = self.categoryIds[number];
+      }
+      number = number + 1;
+    });
   }
 }
