@@ -4,142 +4,80 @@ import { Observable } from 'rxjs';
 import { MemeService } from './meme.service';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
-import { HttpClient } from '@angular/common/http';
-
-export class HttpClientStub {
-  request(): Observable<any> {
-    return Observable.of({});
-  }
-
-  get(): Observable<any> {
-    // Collection of fake memes
-    const memes: Meme[] = [];
-
-    // Create collection of fake memes
-    for (let i = 0; i < 5; i++) {
-      const meme: Meme = {
-        id: 0,
-        title: `Vis meme ${i}`,
-        imageblob: new Blob(),
-        categoryId: 1,
-        userId: 1
-      };
-
-      memes.push(meme)
-    };
-
-    return Observable.of(memes);
-  }
-
-  put(): Observable<any> {
-    return Observable.of({});
-  }
-}
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpTestingController, HttpClientTestingModule } from '@angular/common/http/testing';
+import { environment } from "environments/environment";
 
 describe('MemeService', () => {
   let service: MemeService;
 
-  const httpClientStub = new HttpClientStub();
+  let httpMock : HttpTestingController;
+
+  let httpClient : HttpClient;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        {
-          provide: HttpClient,
-          useValue: httpClientStub
-        }
-      ]
+      imports: [HttpClientTestingModule]
     });
     service = TestBed.inject(MemeService);
+    httpMock = TestBed.get(HttpTestingController);
+    httpClient = TestBed.get(HttpClient);
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
+  // Test creation
+  it('should create a meme', () => {
 
-  it('should return a formdata object', () => {
-    const memeId = 0;
-    const memeTitle = 'abc';
-    const memeImage = new Blob();
-    const categoryId = 0;
-    const userId = 0;
-
-    const dataMock: Meme = {
-      id: memeId,
-      title: memeTitle,
-      imageblob: memeImage,
-      categoryId: categoryId,
-      userId: userId
+    const meme: Meme = {
+      id: 1,
+      title: 'Test meme',
+      imageblob: new Blob(),
+      categoryId: 0,
+      userId: 0
     };
 
-    const result = service.CreateMemeFormData(dataMock);
+    service.CreateMeme(meme).subscribe((m)=>{
 
-    expect(result.get("title")).toEqual(memeTitle);
-  });
-
-  it('should create a meme', (done) => {
-    // assign
-    const memeId = 0;
-    const memeTitle = 'abc';
-    const memeImage = new Blob();
-    const categoryId = 0;
-    const userId = 0;
-
-    const dataMock: Meme = {
-      id: memeId,
-      title: memeTitle,
-      imageblob: memeImage,
-      categoryId: categoryId,
-      userId: userId
-    };
-
-    const formDataMock = new FormData();
-
-    formDataMock.append("imageblob", dataMock.imageblob);
-    formDataMock.append("title", dataMock.title);
-    formDataMock.append("userId", dataMock.id.toString());
-
-    spyOn(service, 'CreateMemeFormData').and.returnValue(formDataMock);
-    spyOn(httpClientStub, 'request').and.callThrough();
-
-    service.CreateMeme(dataMock).subscribe(() => { }, () => { }, () => {
-      // assert
-      expect(service.CreateMemeFormData).toHaveBeenCalledWith(dataMock);
-
-      // asynchronous - je weet niet wanneer 'ie returned
-      done();
+      expect(m.body).toEqual(meme);
     });
+     
+    const request = httpMock.expectOne(`${environment.apiUrl}/meme/`);
+
+    expect(request.request.method).toEqual('POST');
+
+    request.flush(meme);
+
+    httpMock.verify();
   });
 
-  it('should get all memes', (done) => {
+  // Test fetching all
+  it('should get all memes', () => {
 
-    spyOn(httpClientStub, 'get').and.callThrough();
+    const fakeMemes : Meme[] = []
 
-    service.GetAllMemes().subscribe((response) => {
+    for(let i = 0; i < 5; i ++){
+      const meme: Meme = {
+        id: i,
+        title: `Test meme ${i}`,
+        imageblob: new Blob(),
+        categoryId: 0,
+        userId: 0
+      };
 
-      expect(response).not.toBeNull();
+      fakeMemes.push(meme)
+    }
 
-      // Complete
-      done();
-    }, () => {
-      done.fail();
-     }, () => {
-      done();
-    })
-  });
+    service.GetAllMemes().subscribe((m)=>{
+      console.log(`Memes: ${JSON.stringify(m)}`)
 
-  it('should fail to get all memes', (done) => {
+      expect(m).toEqual(fakeMemes)
+    });
+     
+    const request = httpMock.expectOne(`${environment.apiUrl}/meme/`);
 
-    spyOn(httpClientStub, 'get').and.returnValue(Observable.throw('Error getting all memes'));
+    expect(request.request.method).toEqual('GET');
 
-    service.GetAllMemes().subscribe(() => {
+    request.flush(fakeMemes);
 
-      done.fail()
-
-    }, (response) => {
-      done();
-    }, () => {
-      done.fail();
-    })
+    httpMock.verify();
   });
 });

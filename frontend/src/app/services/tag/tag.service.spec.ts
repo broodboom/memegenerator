@@ -3,104 +3,74 @@ import { Tag } from 'app/models/Tag';
 import { Observable } from 'rxjs';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
-import { HttpClient } from '@angular/common/http';
 import { TagService } from './tag.service';
 import { ExpandOperator } from 'rxjs/internal/operators/expand';
-
-export class HttpClientStub {
-  request(): Observable<any> {
-    return Observable.of({});
-  }
-
-  get(): Observable<any> {
-    // Collection of fake tags
-    const tags: Tag[] = [];
-
-    // Create collection of fake tags
-    for (let i = 0; i < 5; i++) {
-      const tag: Tag = {
-        id: i,
-        title: `Tag ${i}`,
-      };
-
-      tags.push(tag)
-    };
-
-    return Observable.of(tags);
-  }
-
-  put(): Observable<any> {
-    return Observable.of({});
-  }
-
-  post(): Observable<any> {
-    return Observable.of({});
-  }
-}
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpTestingController, HttpClientTestingModule } from '@angular/common/http/testing';
+import { environment } from "environments/environment";
 
 describe('TagService', () => {
   let service: TagService;
 
-  const httpClientStub = new HttpClientStub();
+  let httpMock: HttpTestingController;
+
+  let httpClient: HttpClient;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        {
-          provide: HttpClient,
-          useValue: httpClientStub
-        }
-      ]
+      imports: [HttpClientTestingModule]
     });
     service = TestBed.inject(TagService);
+    httpMock = TestBed.get(HttpTestingController);
+    httpClient = TestBed.get(HttpClient);
   });
 
-  it('should create a tag', (done) => {
+  // Test creation
+  it('should create a tag', () => {
+
     const tag: Tag = {
       id: 1,
-      title: 'Test tag'
+      title: 'Test tag',
     };
 
-    spyOn(service, 'createTag').and.returnValue({});
+    service.createTag(tag).subscribe((t) => {
 
-    spyOn(httpClientStub, 'post').and.callThrough();
+      expect(t.body).toEqual(tag);
+    });
 
-    service.createTag(tag)
+    const request = httpMock.expectOne(`${environment.apiUrl}/tag/create/${tag.id}`);
 
-    expect(service.createTag).toHaveBeenCalledWith(tag);
+    expect(request.request.method).toEqual('POST');
 
-    done();
+    request.flush(tag);
+
+    httpMock.verify();
   });
 
-  it('should get all tags', (done) => {
+  // Test fetching all
+  it('should get all tags', () => {
 
-    spyOn(httpClientStub, 'get').and.callThrough();
+    const fakeTags: Tag[] = []
 
-    service.getTags().subscribe((response) => {
+    for (let i = 0; i < 5; i++) {
+      const tag: Tag = {
+        title: `Test tag ${i}`,
+      };
 
-      expect(response).not.toBeNull();
+      fakeTags.push(tag)
+    }
 
-      // Complete
-      done();
-    }, () => {
-      done.fail();
-    }, () => {
-      done();
-    })
-  });
+    service.getTags().subscribe((t) => {
 
-  it('should fail to get all tags', (done) => {
+      expect(t.body).toEqual(fakeTags)
+    });
 
-    spyOn(httpClientStub, 'get').and.returnValue(Observable.throw('Error getting all tags'));
+    const request = httpMock.expectOne(`${environment.apiUrl}/tag/`);
 
-    service.getTags().subscribe(() => {
+    expect(request.request.method).toEqual('GET');
 
-      done.fail()
+    request.flush(fakeTags);
 
-    }, (response) => {
-      done();
-    }, () => {
-      done.fail();
-    })
+    httpMock.verify();
   });
 });
