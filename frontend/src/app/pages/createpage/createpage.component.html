@@ -48,7 +48,13 @@
     </nb-select>
     <button class="add-category-button">Add category</button>
   </form>
-
+  <div>
+    <img src="../../../assets/templateImages/dion.jpg" (click)="handleSaveImageFromTemplate($event)" alt="template1">
+    <img src="../../../assets/templateImages/fistingBaby.png" (click)="handleSaveImageFromTemplate($event)" alt="template2" *ngIf="points >= 5">
+    <img src="../../../assets/templateImages/scaredCat.png" (click)="handleSaveImageFromTemplate($event)" alt="template3" *ngIf="points >= 100">
+    <img src="../../../assets/templateImages/skeleton.png" (click)="handleSaveImageFromTemplate($event)" alt="template4" *ngIf="points >= 500">
+    <img src="../../../assets/templateImages/watchingBack.png" (click)="handleSaveImageFromTemplate($event)" alt="template5" *ngIf="points >= 1000">
+  </div>
   <canvas id="canvas" class="canvas_image"> </canvas>
   <button class="save-button" [disabled]="!allowedToMakeMemes">Save button</button>
 </div>
