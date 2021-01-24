@@ -41,11 +41,11 @@ public class MemeController {
 
     @PostMapping(path = "/")
     public ResponseEntity<MemeDto> createMeme(@RequestParam("imageblob") MultipartFile imageblob, String title,
-            String userId, @RequestParam("tags") String tagsString, long categoryId) {
+            String userId, @RequestParam("tags") String tagsString, long categoryId, String description) {
 
         MemeDto memeDto = new MemeDto();
         memeDto.title = title;
-        memeDto.description = "";
+        memeDto.description = description;
         memeDto.likes = 0;
         memeDto.dislikes = 0;
         memeDto.categoryId = categoryId;

@@ -1,6 +1,7 @@
 package com.example.memegenerator.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -8,9 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import com.example.memegenerator.domain.service.impl.CategoryServiceImpl;
-import com.example.memegenerator.web.controller.CategoryController;
-import com.example.memegenerator.web.dto.CategoryDto;
+import com.example.memegenerator.domain.service.impl.TagServiceImpl;
+import com.example.memegenerator.web.controller.TagController;
+import com.example.memegenerator.web.dto.TagDto;
 import com.jayway.jsonpath.JsonPath;
 
 import org.junit.jupiter.api.Test;
@@ -36,16 +37,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ContextConfiguration()
-public class CategoryControllerTests {
+public class TagControllerTests {
 
     @Autowired
-    private CategoryController controller;
+    private TagController controller;
 
     @MockBean
-    private CategoryServiceImpl categoryService;
+    private TagServiceImpl tagService;
 
     @Autowired
-	private MockMvc mockMvc;	
+    private MockMvc mockMvc;
 
     @Test
     public void contextLoads() throws Exception {
@@ -55,32 +56,48 @@ public class CategoryControllerTests {
 
     @Test
     @WithMockUser(username = "test", roles = { "User" })
-    public void returns_categories() throws Exception {
+    public void returns_tags() throws Exception {
 
         int generations = new Random().nextInt(9) + 1;
-        List<CategoryDto> categoryList = new ArrayList<CategoryDto>();
+        List<TagDto> tagList = new ArrayList<TagDto>();
         String mockTitle = "testtitle";
 
         for (int i = 0; i < generations; i++) {
-            categoryList.add(new CategoryDto() {
+            tagList.add(new TagDto() {
                 {
                     setTitle(mockTitle);
                 }
             });
         }
 
-        when(categoryService.getCategories()).thenReturn(categoryList);
+        when(tagService.getTags()).thenReturn(tagList);
 
-        var resultActions = this.mockMvc.perform(get("/category/")
-            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk());
+        var resultActions = this.mockMvc
+                .perform(get("/tag/").header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
 
         var mvcResult = resultActions.andReturn();
         var json = mvcResult.getResponse().getContentAsString();
 
         List<Map<String, Object>> dataList = JsonPath.parse(json).read("$");
         String title = (String) dataList.get(0).get("title");
-      
+
         assertEquals(mockTitle, title);
+    }
+
+    @Test
+    @WithMockUser(username = "test", roles = { "User" })
+    public void creates_tag() throws Exception {
+
+        String mockTitle = "acbdef";
+        TagDto tagDtoMock = new TagDto() {
+            {
+                setTitle(mockTitle);
+            }
+        };
+
+        when(tagService.createTag(any())).thenReturn(tagDtoMock);
+
+        this.mockMvc.perform(post("/tag/create/abc")).andExpect(status().isOk());
     }
 }
