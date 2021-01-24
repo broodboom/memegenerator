@@ -81,7 +81,7 @@ public class MemeController {
         }
     }
 
-    @GetMapping(path = "/{id}")
+    @GetMapping(path = "/{memeId}")
     public ResponseEntity<MemeDto> getMemeById(@PathVariable long memeId) {
 
         try {
@@ -93,7 +93,7 @@ public class MemeController {
         }
     }
 
-    @PutMapping(path = "/update/{meme}")
+    @PutMapping(path = "/update")
     public ResponseEntity<MemeDto> updateMeme(@Valid @RequestBody MemeDto memeDto) {
 
         try {
@@ -105,7 +105,7 @@ public class MemeController {
         }
     }
 
-    @GetMapping(path = "/category/{id}")
+    @GetMapping(path = "/category/{categoryId}")
     public ResponseEntity<List<MemeDto>> getFilteredMemes(@PathVariable long categoryId) {
 
         try {
@@ -117,7 +117,7 @@ public class MemeController {
         }
     }
 
-    @GetMapping(path = "/checkAllowed/{id}")
+    @GetMapping(path = "/checkAllowed/{userId}")
     public ResponseEntity<Boolean> userAllowedToCreateMeme(@PathVariable long userId){
 
         try {

@@ -54,7 +54,7 @@ public class UserController {
 		}
 	}
 
-	@GetMapping(path = "/activate/{id}/{token}")
+	@GetMapping(path = "/activate/{userId}/{token}")
 	public ResponseEntity<String> activateUser(@PathVariable long userId, @PathVariable String token) {
 
 		try {
@@ -68,7 +68,7 @@ public class UserController {
 		}
 	}
 
-	@GetMapping(path = "/{id}")
+	@GetMapping(path = "/{userId}")
 	public ResponseEntity<UserDto> getUserInfo(@PathVariable long userId) {
 		try {
 
