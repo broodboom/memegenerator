@@ -24,11 +24,12 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
+public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
     
     private static final String USER_PATH = "/user";
     private static final String PASSWORD_RESET_REQUEST_PATH = "/user/password-reset-request";
@@ -39,8 +40,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String LOGOUT_PATH = "/logout";
     private static final String HOME_PATH = "/";
     private static final String GET_CATEGORIES_PATH = "/category";
-
-
 
     @Autowired
     UserServiceImpl userService;
@@ -95,5 +94,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         response.getWriter().write("{ \"status\": false }");
                     }
                 }).and().sessionManagement().maximumSessions(1);
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**").allowedMethods("*");
     }
 }

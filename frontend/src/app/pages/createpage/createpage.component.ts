@@ -229,7 +229,6 @@ export class CreatepageComponent implements OnInit {
   }
 
   saveMeme() {
-    debugger;
     var canvas = document.querySelector("canvas");
 
     const userId = self.authService.getCurrentUser().id;
