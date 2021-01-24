@@ -17,5 +17,5 @@ public interface MemeService {
 
     List<MemeDto> getFilteredMemes(long filter) throws NoSuchElementException;
 
-    Boolean userAllowedToCreate(Long userId) throws NoSuchElementException;
+    boolean userAllowedToCreate(Long userId) throws NoSuchElementException;
 }

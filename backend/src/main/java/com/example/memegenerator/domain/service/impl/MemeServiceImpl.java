@@ -103,7 +103,7 @@ public class MemeServiceImpl implements MemeService {
     }
 
     @Override
-    public Boolean userAllowedToCreate(Long userId) throws NoSuchElementException {
+    public boolean userAllowedToCreate(Long userId) throws NoSuchElementException {
 
         boolean result = false;
 
