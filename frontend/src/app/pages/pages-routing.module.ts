@@ -39,6 +39,7 @@ const routes: Routes = [
         path: "create",
         component: CreatepageComponent,
         canActivate: [AuthGuard],
+        data: { roles: ["Admin", "User"] },
       },
       {
         path: "likebutton",
