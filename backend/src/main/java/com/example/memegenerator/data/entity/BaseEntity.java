@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.io.Serializable;
@@ -22,5 +23,6 @@ public abstract class BaseEntity implements Serializable {
 
     @Column(name = "createdat", unique = false, nullable = true)
     @CreatedDate
+    @CreationTimestamp
     public Timestamp createdat;
 }
