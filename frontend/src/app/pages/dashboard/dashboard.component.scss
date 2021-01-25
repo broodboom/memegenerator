@@ -1,3 +1,13 @@
 nb-list.dashboardlist{
     align-items: center;
 }
+
+.filter-area{
+    display: flex;
+    flex-direction: row;
+    max-width: 20%;
+
+    & select{
+        margin-right: 2rem;
+    }
+}

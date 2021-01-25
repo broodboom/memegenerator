@@ -1,12 +1,19 @@
-<form>
+<div class="filter-area">
   <select id="category" placeholder="Select Category" class="categoryInput" (change)="getFilters($event)">
+    <option value=null>Select a category</option>
     <option *ngFor="let categoryOption of categoryFilteredOptions$ | async let i = index" [attr.data-index]="i"
       [value]="i">
       {{ categoryOption }}
     </option>
   </select>
-  <!-- <button class="add-category-button">Add category</button> -->
-</form> <br />
+  <select id="tags" placeholder="Select tag" class="tagInput" (change)="getFiltersTag($event)">
+    <option value = null>Select a tag</option>
+    <option *ngFor="let tag of taglist"  [value]="tag.id">
+      {{ tag.title }}
+    </option>
+  </select>
+</div>
+ <br />
 
 <input type="search" [(ngModel)]="searchValue" (keyup)="searchMemes()"  placeholder="Search memes" class="form-control" /> <br />
 

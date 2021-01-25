@@ -1,6 +1,7 @@
 package com.example.memegenerator.domain.service.impl;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -29,6 +30,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 
+import com.example.memegenerator.web.dto.TagDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -141,12 +143,26 @@ public class MemeServiceImpl implements MemeService {
         return filteredMemes.stream().map(meme -> modelMapper.map(meme, MemeDto.class)).collect(Collectors.toList());
     }
 
-    
     /** 
      * @param userId
      * @return boolean
      * @throws NoSuchElementException
      */
+    public List<MemeDto> getFilteredMemesTag(List<Long> tagIds){
+        List<Meme> allMemes = memeRepository.findAll();
+        List<Meme> filteredMemes = new ArrayList<Meme>();
+        for(Meme x : allMemes){
+            for(Tag t : x.tags){
+                if(tagIds.contains(t.id)){
+                    filteredMemes.add(x);
+                }
+            }
+        }
+        return filteredMemes.stream().map(meme -> modelMapper.map(meme, MemeDto.class)).collect(Collectors.toList());
+
+
+    }
+
     @Override
     public boolean userAllowedToCreate(Long userId) throws NoSuchElementException {
 
