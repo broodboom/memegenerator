@@ -30,7 +30,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 
-import com.example.memegenerator.web.dto.TagDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
