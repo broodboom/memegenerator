@@ -1,16 +1,13 @@
 package com.example.memegenerator.config;
 
 import java.io.IOException;
-import java.security.Principal;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.HttpMethod;
 
-import com.example.memegenerator.security.Role;
 import com.example.memegenerator.security.UserDetailsAdapter;
-import com.example.memegenerator.data.entity.User;
 import com.example.memegenerator.domain.service.impl.UserServiceImpl;
 
 import org.modelmapper.ModelMapper;

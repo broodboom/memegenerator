@@ -29,7 +29,7 @@ public class TagController {
      * @param tagDto
      * @return ResponseEntity<TagDto>
      */
-    @PostMapping(path = "/create/{tag}")
+    @PostMapping(path = "/create")
     public ResponseEntity<TagDto> createTag(@Valid @RequestBody TagDto tagDto) {
 
         return new ResponseEntity<TagDto>(tagService.createTag(tagDto), HttpStatus.CREATED);

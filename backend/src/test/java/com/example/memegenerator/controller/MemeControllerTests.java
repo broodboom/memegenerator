@@ -15,6 +15,7 @@ import java.util.Random;
 import com.example.memegenerator.domain.service.impl.MemeServiceImpl;
 import com.example.memegenerator.web.controller.MemeController;
 import com.example.memegenerator.web.dto.MemeDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -111,7 +113,7 @@ public class MemeControllerTests {
 
         var resultActions = this.mockMvc
                 .perform(post("/meme/").content(fileMock.getBytes()).contentType(mediaType))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
 
         var mvcResult = resultActions.andReturn();
         var json = mvcResult.getResponse().getContentAsString();
@@ -152,12 +154,8 @@ public class MemeControllerTests {
 
         when(memeService.updateMeme(any())).thenReturn(memeDtoMock);
 
-        var parsedMemeDtoMock = JsonPath.parse(memeDtoMock);
-        var bytesParsedMemeDtoMock = parsedMemeDtoMock.json().toString().getBytes();
-
-        var resultActions = this.mockMvc
-                .perform(post("/meme/5").contentType(MediaType.APPLICATION_JSON).content(bytesParsedMemeDtoMock))
-                .andExpect(status().isOk());
+        var resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/meme/5").content(asJsonString(memeDtoMock))
+                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
         var mvcResult = resultActions.andReturn();
         var json = mvcResult.getResponse().getContentAsString();
@@ -207,5 +205,15 @@ public class MemeControllerTests {
 
         this.mockMvc.perform(get("/meme/5").header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+    }
+
+    private String asJsonString(final Object obj) {
+        try {
+            final ObjectMapper mapper = new ObjectMapper();
+            final String jsonContent = mapper.writeValueAsString(obj);
+            return jsonContent;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

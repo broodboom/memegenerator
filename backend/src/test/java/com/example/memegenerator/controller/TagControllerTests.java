@@ -12,6 +12,7 @@ import java.util.Random;
 import com.example.memegenerator.domain.service.impl.TagServiceImpl;
 import com.example.memegenerator.web.controller.TagController;
 import com.example.memegenerator.web.dto.TagDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -98,6 +100,17 @@ public class TagControllerTests {
 
         when(tagService.createTag(any())).thenReturn(tagDtoMock);
 
-        this.mockMvc.perform(post("/tag/create/abc")).andExpect(status().isOk());
+        mockMvc.perform(MockMvcRequestBuilders.post("/tag/create").content(asJsonString(tagDtoMock))
+                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isCreated());
+    }
+
+    private String asJsonString(final Object obj) {
+        try {
+            final ObjectMapper mapper = new ObjectMapper();
+            final String jsonContent = mapper.writeValueAsString(obj);
+            return jsonContent;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
