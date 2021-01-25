@@ -154,14 +154,12 @@ public class MemeControllerTests {
 
         when(memeService.updateMeme(any())).thenReturn(memeDtoMock);
 
-        var resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/meme/5").content(asJsonString(memeDtoMock))
-                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+        var mvcResult = mockMvc.perform(MockMvcRequestBuilders.put("/meme/update").content(asJsonString(memeDtoMock))
+                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andReturn();
 
-        var mvcResult = resultActions.andReturn();
         var json = mvcResult.getResponse().getContentAsString();
 
-        List<Map<String, Object>> dataList = JsonPath.parse(json).read("$");
-        String title = (String) dataList.get(0).get("title");
+        String title = JsonPath.read(json, "$.title");
 
         assertEquals(mockTitle, title);
     }
