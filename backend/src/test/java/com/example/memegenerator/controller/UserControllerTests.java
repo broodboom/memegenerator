@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.memegenerator.web.dto.SmallUserDto;
 import com.jayway.jsonpath.JsonPath;
 
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import nonapi.io.github.classgraph.json.JSONSerializer;
 
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -116,15 +119,14 @@ public class UserControllerTests {
 
         when(userService.getUserById(anyLong())).thenReturn(userDtoMock);
 
-        var resultActions = this.mockMvc
+        var mvcResult = this.mockMvc
                 .perform(get("/user/1").header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andReturn();
 
-        var mvcResult = resultActions.andReturn();
         var json = mvcResult.getResponse().getContentAsString();
 
-        List<Map<String, Object>> dataList = JsonPath.parse(json).read("$");
-        String username = (String) dataList.get(0).get("username");
+        String username = JsonPath.read(json, "$.username");
 
         assertEquals(mockValue, username);
     }
