@@ -2,6 +2,7 @@ package com.example.memegenerator.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -269,6 +270,6 @@ public class MemeServiceTests {
         when(memeRepository.countAddedRecordsTodayByUser(any(), anyLong())).thenReturn(anyInt());
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
 
-        MemeDto result = memeService.userAllowedToCreate(anyLong());
+        boolean result = memeService.userAllowedToCreate(anyLong());
     }
 }
