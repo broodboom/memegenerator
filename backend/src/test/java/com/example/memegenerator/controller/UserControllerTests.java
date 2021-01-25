@@ -5,9 +5,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
-import java.util.List;
-import java.util.Map;
-
 import com.example.memegenerator.domain.service.impl.UserServiceImpl;
 import com.example.memegenerator.web.controller.UserController;
 import com.example.memegenerator.web.dto.UserDto;
@@ -116,15 +113,14 @@ public class UserControllerTests {
 
         when(userService.getUserById(anyLong())).thenReturn(userDtoMock);
 
-        var resultActions = this.mockMvc
+        var mvcResult = this.mockMvc
                 .perform(get("/user/1").header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andReturn();
 
-        var mvcResult = resultActions.andReturn();
         var json = mvcResult.getResponse().getContentAsString();
 
-        List<Map<String, Object>> dataList = JsonPath.parse(json).read("$");
-        String username = (String) dataList.get(0).get("username");
+        String username = JsonPath.read(json, "$.username");
 
         assertEquals(mockValue, username);
     }
