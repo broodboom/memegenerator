@@ -68,19 +68,22 @@ export class PagesComponent implements OnInit, OnDestroy {
         hidden: this.authService.getLoggedIn(),
       },
       {
-        title: "Create",
-        icon: "plus-square-outline",
-        link: "/pages/create",
-      },
-      {
         title: "Sign up",
         icon: "person-add-outline",
         link: "/pages/signup",
+        hidden: this.authService.getLoggedIn(),
+      },
+      {
+        title: "Create",
+        icon: "plus-square-outline",
+        link: "/pages/create",
+        hidden: !this.authService.getLoggedIn()
       },
       {
         title: "Profile",
         icon: "person-outline",
         link: "/pages/profile",
+        hidden: !this.authService.getLoggedIn()
       },
     ]);
   }
