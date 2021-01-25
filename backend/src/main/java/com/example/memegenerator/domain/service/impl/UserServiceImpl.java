@@ -55,16 +55,16 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
         User savedUser = userRepository.save(user);
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("javaminor@cornevisser.nl");
-        message.setTo(savedUser.email);
-        message.setSubject("Thank you for signing up");
+        // SimpleMailMessage message = new SimpleMailMessage();
+        // message.setFrom("javaminor@cornevisser.nl");
+        // message.setTo(savedUser.email);
+        // message.setSubject("Thank you for signing up");
 
-        String url = "http://localhost:8080/user/activate/" + savedUser.id + "/" + savedUser.confirmationToken;
+        // String url = "http://localhost:8080/user/activate/" + savedUser.id + "/" + savedUser.confirmationToken;
 
-        message.setText("Click here to activate your account: " + url);
+        // message.setText("Click here to activate your account: " + url);
 
-        javaMailSender.getJavaMailSender().send(message);
+        // javaMailSender.getJavaMailSender().send(message);
 
         return modelMapper.map(savedUser, UserDto.class);
     }

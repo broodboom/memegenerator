@@ -16,6 +16,8 @@ export class SignupComponent implements OnInit {
 
   user: User;
   signupForm: FormGroup;
+  showLoginForm: Boolean;
+
 
   constructor(
     
@@ -42,6 +44,8 @@ export class SignupComponent implements OnInit {
       password: ["", Validators.required],
       email: ["", Validators.required],
     });
+
+    this.showLoginForm = false
   }
 
   get f() {
@@ -66,6 +70,9 @@ export class SignupComponent implements OnInit {
     this.httpClient
       .post<User>(`${environment.apiUrl}/user`, this.user, this.httpOptions)
       .subscribe((res) => {
+
+        this.showLoginForm = true
+        
         console.log(res);
       });
   }
