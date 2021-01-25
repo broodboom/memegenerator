@@ -54,8 +54,9 @@ public class MemeController {
      * @return ResponseEntity<MemeDto>
      */
     @PostMapping(path = "/")
-    public ResponseEntity<MemeDto> createMeme(@RequestParam("imageblob") MultipartFile imageblob, String title,
-            String userId, @RequestParam("tags") String tagsString, long categoryId, String description) {
+    public ResponseEntity<MemeDto> createMeme(@RequestParam("imageblob") MultipartFile imageblob, @RequestParam("title") String title,
+        @RequestParam("userId") String userId, @RequestParam("tags") String tagsString, @RequestParam("categoryId") long categoryId,
+        @RequestParam("description") String description) {
 
         MemeDto memeDto = new MemeDto();
         memeDto.title = title;

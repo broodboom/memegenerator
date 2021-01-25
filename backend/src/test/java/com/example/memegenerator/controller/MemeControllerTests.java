@@ -6,8 +6,10 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -104,22 +106,24 @@ public class MemeControllerTests {
 
         when(memeService.createMeme(any(), anyLong())).thenReturn(memeDtoMock);
 
-        MockMultipartFile fileMock = new MockMultipartFile("file", "hello.txt", MediaType.TEXT_PLAIN_VALUE,
+        MockMultipartFile fileMock = new MockMultipartFile("imageblob",
                 "Hello, World!".getBytes());
 
-        HashMap<String, String> contentTypeParams = new HashMap<String, String>();
-        contentTypeParams.put("boundary", "265001916915724");
-        MediaType mediaType = new MediaType("multipart", "form-data", contentTypeParams);
-
         var resultActions = this.mockMvc
-                .perform(post("/meme/").content(fileMock.getBytes()).contentType(mediaType))
+                .perform(multipart("/meme/")
+                .file(fileMock)
+                .param("title", mockTitle)
+                .param("userId", "1")
+                .param("tags", "[]")
+                .param("description", "description")
+                .param("categoryId", "1")
+                .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isCreated());
 
         var mvcResult = resultActions.andReturn();
         var json = mvcResult.getResponse().getContentAsString();
 
-        List<Map<String, Object>> dataList = JsonPath.parse(json).read("$");
-        String title = (String) dataList.get(0).get("title");
+        String title = JsonPath.read(json, "$.title");
 
         assertEquals(mockTitle, title);
     }
