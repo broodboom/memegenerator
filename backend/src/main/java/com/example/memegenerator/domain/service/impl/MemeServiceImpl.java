@@ -1,6 +1,7 @@
 package com.example.memegenerator.domain.service.impl;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -10,6 +11,7 @@ import javax.imageio.ImageIO;
 
 import com.example.memegenerator.data.entity.Category;
 import com.example.memegenerator.data.entity.Meme;
+import com.example.memegenerator.data.entity.Tag;
 import com.example.memegenerator.data.entity.User;
 import com.example.memegenerator.data.repository.CategoryRepository;
 import com.example.memegenerator.data.repository.MemeRepository;
@@ -105,11 +107,16 @@ public class MemeServiceImpl implements MemeService {
 
     public List<MemeDto> getFilteredMemesTag(List<Long> tagIds){
         List<Meme> allMemes = memeRepository.findAll();
-        return allMemes.stream()
-                .filter(i -> i.tags.stream()
-                        .anyMatch(x ->
-                                x.id.equals(tagIds.stream().findAny())))
-                        .map(meme -> modelMapper.map(meme, MemeDto.class)).collect(Collectors.toList());
+        List<Meme> filteredMemes = new ArrayList<Meme>();
+        for(Meme x : allMemes){
+            for(Tag t : x.tags){
+                if(tagIds.contains(t.id)){
+                    filteredMemes.add(x);
+                }
+            }
+        }
+        return filteredMemes.stream().map(meme -> modelMapper.map(meme, MemeDto.class)).collect(Collectors.toList());
+
 
     }
 
