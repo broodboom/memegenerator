@@ -13,8 +13,8 @@
       <canvas id="canvas" class="canvas_image" (change)="handleSaveImage($event)"> 
       </canvas>
       <form>
-        <input type ="text" id="title" placeholder="Text for Image" class="text-field">
-        <input type="text" id="inp" [(ngModel)]="title" name="title" placeholder="Title for image" class="text-field">
+        <input type ="text" id="inp" placeholder="Text for Image" class="text-field">
+        <input type="text" id="title" [(ngModel)]="title" name="title" placeholder="Title for image" class="text-field">
         <input type="text" id="description" [(ngModel)]="description" name="description" placeholder="Description for image" *ngIf="allowedToAddDescription" class="text-field">
         <input #tagInput nbInput type="text" id="tag" (input)="tagOnChange()" placeholder="Enter tag" [nbAutocomplete]="tagAuto" autocomplete="off" class="tagInput"/>
           <nb-autocomplete #tagAuto (selectedChange)="tagOnSelectionChange($event)">

@@ -256,7 +256,7 @@ export class CreatepageComponent implements OnInit {
   }
 
   fillCanvas() {
-    var inputField = document.querySelector("input");
+    var inputField = <HTMLInputElement>document.getElementById("inp");
     var canvas = document.querySelector("canvas");
     var ctx = canvas.getContext("2d");
     inputField.addEventListener("keyup", function () {
@@ -279,7 +279,9 @@ export class CreatepageComponent implements OnInit {
 
     var imageLoader = document.getElementById("imageLoader");
     console.log(imageLoader);
-    imageLoader.addEventListener("change", this.handleSaveImage, false);
+    if(self.allowedToAddOwnImage){
+      imageLoader.addEventListener("change", this.handleSaveImage, false);
+    }
 
     var savebutton = document.querySelector(".save-button");
     savebutton.addEventListener("click", this.saveMeme);
