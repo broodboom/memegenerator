@@ -25,13 +25,13 @@ export class ProfileComponent implements OnInit {
     const e: Event = window.event;
     e.preventDefault();
 
-    this.profileService.updateUserInfo(this.user).subscribe(() => {
-      self.user.email = (<HTMLInputElement>(
-        document.getElementById("email")
-      )).value;
-      self.user.password = (<HTMLInputElement>(
-        document.getElementById("password")
-      )).value;
-    });
+    self.user.email = (<HTMLInputElement>(
+      document.getElementById("email")
+    )).value;
+    self.user.password = (<HTMLInputElement>(
+      document.getElementById("password")
+    )).value;
+
+    this.profileService.updateUserInfo(this.user).subscribe();
   }
 }
