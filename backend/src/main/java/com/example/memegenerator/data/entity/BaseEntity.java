@@ -2,9 +2,11 @@ package com.example.memegenerator.data.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+
+import org.springframework.data.annotation.CreatedDate;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -15,10 +17,10 @@ public abstract class BaseEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", unique = true, nullable = false)
+    @Column(name = "id", unique = true, nullable = false, updatable = false)
     public Long id;
 
-    @CreationTimestamp
-    @Column(name = "createdat", unique = false, nullable = false)
+    @Column(name = "createdat", unique = false, nullable = false, updatable = false)
+    @CreatedDate
     public Timestamp createdat;
 }
