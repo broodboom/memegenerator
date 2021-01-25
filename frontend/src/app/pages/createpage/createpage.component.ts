@@ -30,6 +30,7 @@ export class CreatepageComponent implements OnInit {
   addedTags: Tag[];
   allowedToMakeMemes: boolean;
   allowedToAddDescription: boolean;
+  allowedToAddOwnImage: boolean;
   title: string;
   description: string;
   notifier: NotifierService;
@@ -56,6 +57,7 @@ export class CreatepageComponent implements OnInit {
     self.categoryIds = [];
     this.userAllowedToMakeMeme();
     this.userAllowedToAddDescription();
+    this.userAllowedToAddOwnImage();
     this.fillCanvas();
     this.tagService.getTags().pipe(
       tap((result)=>console.log(result))
@@ -96,6 +98,13 @@ export class CreatepageComponent implements OnInit {
 
     this.points = user.points;
     this.allowedToAddDescription = user.points >= 500;
+  }
+
+  userAllowedToAddOwnImage(){
+    const user = this.authService.getCurrentUser();
+
+    this.points = user.points;
+    this.allowedToAddOwnImage = user.points >= 100;
   }
 
   activateTagButton(tag: Tag, tagService: TagService, tags: Tag[]){

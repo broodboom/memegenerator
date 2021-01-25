@@ -33,7 +33,7 @@
         <button class="add-category-button">Add category</button>
       </form>
       <div class="button-field">
-        <input type="file" id="imageLoader"name="imageLoader"/>
+        <input type="file" id="imageLoader"name="imageLoader" *ngIf="allowedToAddOwnImage"/>
         <button class="save-button" [disabled]="!allowedToMakeMemes">Save meme</button>
      </div>
     </div>
