@@ -7,7 +7,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { CategoryService } from "app/services/category/category.service";
 import { Category } from "app/models/Category";
 import { Observable, of } from 'rxjs';
-import { AuthService } from 'app/services/auth/auth.service';
+import { FormGroup, FormControl, Validators} from '@angular/forms';
 
 //TODO: move this to a generic model folder
 class Card{
@@ -48,16 +48,20 @@ let self: any;
 
 
 export class DashboardComponent implements OnInit{
+  searchValue: string
   categoryOptions: string[];
   categoryIds: number[];
   categoryFilteredOptions$: Observable<string[]>;
   addedCategoryId: number;
   webSocketAPI: WebSocketAPI;
   items = []
+  searchItems = []
   loading = false;
 
   constructor(public memeService: MemeService, private categoryService: CategoryService,private sanitizer : DomSanitizer, private route: ActivatedRoute
-    , private router: Router, private authService: AuthService){}
+    , private router: Router){
+      this.searchValue = ""
+    }
 
   loadNext(){
     if(this.loading) {return}
@@ -66,6 +70,9 @@ export class DashboardComponent implements OnInit{
     this.loading = false;
   }
 
+  searchMemes(){
+    this.searchItems = this.items.filter((i) => i.title == this.searchValue);
+  }
   
   ngOnInit(){
     self = this;
@@ -101,16 +108,14 @@ export class DashboardComponent implements OnInit{
   }
 
   sendMessage(voteType, item){
-    if(this.authService.getCurrentUser()){
-      let response;
-      if(voteType === "u"){
-        response = {memeId: item.id,isUpvote: true, userId: this.authService.getCurrentUser().id}
-      }else{
-        response = {memeId: item.id,isUpvote: false, userId: this.authService.getCurrentUser().id}
-      }
-
-      this.webSocketAPI._send(response);
+    let response;
+    if(voteType === "u"){
+      response = {memeId: item.id,isUpvote: true}
+    }else{
+      response = {memeId: item.id,isUpvote: false}
     }
+
+    this.webSocketAPI._send(response);
   }
 
   connect(){
