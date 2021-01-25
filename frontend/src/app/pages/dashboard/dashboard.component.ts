@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import { Meme } from 'app/models/Meme';
+import { Tag } from 'app/models/Tag';
 import { MemeService } from 'app/services/meme/meme.service';
+import { TagService } from 'app/services/tag/tag.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { WebSocketAPI } from './WebSocketAPI';
 import { ActivatedRoute, Params, Router } from '@angular/router';
@@ -9,6 +11,7 @@ import { Category } from "app/models/Category";
 import { Observable, of } from 'rxjs';
 import { FormGroup, FormControl, Validators} from '@angular/forms';
 import { AuthService } from 'app/services/auth/auth.service';
+import { addDependencyToPackageJson } from '@nebular/theme/schematics/util';
 
 //TODO: move this to a generic model folder
 class Card{
@@ -56,11 +59,13 @@ export class DashboardComponent implements OnInit{
   addedCategoryId: number;
   webSocketAPI: WebSocketAPI;
   items = []
+  taglist = []
   searchItems = []
   loading = false;
 
   constructor(public memeService: MemeService, private categoryService: CategoryService,private sanitizer : DomSanitizer, private route: ActivatedRoute
-    , private router: Router, private authService: AuthService){
+    , private router: Router, private authService: AuthService,
+    private tagService: TagService){
       this.searchValue = ""
     }
 
@@ -80,8 +85,8 @@ export class DashboardComponent implements OnInit{
     self.categoryIds = [];
     this.webSocketAPI = new WebSocketAPI(this);
     this.connect();
+  
     this.route.queryParamMap.forEach((params: Params) => {
-      console.log("params: ",params.params.category);
       let category = params.params.category; 
       if(category != null){
         this.memeService.GetAllMemesFilteredOnCategory(category).subscribe(meme => this.inserItem(meme));
@@ -100,7 +105,8 @@ export class DashboardComponent implements OnInit{
         this.addFilters(this.categoryOptions);
         // this.activateCategoryButton(this.categoryOptions);
       });
-      
+      this.tagService.getTags().subscribe(tags => this.insertTags(tags));
+   
   });
   }
 
@@ -137,6 +143,13 @@ export class DashboardComponent implements OnInit{
     })
   }
 
+  insertTags(tags: Tag[]){
+    let resSTR = JSON.stringify(tags);
+    let resJSON = JSON.parse(resSTR);
+    this.taglist = resJSON.body;
+    console.log(this.taglist)
+  }
+
   handleMessage(message){
     let fObj: ResponseClass = new ResponseClass(message);
     var item2 = self.items.filter(function(item) {
@@ -154,6 +167,11 @@ export class DashboardComponent implements OnInit{
     console.log(e.target.value);
     self.items = [];
     this.memeService.GetAllMemesFilteredOnCategory(e.target.value).subscribe(meme => this.inserItem(meme));
+  }
+
+  getFiltersTag(e){
+    self.items =[];
+    this.memeService.GetAllMemesFilteredOnTag(e.target.value).subscribe(meme => this.inserItem(meme));
   }
 
   addFilters(categoryOptions: string[]){
