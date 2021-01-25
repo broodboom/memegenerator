@@ -1,17 +1,19 @@
 package com.example.memegenerator.service;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.example.memegenerator.data.entity.Tag;
+import com.example.memegenerator.data.entity.Meme;
+import com.example.memegenerator.data.repository.CategoryRepository;
+import com.example.memegenerator.data.repository.MemeRepository;
 import com.example.memegenerator.data.repository.TagRepository;
-import com.example.memegenerator.domain.service.TagService;
-import com.example.memegenerator.web.dto.TagDto;
+import com.example.memegenerator.data.repository.UserRepository;
+import com.example.memegenerator.domain.service.MemeService;
+import com.example.memegenerator.web.dto.MemeDto;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,56 +26,41 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ContextConfiguration()
-public class TagServiceTests {
+public class MemeServiceTests {
 
     @Autowired
-    private TagService tagService;
+    private MemeService memeService;
+
+    @MockBean
+    private MemeRepository memeRepository;
+
+    @MockBean
+    private CategoryRepository categoryRepository;
+
+    @MockBean
+    private UserRepository userRepository;
 
     @MockBean
     private TagRepository tagRepository;
 
     @Test
-    public void creates_tag() {
-
-        String testValue = "abc";
-
-        TagDto tagDto = new TagDto() {
-            {
-                setTitle(testValue);
-            }
-        };
-
-        Tag tag = new Tag() {
-            {
-                setTitle(testValue);
-            }
-        };
-
-        when(tagRepository.save(any())).thenReturn(tag);
-
-        TagDto result = tagService.createTag(tagDto);
-
-        assertEquals(result.getTitle(), tagDto.getTitle());
-    }
-
-    @Test
-    public void gets_tags() {
+    public void gets_memes() {
 
         int generations = new Random().nextInt(9) + 1;
-        List<Tag> tagList = new ArrayList<Tag>();
+        List<Meme> memeList = new ArrayList<Meme>();
         String mockTitle = "testtitle";
 
         for (int i = 0; i < generations; i++) {
-            tagList.add(new Tag() {
+            memeList.add(new Meme() {
                 {
                     setTitle(mockTitle);
                 }
             });
         }
 
-        when(tagRepository.findAll()).thenReturn(tagList);
+        when(memeRepository.findAll()).thenReturn(memeList);
         
-        List<TagDto> result = tagService.getTags();
+        List<MemeDto> result = memeService.getCategories();
 
         assertEquals(result.size(), generations);
     }
