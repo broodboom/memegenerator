@@ -1,6 +1,7 @@
 package com.example.memegenerator.config;
 
 import java.io.IOException;
+import java.security.Principal;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -8,8 +9,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.HttpMethod;
 
 import com.example.memegenerator.security.Role;
+import com.example.memegenerator.security.UserDetailsAdapter;
+import com.example.memegenerator.data.entity.User;
 import com.example.memegenerator.domain.service.impl.UserServiceImpl;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,6 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
     private static final String LOGOUT_PATH = "/logout";
     private static final String HOME_PATH = "/";
     private static final String GET_CATEGORIES_PATH = "/category";
+    private ModelMapper modelmapper = new ModelMapper();
 
     @Autowired
     UserServiceImpl userService;
@@ -102,7 +107,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                     @Override
                     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                             Authentication authentication) throws IOException, ServletException {
-                        response.getWriter().write("{ \"status\": true }");
+                        var principal = modelmapper.map(authentication.getPrincipal(), UserDetailsAdapter.class);
+                        response.getWriter().write("{ \"status\": true, \"userId\": " + principal.getUserId() +" }");
                     }
                 }).failureHandler(new AuthenticationFailureHandler() {
 

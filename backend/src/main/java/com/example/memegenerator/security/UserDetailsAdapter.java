@@ -86,4 +86,12 @@ public class UserDetailsAdapter implements UserDetails {
         
         return user.isActivated();
     }
+
+    
+    /** 
+     * @return Long
+     */
+    public Long getUserId(){
+        return user.id;
+    }
 }
