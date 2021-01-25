@@ -20,5 +20,5 @@ public class UserDto {
 	@NotNull
 	public String email;
 
-	public int activated;
+	public boolean activated;
 }
