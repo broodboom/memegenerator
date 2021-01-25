@@ -5,9 +5,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
-import java.util.List;
-import java.util.Map;
-
 import com.example.memegenerator.domain.service.impl.UserServiceImpl;
 import com.example.memegenerator.web.controller.UserController;
 import com.example.memegenerator.web.dto.UserDto;
@@ -15,7 +12,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.memegenerator.web.dto.SmallUserDto;
 import com.jayway.jsonpath.JsonPath;
 
-import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +25,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import nonapi.io.github.classgraph.json.JSONSerializer;
 
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
