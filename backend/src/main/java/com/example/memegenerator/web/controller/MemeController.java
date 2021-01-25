@@ -117,6 +117,16 @@ public class MemeController {
         }
     }
 
+    @GetMapping(path= "/tags/{tags}")
+    public ResponseEntity<List<MemeDto>> getFilteredTagMemes(@PathVariable List<Long> tags){
+        try{
+            return new ResponseEntity<List<MemeDto>>(memeService.getFilteredMemesTag(tags), HttpStatus.OK);
+        }  catch (NoSuchElementException e) {
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    }
+
     @GetMapping(path = "/checkAllowed/{userId}")
     public ResponseEntity<Boolean> userAllowedToCreateMeme(@PathVariable long userId){
 

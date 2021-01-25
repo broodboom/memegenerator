@@ -27,6 +27,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 
+import com.example.memegenerator.web.dto.TagDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -100,6 +101,16 @@ public class MemeServiceImpl implements MemeService {
                 .filter(t -> t.category.id.equals(category.id)).collect(Collectors.toList());
 
         return filteredMemes.stream().map(meme -> modelMapper.map(meme, MemeDto.class)).collect(Collectors.toList());
+    }
+
+    public List<MemeDto> getFilteredMemesTag(List<Long> tagIds){
+        List<Meme> allMemes = memeRepository.findAll();
+        return allMemes.stream()
+                .filter(i -> i.tags.stream()
+                        .anyMatch(x ->
+                                x.id.equals(tagIds.stream().findAny())))
+                        .map(meme -> modelMapper.map(meme, MemeDto.class)).collect(Collectors.toList());
+
     }
 
     @Override
