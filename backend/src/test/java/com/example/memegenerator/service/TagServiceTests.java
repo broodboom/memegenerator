@@ -4,7 +4,10 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import com.example.memegenerator.data.entity.Tag;
 import com.example.memegenerator.data.repository.TagRepository;
@@ -47,14 +50,32 @@ public class TagServiceTests {
             }
         };
 
-        when(tagRepository.save(any())).thenReturn(Optional.of(tag));
+        when(tagRepository.save(any())).thenReturn(tag);
 
         TagDto result = tagService.createTag(tagDto);
 
         assertEquals(result.getTitle(), tagDto.getTitle());
     }
 
+    @Test
     public void gets_tags() {
+
+        int generations = new Random().nextInt(9) + 1;
+        List<Tag> tagList = new ArrayList<Tag>();
+        String mockTitle = "testtitle";
+
+        for (int i = 0; i < generations; i++) {
+            tagList.add(new Tag() {
+                {
+                    setTitle(mockTitle);
+                }
+            });
+        }
+
+        when(tagRepository.findAll()).thenReturn(tagList);
         
+        List<TagDto> result = tagService.getTags();
+
+        assertEquals(result.size(), generations);
     }
 }
