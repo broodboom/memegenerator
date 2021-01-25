@@ -20,7 +20,7 @@ public abstract class BaseEntity implements Serializable {
     @Column(name = "id", unique = true, nullable = false, updatable = false)
     public Long id;
 
-    @Column(name = "createdat", unique = false, nullable = false, updatable = false)
+    @Column(name = "createdat", unique = false, nullable = true)
     @CreatedDate
     public Timestamp createdat;
 }
