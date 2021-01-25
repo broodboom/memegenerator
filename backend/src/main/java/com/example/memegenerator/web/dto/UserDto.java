@@ -20,5 +20,6 @@ public class UserDto {
 	@NotNull
 	public String email;
 
+	@NotNull
 	public boolean activated;
 }

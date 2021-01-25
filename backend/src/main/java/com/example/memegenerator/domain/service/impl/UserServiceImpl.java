@@ -78,16 +78,17 @@ public class UserServiceImpl implements UserDetailsService, UserService {
      */
     public UserDto updateUser(UserDto userDto) throws NoSuchElementException, DuplicateKeyException {
 
-        User user = userRepository.findByEmail(userDto.email)
+        User user = userRepository.findUserByUsername(userDto.username)
                 .orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
-
         if (user.id != userDto.id) {
 
             throw new DuplicateKeyException("Email is already in use");
         }
 
         user = modelMapper.map(userDto, User.class);
-
+        user.role =  Role.User;
+        user.password = bCryptPasswordEncoder.encode(userDto.password);
+        user.confirmationToken = this.randomInt();
         User savedUser = userRepository.save(user);
 
         return modelMapper.map(savedUser, UserDto.class);
