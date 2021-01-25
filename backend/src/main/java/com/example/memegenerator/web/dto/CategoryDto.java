@@ -11,4 +11,7 @@ public class CategoryDto {
 
 	@NotNull
 	public String title;
+
+	@NotNull
+	public Long id;
 }

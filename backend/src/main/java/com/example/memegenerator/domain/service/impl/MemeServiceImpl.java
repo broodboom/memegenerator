@@ -10,9 +10,11 @@ import javax.imageio.ImageIO;
 
 import com.example.memegenerator.data.entity.Category;
 import com.example.memegenerator.data.entity.Meme;
+import com.example.memegenerator.data.entity.Tag;
 import com.example.memegenerator.data.entity.User;
 import com.example.memegenerator.data.repository.CategoryRepository;
 import com.example.memegenerator.data.repository.MemeRepository;
+import com.example.memegenerator.data.repository.TagRepository;
 import com.example.memegenerator.domain.service.MemeService;
 import com.example.memegenerator.data.repository.UserRepository;
 import com.example.memegenerator.web.dto.MemeDto;
@@ -39,6 +41,7 @@ public class MemeServiceImpl implements MemeService {
     private final MemeRepository memeRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final TagRepository tagRepository;
     private final ModelMapper modelMapper;
 
     
@@ -53,6 +56,13 @@ public class MemeServiceImpl implements MemeService {
         Meme meme = modelMapper.map(memeDto, Meme.class);
 
         meme.user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
+        meme.category = categoryRepository.findById(memeDto.categoryId).orElseThrow(() -> new NoSuchElementException("Category not found"));
+
+        for (Tag elementTag : memeDto.tags) {
+            Tag tag = tagRepository.findById(elementTag.id).orElseThrow(() -> new NoSuchElementException("Tag not found"));
+
+            meme.tags.add(tag);
+        }
 
         if (meme.user.points >= 1000) {
 

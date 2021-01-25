@@ -1,5 +1,8 @@
 package com.example.memegenerator.config;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
 import com.example.memegenerator.data.entity.Meme;
 import com.example.memegenerator.data.entity.Tag;
 import com.example.memegenerator.web.dto.MemeDto;
@@ -71,6 +74,16 @@ public class ApplicationConfig {
          MemeDto memeDto = context.getSource();
 
          Meme meme = context.getDestination();
+
+         if(memeDto == null) return meme;
+
+         if(meme == null){ 
+            meme = new Meme();
+
+            meme.description = memeDto.description;
+            meme.imageblob = memeDto.imageblob;
+            meme.title = memeDto.title;
+         }
 
          meme.likes = memeDto.likes;
          meme.dislikes = memeDto.dislikes;
