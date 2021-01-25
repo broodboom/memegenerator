@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { User } from "app/models/User";
+import { AuthService } from "app/services/auth/auth.service";
 import { ProfileService } from "../../services/profile/profile.service";
 
 let self: any;
@@ -10,14 +11,14 @@ let self: any;
   styleUrls: ["./profile.component.scss"],
 })
 export class ProfileComponent implements OnInit {
-  constructor(private profileService: ProfileService) {}
+  constructor(private profileService: ProfileService, private authService: AuthService) {}
 
   user: User;
 
   ngOnInit(): void {
     self = this;
 
-    this.profileService.getUserInfo();
+    this.profileService.getUserInfo(this.authService.getCurrentUser().id).subscribe(user => {this.user = user});
   }
 
   updateUser(): void {

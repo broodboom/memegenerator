@@ -8,6 +8,7 @@ import { ProfileService } from "../profile/profile.service";
 
 export interface LoginResponse {
   status: boolean;
+  userId: number;
 }
 
 @Injectable({
@@ -52,7 +53,7 @@ export class AuthService {
 
         if (response.status) {
           this.profileService
-            .getUserInfo()
+            .getUserInfo(response.userId)
             .subscribe((user: User) => this._currentUser.next(user));
         }
       }),

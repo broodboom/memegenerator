@@ -23,8 +23,6 @@ describe("AuthService", () => {
   const httpClientStub = new HttpClientStub();
   const profileServiceStub = new ProfileServiceStub();
 
-  let loginResponse: LoginResponse = { status: false };
-
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [

@@ -27,9 +27,13 @@ export class ProfileService {
     );
   }
 
-  getUserInfo(): Observable<User> {
+  getUserInfo(userId = null): Observable<User> {
+    if(!userId){
+      userId = 0;
+    }
+
     return this.http
-      .get<User>(`${environment.apiUrl}/user/` + 10)
+      .get<User>(`${environment.apiUrl}/user/` + userId)
       .pipe(retry(1), catchError(this.handleError));
   }
 
