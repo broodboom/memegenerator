@@ -125,6 +125,8 @@ export class CreatepageComponent implements OnInit {
             tagService.createTag(tag).subscribe((data: any)=> {
               console.log(data);
               tagId = data.body.id;
+              self.tagOptions.push(data.body.title);
+              tags.push(data.body);
               let addedTag = {id: tagId, title: tagInput.value};
               let condition = true;
               self.addedTags.forEach(oldAddedTag => {
